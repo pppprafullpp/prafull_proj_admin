@@ -1,0 +1,23 @@
+<div id="user-comm-data"></div>
+<script>
+
+    jQuery(document).ready(function() {
+
+        <% if obj.present? %>
+        $.ajax({
+            url: "<%= user_user_comments_path %>",
+            type: 'GET',
+            data: "commentable_type=<%= obj.class %>&commentable_id=<%= obj.id %>",
+            dataType: "script",
+            beforeSend: function() {
+                $(".progress-bar").show();
+            },
+            success: function(data) {
+                $(".progress-bar").fadeIn('slow').hide();
+
+            }
+        });
+        <% end %>
+
+    });
+</script>

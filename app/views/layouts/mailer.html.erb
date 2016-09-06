@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Welcome to servicedeals.com</title>
+</head>
+
+
+<body>
+
+<table style="background-color:#f6f6f6;width:100%">
+  <tbody>
+  <tr>
+    <td></td>
+    <td style="width:100%!important" width="600">
+      <div style="max-width:600px;margin:0 auto;display:block;padding:20px">
+        <table style="background:#fff;border:1px solid #e9e9e9;border-radius:3px" width="100%" cellpadding="0" cellspacing="0">
+          <tbody><tr>
+            <td style="padding:20px">
+              <table cellpadding="0" cellspacing="0">
+                <tbody>
+                
+                <tr>
+                  <td style="padding:0 0 10px">
+                  	<img src="http://servicedeals.in/assets/home/logo.png">
+                  </td>
+                </tr>
+
+                <%= yield %>
+                
+                <tr>
+  					<td style="padding:0 0 10px">Stay Healthy,</td>
+				</tr>
+				
+				<tr>
+				  <td style="padding:0 0 5px">Service Deals Team</td>
+				</tr>
+				
+				</tbody>
+              </table>
+            </td>
+          </tr>
+          </tbody></table>
+        <div style="width:100%;clear:both;color:#999;padding:20px">
+          <table width="100%">
+            <tbody>
+            <tr>
+              <td style="text-align:center;padding:0 0 20px">
+                <strong>Copyright</strong> Service Deals Company &copy; <%= Date.today.strftime('%Y') %> - <%= (Date.today + 1.year).strftime('%Y') %><br/>
+                For Support Email to : support@servicedeals.com
+              </td>
+            </tr>
+            <tr>
+              <td style="text-align:center;padding:0 0 20px">Follow <a href="https://facebook.com/servicedeals">Service Deals</a> on Facebook.</td>
+            </tr>
+            </tbody></table>
+        </div>
+      </div>
+    </td>
+    <td>
+
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+$('#dashboard_graph').replaceWith("<%= j (render :partial => "dashboard/dashboards/#{session[:role].downcase}/graph", :locals => {:orders => @orders})%>")

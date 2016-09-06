@@ -1,0 +1,54 @@
+<tr>
+  <td style="padding:0 0 20px">
+    <table style="margin:40px auto;text-align:left;width:80%">
+      <tbody>
+      <tr>
+        <td>
+          Hey Admin,<br>
+          Lab <%= @lab.lab_name %> is moved to production by crawled lab module.<br/>
+          Lab Email : <%= @lab.email %><br/>
+          Lab Password : <%= @password %><br/>
+          Lab Mobile : <%= @lab.mobile %><br/>
+          Lab Landline : <%= @lab.landline %><br/>
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table style="border-top:#eee 4px solid" cellpadding="0" cellspacing="0">
+            <tbody>
+            <tr>
+              <td>Test Name</td>
+              <td style="text-align:right">Actual Price</td>
+            </tr>
+
+            <% test_discounted_price = 0 %>
+            <% @lab.lab_tests.each do |lot| %>
+                <% test = Test.find_by_id(lot.test_id)%>
+                <tr>
+                  <td><%= test.name %></td>
+                  <td style="text-align:right">Rs. <%= lot.actual_price %></td>
+                </tr>
+
+            <% end %>
+
+
+            </tbody></table>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:0 0 20px">
+          Good work Team keep it up !!!
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:0 0 20px; text-align:center">
+          <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </td>
+</tr>
+

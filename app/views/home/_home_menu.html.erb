@@ -1,0 +1,35 @@
+<% padding_top = (params[:controller] == 'home' and params[:action] == 'index') ? "12px" : "14px" %>
+<nav-home>
+
+
+  <%
+     if params[:controller] == 'home' and params[:action] == 'index'
+
+       style = 'margin-right: -30%;'
+       pic_margin = '-18px'
+
+     else
+       style = ''
+       pic_margin = '-10px'
+     end
+  %>
+  <ul class="right-nav" style="padding-top:<%= padding_top %>;">
+	
+	<% if current_user.present? %>
+        <% pic_url = auth_display_pic('thumb') %>
+        <% if session[:fb_image].present? %>
+            <%= image_tag session[:fb_image],:class => 'img-thumbnail',:alt => 'Service Deals',:style => "margin-top: #{pic_margin};height: 40px;" %>
+        <% else %>
+            <%= image_tag pic_url,:class => 'img-thumbnail',:alt => 'Service Deals',:style => "margin-top: #{pic_margin};height: 40px;" if pic_url.present? %>
+        <% end %>
+
+        <li class="login" ><%= link_to("Welcome #{session[:user_name]}", dashboard_dashboards_path) %></li>
+        <li class="login"><%= link_to "Sign out", signout_path, id: "sign_out" %></li>
+
+    <% else %>
+        <li class="login"><a href="<%= register_admin_admins_path %>"><i></i>Login/Sign Up</a></li>
+    <% end %>
+
+  </ul>
+
+</nav-home>

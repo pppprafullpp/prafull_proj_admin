@@ -1,0 +1,89 @@
+<header>
+  <div class="navbar-fixed-top">
+    <%#= render :partial => 'home/top_nav' %>
+    <!-- <div class="clr"></div> -->
+    <a href="<%= root_url %>"> <div class="logo"></div></a>
+    <%= render :partial => 'home/home_menu' %>
+  </div>
+</header>
+
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+  <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 100%;">
+    <div class="sidebar-collapse" style="overflow: hidden; width: auto; height: 100%;">
+      <ul class="nav metismenu" id="side-menu">
+
+        <!--<li class="nav-header">
+          <div class="dropdown profile-element">
+           <span>
+             <%#= image_tag auth_display_pic('thumb'),:class => 'img-circle',:alt => 'Service Deals' %>
+           </span>
+
+            <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
+	        <span class="clear">
+	           <span class="block m-t-xs">
+	           	  </span> <span class="text-muted text-xs block"><%#= auth_display_name %></span>
+	           </span>
+              </span>
+            </a>
+        </li>-->
+
+        <li class="<%= 'active' if current_controller.eql? 'dashboard/dashboards' %>">
+          <%= link_to dashboard_dashboards_path do %>
+              <i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span>
+          <% end %>
+        </li>
+
+
+        <% if is_admin? %>
+            <li class="">
+              <a href="#"><i class="fa fa-edit"></i> <span class="nav-label">Admin</span><span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level collapse"id="admin_menu"  style="height: 0px;">
+                <li class="<%= 'active' if current_controller.eql? 'admin/pending_actions' %>"><a href="<%= admin_pending_actions_path %>">Pending Actions</a></li>
+                <li class="<%= 'active' if ['home'].include? current_controller%>"><a href="<%= change_password_home_index_path %>">Change Password</a></li>
+              </ul>
+            </li>
+        <% end %>
+
+        <% if is_sales_executive? || is_admin? %>
+            <li class="">
+              <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Sales Executive</span><span class="fa arrow"></span></a>
+              <ul class="nav nav-second-level collapse" id="user_menu" style="height: 0px;">
+                <li class="<%= 'active' if ['user/users'].include? current_controller%>"><a href="<%= user_users_path %>">Personal Information</a></li>
+                <li class="<%= 'active' if ['home'].include? current_controller%>"><a href="<%= change_password_home_index_path %>">Change Password</a></li>
+              </ul>
+            </li>
+        <% end %>
+
+
+      </ul>
+
+    </div>
+  </div>
+</nav>
+<script type="text/javascript">
+
+    $(function() {
+
+        <% if is_sales_executive? %>
+            $("#user_menu").css('height','');
+            $("#user_menu").addClass('in');
+        <% end %>
+
+        <% if is_admin? %>
+            <% if(params[:controller].split('/')[0]  == "admin") %>
+                $("#admin_menu").css('height','');
+                $("#admin_menu").addClass('in');
+            <% end %>
+            <% if(params[:controller].split('/')[0]  == "home") %>
+                $("#admin_menu").css('height','');
+                $("#admin_menu").addClass('in');
+            <% end %>
+            <% if(params[:controller].split('/')[0]  == "user") %>
+                $("#user_menu").css('height','');
+                $("#user_menu").addClass('in');
+            <% end %>
+        <% end %>
+
+    });
+</script>

@@ -1,0 +1,34 @@
+<tr>
+  <td style="padding:0 0 10px">
+    <h3>Dear <%= @user.prefix %> <%= @user.first_name %> <%= @user.last_name %>, </h3>
+  </td>
+</tr>
+<tr>
+  <td style="padding:0 0 20px">
+    You have been successfully signed up with servicedeals.com, Below are login details.
+  </td>
+</tr>
+<tr>
+  <td style="padding:0 0 5px">
+    Your username is: <%= @user.email %></br>
+    
+  </td>
+</tr>
+<tr>
+  <td style="padding:0 0 20px">
+    
+    Your password is: <%= @password %></br>
+  </td>
+</tr>
+<tr>
+  <td style="padding:0 0 20px">
+    Thanks for joining and have a great and healthy day!
+  </td>
+</tr>
+<tr>
+  <td style="padding:0 0 20px; text-align:center">
+    <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+  </td>
+</tr>
+
+

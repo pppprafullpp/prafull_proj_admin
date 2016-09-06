@@ -1,0 +1,20 @@
+<% obj = Feedback.find(@pending_action.key) %>
+<% if obj.present? %>
+    <% if obj.user.present? %>
+        <div class="form-group"><label class="col-sm-2 control-label">User Name:</label>
+          <div class="col-sm-10">
+            <span class="form-control"><%= obj.user.first_name +  ' ' +obj.user.last_name %></span>
+          </div>
+        </div>
+    <% end %>
+
+    <div class="form-group"><label class="col-sm-2 control-label">Feedback:</label>
+      <div class="col-sm-10">
+        <%= text_area_tag :feedback,obj.feedback,:class => "form-control",:disabled => true,:row => 3,:column => 40,:maxlength => 500 %>
+      </div>
+    </div>
+
+
+<% end %>
+
+

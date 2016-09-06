@@ -1,0 +1,44 @@
+
+<% filter = [:name, :status, :test_category_id,:test_id,:order_number] if local_assigns[:filter].nil? %>
+
+
+<%if filter.include?(:test_category_id)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Category</label>
+        <%= select_tag :category_ids,options_for_select(get_test_categories),:data => {:placeholder => "All Category"},:id => "category_ids", :include_blank => "-All Categories-", :multiple => true,:class => 'form-control chosen-select'  %>
+      </div>
+    </div>
+<%end%>
+
+
+<%if filter.include?(:name)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Test Keyword</label>
+        <%= text_field_tag 'search_name', 'Enter your keyword here', :class => 'form-control' %>
+      </div>
+    </div>
+<%end%>
+
+
+<div style="padding: 22px 0 0 0">
+  <%= submit_tag "Search",:class=>"btn btn-primary btn-sm"%>
+  <%= link_to('Clear', cancel_url,:class=>"btn btn-white btn-sm") if cancel_url.present? %>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+		$("#category_ids").chosen();
+		
+        <%if filter.include?(:name)%>
+        $('#search_name').val('<%= params[:search_name] if params[:search_name].present? %>')
+        <%end%>
+
+
+        <%if filter.include?(:test_category_id)%>
+        $('#category_ids').val(<%= params[:category_ids] if params[:category_ids].present? %>)
+        <%end%>
+
+    });
+</script>

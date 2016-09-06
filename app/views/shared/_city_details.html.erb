@@ -1,0 +1,65 @@
+<div class="form-group <%= f.dpl_err_cls :city_id %>">
+  <label class="col-sm-2 control-label">City</label>
+  <div class="col-sm-10">
+  <%= f.select :city_id,options_for_select(get_cities('hash'),:selected => obj.city_id), {:prompt => '-Select city-'},{:class => "form-control chosen-select",:id => 'city'} %>
+  <%= f.dpl_err_msg :city_id, "City" %>
+  </div>
+</div>
+
+<div id="update_city_details">
+  <div class="form-group <%= f.dpl_err_cls :city_location_id %>">
+    <label class="col-sm-2 control-label">Location</label>
+    <div class="col-sm-10">
+    <%= f.select :city_location_id,options_for_select([],:selected => obj.city_location_id), {:prompt => '-Select location-'},{:class => "form-control chosen-select",:id => 'city_location'} %>
+    <%= f.dpl_err_msg :city_location_id, "Location" %>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Zip</label>
+    <div class="col-sm-10">
+    <span class="form-control" id="zip"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">State</label>
+    <div class="col-sm-10">
+    <span class="form-control" id="state"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Country</label>
+    <div class="col-sm-10">
+    <span class="form-control" id="country"></span>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        get_city_details("<%= obj.city_location_id%>");
+    });
+
+    $( "#city" ).bind("keyup change", function() {
+        get_city_details();
+    });
+
+    function get_city_details(city_location_id){
+        var city = $("#city").val();
+        if (city.length > 0) {
+            $.ajax({
+                type: "GET",
+                url: "<%= get_city_details_admin_cities_path %>?clid="+city_location_id+"&city_id=" + city + "&address_for=" + '<%= address_for.downcase %>',
+                dataType: "script",
+                success: function (data) {
+
+                },
+                error: function (data) {
+                    //alert(data)
+                }
+            });
+        }
+    }
+</script>

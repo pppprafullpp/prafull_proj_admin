@@ -1,0 +1,185 @@
+
+<% filter = [:name, :status, :test_category_id,:test_id,:order_number,:first_name,:mobile,:email,:start_end_date,:lab,:campaign_type,:admin_meeting_status] if local_assigns[:filter].nil? %>
+
+
+<%if filter.include?(:lab)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Lab</label>
+        <%=f.select(:lab_id, get_access_associated_labs, {},{:class => 'form-control chosen-select'})%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:name)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Name</label>
+        <%=f.text_field :name, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:first_name)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Name</label>
+        <%=f.text_field :first_name, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:mobile)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Mobile</label>
+        <%=f.text_field :mobile, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:email)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Email</label>
+        <%=f.text_field :email, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:test_id)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Test</label>
+        <%=f.select(:test_id, get_admin_tests, { :include_blank => "-Select-"},{:class => 'form-control chosen-select'})%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:test_category_id)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Category</label>
+        <%=f.select(:test_category_id, get_test_categories, { :include_blank => "-Select-"},{:class => 'form-control chosen-select'})%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:order_number)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Order Number</label>
+        <%=f.text_field :order_number, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:start_end_date)%>
+    <div>
+      <div class="col-sm-4 w-220 date">
+        <div class="form-group">
+          <label class="control-label">Start Date</label>
+          <div class="input-group date" id="start_date">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <%=f.text_field :start_date, {:class => 'input-sm form-control'}%>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-4 w-220 date">
+        <div class="form-group">
+          <label class="control-label">End Date</label>
+          <div class="input-group date" id="end_date">
+            <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <%=f.text_field :end_date, {:class => 'input-sm form-control'}%>
+          </div>
+        </div>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:campaign_type)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Campaign Type</label>
+        <%=f.select(:campaign_type, get_campaign_types, {:include_blank => "-Select-"},{:class => 'form-control chosen-select'})%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:status)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Status</label>
+        <%=f.select(:status, get_statuses, {:include_blank => "-Select-"},{:class => 'form-control chosen-select'})%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:admin_meeting_status)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Status</label>
+        <%=f.select(:status, AdminMeeting::MEETING_STATUSES, {:include_blank => "-Select-"},{:class => 'form-control chosen-select'})%>
+      </div>
+    </div>
+<%end%>
+
+
+<div style="padding: 22px 0 0 0">
+  <%=f.submit "Search",:class=>"btn btn-primary btn-sm"%>
+  <%= link_to('Clear', cancel_url,:class=>"btn btn-white btn-sm") if cancel_url.present? %>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        <%if filter.include?(:name)%>
+        $('#search_name').val('<%= params[:search][:name] if params[:search].present? %>')
+        <%end%>
+
+        <%if filter.include?(:first_name)%>
+        $('#search_first_name').val('<%= params[:search][:first_name] if params[:search].present? %>')
+        <%end%>
+
+        <%if filter.include?(:mobile)%>
+        $('#search_mobile').val('<%= params[:search][:mobile] if params[:search].present? %>')
+        <%end%>
+
+        <%if filter.include?(:email)%>
+        $('#search_email').val('<%= params[:search][:email] if params[:search].present? %>')
+        <%end%>
+
+        <%if filter.include?(:status)%>
+        $('#search_status').val(<%= params[:search][:status] if params[:search].present? %>)
+        <%end%>
+
+        <%if filter.include?(:test_category_id)%>
+        $('#search_test_category_id').val(<%= params[:search][:test_category_id] if params[:search].present? %>)
+        <%end%>
+
+        <%if filter.include?(:test_id)%>
+        $('#search_test_id').val(<%= params[:search][:test_id] if params[:search].present? %>)
+        <%end%>
+
+        <%if filter.include?(:order_number)%>
+        $('#search_order_number').val(<%= params[:search][:order_number] if params[:search].present? %>)
+        <%end%>
+
+        <%if filter.include?(:campaign_type)%>
+        $('#search_campaign_type').val(<%= params[:search][:campaign_type] if params[:search].present? %>)
+        <%end%>
+
+        <%if filter.include?(:start_end_date)%>
+        $('#search_start_date').val('<%= params[:search][:start_date] if params[:search].present? %>')
+        $('#search_end_date').val('<%= params[:search][:end_date] if params[:search].present?  %>')
+        <%end%>
+
+        <%if filter.include?(:admin_meeting_status)%>
+        $('#search_status').val(<%= params[:search][:status] if params[:search].present? %>)
+        <%end%>
+
+        <%if filter.include?(:lab)%>
+        $('#search_lab_id').val(<%= params[:search][:lab_id] if params[:search].present? %>)
+        <%end%>
+    });
+</script>

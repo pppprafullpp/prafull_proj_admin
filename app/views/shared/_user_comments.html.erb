@@ -1,0 +1,96 @@
+<div class="wrapper wrapper-content  animated fadeInRight" id="user-comm-data">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox">
+        <div class="ibox-title">
+          <h5>User Comments : Found <%= user_comments.present? ? user_comments.count : 0 %> comments.</h5>
+          <% if is_user? %>
+              <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal2" style="float: right;">
+                Add Your Comment
+              </button>
+          <% end %>
+        </div>
+        <div class="ibox-content">
+
+          <div class="table-responsive">
+            <table class="table table-hover issue-tracker">
+              <tbody>
+
+              <% user_comments.each do |user_comment| %>
+                  <tr>
+                    <td class="issue-info">
+                      <a href="#">
+                        Comment
+                      </a>
+
+                      <small>
+                        <%= user_comment.body %>
+                      </small>
+                    </td>
+                    <td>
+                      <%= user_comment.first_name %> <%= user_comment.last_name %>
+                    </td>
+                    <td>
+                      <i class="fa fa-clock-o"></i> <%= user_comment.created_at.strftime('%d/%m/%Y %I:%M%p') %>
+                    </td>
+                    <!--
+                    <td class="text-right">
+                      <button class="btn btn-white btn-xs"> Tag</button>
+                    </td>
+                    -->
+                  </tr>
+              <% end %>
+
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<%
+   #raise obj.inspect
+   message = ''
+   obj_name = ''
+   case obj.class.to_s
+     when LAB
+       obj_name = "#{obj.lab_name}"
+       message = "Are you satisfied by the services provided at #{obj_name}"
+     when DOCTOR
+       obj_name = "#{obj.name}"
+       message = "Wanna share any comments for #{obj_name}"
+   end
+%>
+
+
+<!--  modal box to request admin for new test -->
+<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content animated flipInY">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Share Your Valuable Comments</h4>
+        <small class="font-bold"><%= message %></small>
+      </div>
+
+      <%= form_tag(user_user_comments_path, method: :POST) do %>
+          <div class="modal-body">
+            Comment : <input type="text" name="comment" value="" required class="form-control">
+            <input type="hidden" name="commentable_id" value="<%= obj.id %>">
+            <input type="hidden" name="commentable_type" value="<%= obj.class %>">
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            <input type="submit" class="btn btn-primary">
+          </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>

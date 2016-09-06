@@ -1,0 +1,123 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <%= form_for @address,:html => {:id => 'submit_address'} do |f| %>
+      <%= f.hidden_field :user_id, :value => session[:id]%>
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>User Address<small></small></h5>
+          <div class="ibox-tools">
+            <a class="collapse-link">
+              <i class="fa fa-chevron-up"></i>
+            </a>
+          </div>
+        </div>
+        <div class="ibox-content" style="display: block;">
+
+
+          <div class="form-group <%= f.dpl_err_cls :nickname %>">
+            <label>NickName</label>
+            <%= f.text_field :nickname,:value => @address.nickname,:class => 'form-control',:maxlength => 150 %>
+            <%= f.dpl_err_msg :nickname, "Nickname" %>
+          </div>
+
+          <div class="form-group <%= f.dpl_err_cls :address1 %>">
+            <label>Address 1</label>
+            <%= f.text_field :address1,:value => @address.address1,:class => 'form-control',:maxlength => 150 %>
+            <%= f.dpl_err_msg :address1, "Address 1" %>
+          </div>
+
+          <div class="form-group <%= f.dpl_err_cls :address2 %>">
+            <label>Address 2</label>
+            <%= f.text_field :address2,:value => @address.address2,:class => 'form-control',:maxlength => 150 %>
+            <%= f.dpl_err_msg :address2, "Address 2" %>
+          </div>
+
+          <div class="form-group <%= f.dpl_err_cls :landmark %>">
+            <label>Landmark</label>
+            <%= f.text_field :landmark,:value => @address.landmark,:class => 'form-control',:maxlength => 150 %>
+            <%= f.dpl_err_msg :landmark, "Landmark" %>
+          </div>
+
+          <div class="form-group <%= f.dpl_err_cls :contact_number %>">
+            <label>Contact Number</label>
+            <%= f.text_field :contact_number,:value => @address.contact_number,:class => 'form-control',:maxlength => 15 %>
+            <%= f.dpl_err_msg :contact_number, "Contact Number" %>
+          </div>
+
+          <%= render :partial => 'shared/city_details',:locals => {:f => f,:address_for => 'user_address',:obj => @address} %>
+
+          <div class="form-group <%= f.dpl_err_cls :status %>">
+            <label>Status</label>
+            <%= f.select :status, options_for_select(get_statuses,:selected => @address.status),{},{:class => 'form-control'} %>
+            <%= f.dpl_err_msg :status, "Status" %>
+          </div>
+
+          <div class="form-group"></div>
+
+          <div>
+            <button class="btn btn-primary" style="width: 100%;" type="submit" id="submit_address_button">Save Address</button>
+          </div>
+
+        </div>
+      </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+
+    $( document ).ready(function() {
+
+        //submit button validation
+        $("#submit_address_button").click(function(){
+            var check = true
+
+            var a = $('#user_address_nickname').val().trim();
+            if (a == null || a == "") {
+                $('#user_address_nickname').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_address_nickname').removeClass('custom-input-error')
+            }
+
+            var a = $('#user_address_address1').val().trim();
+            if (a == null || a == "") {
+                $('#user_address_address1').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_address_address1').removeClass('custom-input-error')
+            }
+
+            var a = $('#user_address_contact_number').val().trim();
+            if (a == null || a == "" || a.length < 10) {
+                $('#user_address_contact_number').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_address_contact_number').removeClass('custom-input-error')
+            }
+
+            var a = $('#city').val().trim();
+            if (a == null || a == "" ) {
+                $('#city').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#city').removeClass('custom-input-error')
+            }
+
+            var a = $('#city_location').val().trim();
+            if (a == null || a == "" ) {
+                $('#city_location').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#city_location').removeClass('custom-input-error')
+            }
+
+
+            if (check){
+                $('#submit_address').submit()
+            }else{
+                return false
+            }
+        });
+
+
+    });
+</script>

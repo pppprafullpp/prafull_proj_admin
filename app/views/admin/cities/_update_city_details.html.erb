@@ -1,0 +1,56 @@
+<div id="update_city_details">
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Location</label>
+    <div class="col-sm-10">
+    <%= select_tag :city_location_id,options_for_select(city_locations, @city_location_id), {:prompt => '-Select location-',:class => "form-control chosen-select",:id => 'city_location',:name => "#{address_for}[city_location_id]"} %>
+    </div>
+    <%#= dpl_err_msg :city_location_id, "Location" %>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Zip</label>
+    <div class="col-sm-10">
+    	<span class="form-control" id="zip"></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">State</label>
+    <div class="col-sm-10">
+    <span class="form-control" id="state"><%= city.city_state %></span>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label class="col-sm-2 control-label">Country</label>
+    <div class="col-sm-10">
+    <span class="form-control" id="country"><%= city.city_country %></span>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        get_location_details();
+    });
+    $( "#city_location" ).bind("keyup change", function() {
+        get_location_details()
+    });
+
+    function get_location_details(){
+        var location_id = $('#city_location').val();
+        if (location_id.length > 0) {
+            $.ajax({
+                type: "GET",
+                url: "<%= get_location_details_admin_cities_path %>?location_id=" + location_id,
+                dataType: "json",
+                success: function (data) {
+                    $('#zip').html(data['location']['zip'])
+                },
+                error: function (data) {
+                    //alert(data)
+                }
+            });
+        }
+    }
+</script>

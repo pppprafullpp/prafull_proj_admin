@@ -1,0 +1,9 @@
+<div class="footer fixed">
+    <div class="pull-right">
+        For Support Email to : <a href="mailto:<%= APP_CONFIG[:contact_email]%>?Subject=Hello%20Service Deals%20Team" target="_top"><%= APP_CONFIG[:contact_email]%></a>
+    or call <span class="phone"><i></i><%= APP_CONFIG[:contact_number]%></span>
+    </div>
+    <div>
+      <strong>Copyright</strong> <a href="<%= root_url %>">ServiceDeals</a> Company &copy; All Rights Reserved.<%= Date.today.strftime('%Y') %> - <%= (Date.today + 1.year).strftime('%Y') %>
+    </div>
+</div>

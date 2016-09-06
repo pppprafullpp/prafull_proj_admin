@@ -1,0 +1,36 @@
+development:
+  :main_url: "http://localhost:3000"
+  :contact_email: "servicedeals@gmail.com"
+  :contact_number: "0000-00000000"
+  :smsowl:
+    :accountid: ""
+    :apikey: ""
+    #:apikey: "gkeE6HqPpAGqa2pyeDqvvwxjMXrR7qKxtvFGEvuz5r4LdphqkhA"
+  :from: "servicedeals@gmail.com"
+  :solr_server: ""
+  
+test:
+  :main_url: "http://www.servicedeals.com"
+  :contact_email: "servicedeals@gmail.com"
+  :contact_number: "0000-00000000"
+  :smsowl:
+    :accountid: ""
+    :apikey: ""
+  :from: "servicedeals@gmail.com"
+staging:
+  :main_url: "http://www.servicedeals.com"
+  :contact_email: "servicedeals@gmail.com"
+  :contact_number: "0000-00000000"
+  :smsowl:
+    :accountid: ""
+    :apikey: ""
+  :from: "servicedeals@gmail.com"
+production:
+  :main_url: "http://www.servicedeals.com"
+  :contact_email: "servicedeals@gmail.com"
+  :contact_number: "0000-00000000"
+  :smsowl:
+    :accountid: ""
+    :apikey: ""
+  :from: "servicedeals@gmail.com"
+  :solr_server: ""

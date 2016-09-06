@@ -1,0 +1,147 @@
+<%= stylesheet_link_tag "search/select.min","search/materialize.min" %>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<div class="row" style="padding-top:2%">
+  <div class="col l5 m4 s12">
+    <div class="col s12">
+
+      <% if @package_id.present? %>
+          <%= render :partial => 'home/package_checkout' %>
+      <% else %>
+          <%= render :partial => 'home/test_checkout' %>
+      <%end %>
+
+    </div>
+  </div>
+  <div class="col l7 m8 s12">
+    <div class="col s12 m12 l12">
+      <div class="row">
+        <div class="col s12 card patient-form">
+          <% if session[:id].present? and session[:role] == USER %>
+              <% #raise current_user.inspect %>
+              <% obj = current_user %>
+              <%
+                 name =   current_user.first_name
+                 age = current_user.age
+                 sex = current_user.sex
+                 email = current_user.email
+                 mobile = current_user.mobile
+                 address = current_user.user_addresses.pluck(:address1).first
+              %>
+              <div>
+                <h3 style="font-size: 1.5rem;line-height:1.5rem;padding-left:4%">Member Details</h3>
+                <div class="hr-line-dashed"></div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+
+                  <i class="material-icons prefix">face</i>
+                  <%= text_field_tag :name,name,:disabled => true,:placeholder => 'Name' %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">cake</i>
+                  <%= number_field_tag :age,age,:disabled => true,:placeholder => 'Age' %>
+                </div>
+                <div class="input-field col s6">
+                  <%
+                     if sex == MALE
+                       male_select = "checked='checked'"
+                       female_select = ''
+                     elsif sex == FEMALE
+                       male_select = ''
+                       female_select = "checked='checked'"
+                     else
+                       male_select = ''
+                       female_select = ''
+                     end
+                  %>
+                  <input name="type" type="radio" id="male" value="male" disabled="disabled" <%= male_select %>>
+                  <label for="male">Male</label>
+                  <input name="type" type="radio" id="female" value="female" disabled="disabled" <%= female_select %>>
+                  <label for="female">Female</label>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">email</i>
+                  <%= text_field_tag :email,email,:disabled => true,:placeholder => 'Email' %>
+                </div>
+                <div class="input-field col s6">
+                  <i class="material-icons prefix">phone</i>
+                  <%= text_field_tag :mobile,mobile,:disabled => true,:placeholder => 'Mobile' %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <i class="material-icons prefix">location_on</i>
+                  <%= text_field_tag :address,address,:disabled => true,:placeholder => 'Address' %>
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s8">
+                  <%= form_tag home_create_appointment_path do %>
+                      <%= hidden_field_tag :lab_id, @lab_id,:name => 'lab_test_request[lab_id]' %>
+                      <%= hidden_field_tag :lab_test_ids, session[:cart][:test_ids],:name => 'lab_test_request[lab_test_ids]' %>
+                      <%= hidden_field_tag :user_id, session[:id],:name => 'lab_test_request[user_id]' %>
+                      <%= hidden_field_tag :request_date, Time.now,:name => 'lab_test_request[request_date]' %>
+                      <%= hidden_field_tag :status, LabTestRequest::NEW_REQUEST,:name => 'lab_test_request[status]' %>
+                      <% if @package_id.present? %>
+                          <%= hidden_field_tag :request_for, LabTestRequest::PACKAGE_REQUEST,:name => 'lab_test_request[request_for]' %>
+                          <%= hidden_field_tag :request_for_id, @package_id,:name => 'lab_test_request[request_for_id]' %>
+                      <% else %>
+                          <%= hidden_field_tag :request_for, LabTestRequest::TEST_REQUEST,:name => 'lab_test_request[request_for]' %>
+                      <% end %>
+                      <button class="btn medd-blue waves-effect waves-light right" type="submit">
+                        Confirm Test
+                      </button>
+                  <% end %>
+
+                </div>
+              </div>
+          <% else %>
+              <div class="row">
+
+                <div class="col5">
+                  <div class="ibox-content">
+                    <div>
+                      <h3 style="font-size: 1.5rem;line-height:1.5rem;">Member Login</h3>
+                    </div>
+
+                    <div class="hr-line-dashed"></div>
+                    <%= form_tag login_user_users_path do %>
+                        <div class="form-group">
+                          <input class="form-control" placeholder="Email/Mobile" required="true" name="email">
+                        </div>
+                        <div class="form-group">
+                          <input type="password" class="form-control" placeholder="Password" name="password" required="true">
+                        </div>
+                        <input type="hidden" name="referer" value="checkout_login">
+                        <button type="submit" class="btn btn-w-m btn-success block full-width m-b" style="background-color: #2b96cc;">
+                          Login
+                        </button>
+
+                        <%= link_to "Sign in with Facebook", "/auth/facebook", id: "sign_in", :class => "btn btn-w-m btn-success block full-width m-b",  :style => "background-color: #2b96cc;"%>
+
+                        <a href="<%= forgot_password_user_users_path %>"> <small>Forgot password?</small> </a>
+
+                        <p class="text-muted text-center">
+                          <small>Do not have an account?</small>
+                        </p>
+                        <a class="btn btn-w-m btn-success block full-width m-b" href="<%= new_user_user_path %>"  style="background-color: #2b96cc;">Become Service Deals Member</a>
+
+                        <p class="text-muted text-center"></p>
+
+                    <% end %>
+                    <p class="m-t"></p>
+                  </div>
+                </div>
+              </div>
+              <hr />
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

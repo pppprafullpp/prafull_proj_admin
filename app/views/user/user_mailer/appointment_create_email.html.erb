@@ -1,0 +1,114 @@
+<tr>
+  <td style="padding:0 0 20px">
+    <table style="margin:40px auto;text-align:left;width:80%">
+      <tbody>
+      <tr>
+        <td>
+          Dear <%= @user.prefix %> <%= @user.first_name %> <%= @user.last_name %>,<br>
+          You have raised request for Diagnostic Tests please find below following details,<br/><br/>
+          Request# <%= @request.request_number %><br>
+          Date : <%= @request.created_at.strftime('%b %d %Y') %><br/>
+          Lab : <%= @lab.lab_name %><br/>
+          <% if @doctor.present? %>
+              Suggested By : Dr. <%= @doctor.first_name %> <%= @doctor.last_name %>
+          <% else %>
+              Suggested By : Self
+          <% end %>
+        </td>
+      </tr>
+
+      <% if @request.request_for == LabTestRequest::PACKAGE_REQUEST %>
+          <% package = LabPackage.find_by_id(@request.request_for_id)%>
+          <tr>Package Name : <%= package.name %></tr>
+          <tr>
+            <td>
+              <table style="border-top:#eee 1px solid" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                  <td>Package Tests</td>
+                  <td style="text-align:right">Actual Price</td>
+                  <td style="text-align:right">Discount Amount</td>
+                  <td style="text-align:right">Discounted Price</td>
+                </tr>
+
+                <% test_discounted_price = 0 %>
+                <% package.lab_package_items.each do |lab_test| %>
+                    <% test = Test.find_by_id(lab_test.test_id)%>
+                    <tr>
+                      <td><%= test.name %></td>
+                      <td style="text-align:right">Rs. <%= lab_test.actual_price %></td>
+                      <td style="text-align:right">Rs. <%= lab_test.discount_amount %></td>
+                      <td style="text-align:right">Rs. <%= lab_test.discounted_price %></td>
+                    </tr>
+                    <% test_discounted_price += lab_test.discounted_price %>
+                <% end %>
+
+                <tr class="total">
+                  <td></td>
+                  <td></td>
+                  <td style="text-align:right" width="15%">Total</td>
+                  <td style="text-align:right">
+                    <span class="grey-text font-12"> <span style="text-decoration: line-through;">Rs. <%= test_discounted_price %></span> </span>
+                    <br>
+                    <span class="font-20" style="font-size: 14px;">Package Price : Rs. <%= package.discounted_price %>/-</span>
+                  </td>
+                </tr>
+                </tbody></table>
+            </td>
+          </tr>
+      <% else %>
+          <tr>
+            <td>
+              <table style="border-top:#eee 1px solid" cellpadding="0" cellspacing="0">
+                <tbody>
+                <tr>
+                  <td>Test</td>
+                  <td style="text-align:right">Actual Price</td>
+                  <td style="text-align:right">Discount Amount</td>
+                  <td style="text-align:right">Discounted Price</td>
+                </tr>
+
+                <%
+                   lab_test_ids = @request.lab_test_ids.present? ? eval(@request.lab_test_ids) : []
+                   lab_tests = LabTest.where(:id => lab_test_ids)
+                %>
+                <% total_price = 0 %>
+                <% lab_tests.each do |lab_test| %>
+                    <% test = Test.find_by_id(lab_test.test_id)%>
+                    <tr>
+                      <td><%= test.name %></td>
+                      <td style="text-align:right">Rs. <%= lab_test.actual_price %></td>
+                      <td style="text-align:right">Rs. <%= lab_test.discount_amount %></td>
+                      <td style="text-align:right">Rs. <%= lab_test.discounted_price %></td>
+                    </tr>
+                    <% total_price += lab_test.discounted_price %>
+                <% end %>
+
+                <tr class="total">
+                  <td></td>
+                  <td></td>
+                  <td style="text-align:right" width="15%">Total</td>
+                  <td style="text-align:right">Rs. <%= total_price %></td>
+                </tr>
+                </tbody></table>
+            </td>
+          </tr>
+      <% end %>
+
+      <tr>
+        <td style="padding:0 0 20px">
+          We will notify you once Diagnostic Labs confirms your request <br/>
+          Thanks for using Service Deals and have a great and healthy day!
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:0 0 20px; text-align:center">
+          <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </td>
+</tr>
+

@@ -1,0 +1,175 @@
+<div class="wrapper wrapper-content animated fadeInRight">
+  <%= form_for [:user,@user],:html => {:id => 'submit_user'} do |f| %>
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Personal Information<small></small></h5>
+          <div class="ibox-tools">
+            <a class="collapse-link">
+              <i class="fa fa-chevron-up"></i>
+            </a>
+          </div>
+        </div>
+        <div class="ibox-content" style="display: block;">
+          <div class="row">
+            <div class="col-sm-6 b-r"><h3 class="m-t-none m-b"></h3>
+              <p></p>
+
+              <label style="width: 15%;">Prefix*</label>
+              <label style="width: 41%;">First Name*</label>
+              <label>Last Name*</label>
+              <div class="input-group m-b <%= f.dpl_err_cls :first_name %>">
+                <div class="input-group-btn">
+                  <%= f.select :prefix,options_for_select(get_prefix_types, @user.prefix),{},{:class => "btn btn-white dropdown-toggle",:style => "height: 34px;"} %>
+                </div>
+                <%= f.text_field :first_name,:value => @user.first_name,:class => 'form-control',:placeholder => "Enter First Name",:maxlength => 150,:style => "width: 50%;" %>
+                <%= f.dpl_err_msg :first_name, "First Name" %>
+                <%= f.text_field :last_name,:value => @user.last_name,:class => 'form-control',:placeholder => "Enter First Name",:maxlength => 150,:style => "width: 50%;" %>
+                <%= f.dpl_err_msg :last_name, "Last Name" %>
+              </div>
+
+              <div class="form-group <%= f.dpl_err_cls :email %>">
+                <label>Email*</label>
+                <%= f.email_field :email,:value => @user.email,:class => 'form-control',:maxlength => 150 %>
+                <%= f.dpl_err_msg :email, "Email" %>
+              </div>
+
+              <div class="form-group <%= f.dpl_err_cls :age %>">
+                <label>Age (in year)*</label>
+                <%= f.number_field :age,:value => @user.age,:class => 'form-control' %>
+                <%= f.dpl_err_msg :age, "Age" %>
+              </div>
+
+            </div>
+
+            <div class="col-sm-6"><h3 class="m-t-none m-b"></h3>
+              <p></p>
+
+              <div class="form-group <%= f.dpl_err_cls :mobile %>">
+                <label>Mobile*</label>
+                <%= f.text_field :mobile,:value => @user.mobile,:class => 'form-control',:maxlength => 11 %>
+                <%= f.dpl_err_msg :mobile, "Mobile" %>
+              </div>
+
+              <div class="form-group <%= f.dpl_err_cls :landline %>">
+                <label>Landline</label>
+                <%= f.text_field :landline,:value => @user.landline,:class => 'form-control',:maxlength => 15 %>
+                <%= f.dpl_err_msg :landline, "Landline" %>
+              </div>
+
+              <div class="form-group <%= f.dpl_err_cls :emergency_contact_number %>">
+                <label>Emergency Contact</label>
+                <%= f.text_field :emergency_contact_number,:value => @user.emergency_contact_number,:class => 'form-control',:maxlength => 15 %>
+                <%= f.dpl_err_msg :emergency_contact_number, "Emergency Contact" %>
+              </div>
+
+
+            </div>
+
+            <div class="form-group <%= f.dpl_err_cls :upload %>">
+              <div class="col-sm-10">
+                <label title="Upload image file" for="inputImage" class="btn btn-primary"> <%= f.file_field :upload, {:accept => "image/*", :class => "hide", :id => "inputImage"} %>
+                  Upload Profile Pic </label>
+                <%= f.dpl_err_msg :upload, "Photo" %>
+                <%= image_tag @user.upload.url(:medium) if @user.upload.present? %>
+              </div>
+            </div>
+
+          </div>
+
+          <div>
+            <button class="btn btn-primary" style="width: 100%;" type="submit" id="submit_user_button">Save Changes</button>
+          </div>
+
+        </div>
+      </div>
+  <% end %>
+</div>
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+
+        //submit button validation
+        $("#submit_user_button").click(function(){
+            var check = true
+
+            var a = $('#user_prefix').val().trim();
+            if (a == null || a == "") {
+                $('#user_prefix').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_prefix').removeClass('custom-input-error')
+            }
+
+            var a = $('#user_first_name').val().trim();
+            if (a == null || a == "") {
+                $('#user_first_name').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_first_name').removeClass('custom-input-error')
+            }
+
+            var a = $('#user_last_name').val().trim();
+            if (a == null || a == "") {
+                $('#user_last_name').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_last_name').removeClass('custom-input-error')
+            }
+
+            var a = $('#user_mobile').val().trim();
+            if (a == null || a == "" || a.length < 10) {
+                $('#user_mobile').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_mobile').removeClass('custom-input-error')
+            }
+
+            var a = $('#user_age').val().trim();
+            if (a == null || a == "" || a <= 0 || a > 120) {
+                $('#user_age').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_age').removeClass('custom-input-error')
+            }
+
+            var a = $('#user_email').val().trim();
+            if (a == null || a == "" || !validateEmail(a)) {
+                $('#user_email').addClass('custom-input-error')
+                check = false
+            }else{
+                $('#user_email').removeClass('custom-input-error')
+            }
+
+            if (check){
+                $('#submit_user').submit()
+            }else{
+                return false
+            }
+        });
+
+
+
+        var $inputImage = $("#inputImage");
+        if (window.FileReader) {
+            $inputImage.change(function() {
+                var fileReader = new FileReader(), files = this.files, file;
+
+                if (!files.length) {
+                    return;
+                }
+
+                file = files[0];
+
+                if (/^image\/\w+$/.test(file.type)) {
+
+                } else {
+                    alert("Please choose an image file.");
+                }
+            });
+        } else {
+            $inputImage.addClass("hide");
+        }
+
+
+    });
+</script>

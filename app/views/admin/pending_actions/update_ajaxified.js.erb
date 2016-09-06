@@ -1,0 +1,3 @@
+
+//$("#list_pending_actions-modal").html("<%#= escape_javascript(render :partial => "admin/pending_actions/list_pending_actions", :locals => {:pending_actions => @pending_actions}) %>")
+$('#list_pending_actions').replaceWith("<%= j (render :partial => "admin/pending_actions/list_pending_actions", :locals => {:pending_actions => @pending_actions})%>");

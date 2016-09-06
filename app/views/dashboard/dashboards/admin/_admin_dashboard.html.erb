@@ -1,0 +1,123 @@
+<div class="wrapper wrapper-content">
+  <div class="row">
+    <div class="col-lg-3">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <span class="label label-success pull-right">Total</span>
+          <h5>Users</h5>
+        </div>
+        <div class="ibox-content">
+          <h1 class="no-margins"><%= @user_count.present? ? @user_count : 0 %></h1>
+          <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
+          <small>Total Users</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <span class="label label-success pull-right">Total</span>
+          <h5>Leads</h5>
+        </div>
+        <div class="ibox-content">
+          <h1 class="no-margins"><%= @lab_count.present? ? @lab_count : 0 %></h1>
+          <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
+          <small>Total Leads</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <span class="label label-info pull-right">Total</span>
+          <h5>Requests</h5>
+        </div>
+        <div class="ibox-content">
+          <h1 class="no-margins"><%= @request_count.present? ? @request_count : 0 %></h1>
+          <div class="stat-percent font-bold text-success">98% <i class="fa fa-bolt"></i></div>
+          <small>Total Requests</small>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <span class="label label-info pull-right">Total</span>
+          <h5>Orders</h5>
+        </div>
+        <div class="ibox-content">
+          <h1 class="no-margins"><%= @order_count.present? ? @order_count : 0 %></h1>
+          <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
+          <small>Total Orders</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="dashboard_graph"></div>
+
+
+  <div id="dashboard_order_listing"></div>
+  <div id="dashboard_signup_listing"></div>
+
+</div>
+
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $.ajax({
+            url: "<%= populate_graph_ajaxified_dashboard_dashboards_path %>",
+            type: 'GET',
+            data: "row_key=test",
+            dataType: "script",
+            beforeSend: function() {
+                // setting a timeout
+                //$(".top_ajaxify_loading").show();
+                $(".progress-bar").show();
+            },
+            success: function(data) {
+                //$(".top_ajaxify_loading").fadeIn('slow').hide();
+                $(".progress-bar").fadeIn('slow').hide();
+
+            }
+        });
+
+        $.ajax({
+            url: "<%= list_orders_ajaxified_dashboard_dashboards_path %>",
+            type: 'GET',
+            data: "row_key=test",
+            dataType: "script",
+            beforeSend: function() {
+                // setting a timeout
+                $(".top_ajaxify_loading").show();
+                $(".ajaxify_loading").show();
+            },
+            success: function(data) {
+                $(".top_ajaxify_loading").fadeIn('slow').hide();
+                $(".ajaxify_loading").fadeIn('slow').hide();
+
+            }
+        });
+
+        $.ajax({
+            url: "<%= list_signups_ajaxified_dashboard_dashboards_path %>",
+            type: 'GET',
+            data: "row_key=signup",
+            dataType: "script",
+            beforeSend: function() {
+                // setting a timeout
+                $(".top_ajaxify_loading").show();
+                $(".ajaxify_loading").show();
+            },
+            success: function(data) {
+                $(".top_ajaxify_loading").fadeIn('slow').hide();
+                $(".ajaxify_loading").fadeIn('slow').hide();
+
+            }
+        });
+    });
+</script>
+
+
+

@@ -1,0 +1,60 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require font-awesome
+ *= require animate/animate.css
+ *= require chosen/chosen.css
+ *= require style
+ *= require commontator/application
+ */
+
+th .current {
+  padding-right: 12px;
+  background-repeat: no-repeat;
+  background-position: right center;
+}
+
+th .asc {
+  background-image: url(/assets/time-up.png);
+}
+
+th .desc {
+  background-image: url(/assets/time-down.png);
+}
+
+.top_ajaxify_loading{display: inline-block;
+    width: 92%;
+    background:url("/assets/ajax_loading.gif") no-repeat center 19px #edf3ff;
+    height:25px;
+    border-top: 3px solid #e6eeff;
+    border-bottom: 3px solid #e6eeff;
+    border-left: 2px solid #e6eeff;
+    border-right: 2px solid #e6eeff;
+    padding: 4%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    opacity:0.4;
+    filter:alpha(opacity=40);}
+
+.ajaxify_loading{
+    background:url("/assets/ajax_loading.gif") no-repeat center 19px #f9f9f9;
+    display: inline-block;
+    width: 92%;
+    padding: 4%;
+    border-top: 2px dotted #ededed;
+    border-bottom: 2px dotted #ededed;
+    margin:10px 0 0 0;
+    height:25px;display: none;
+    opacity:0.4;
+    filter:alpha(opacity=40);
+}
+
+.dpl_auth_pad{padding-top:4%;padding-bottom:-1%;}

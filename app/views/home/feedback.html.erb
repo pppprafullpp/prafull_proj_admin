@@ -1,0 +1,50 @@
+<div style="background-color: #f3f3f4">
+<div class="loginColumns animated fadeInDown" style="padding-top:4%;padding-bottom:0%;max-width: 800px;margin: 0 auto;padding: 100px 20px 20px 20px;">
+  <%= render :partial => 'shared/dpl_notifier' %>
+  <div class="row">
+
+    <div class="col-md-6">
+      <h1 class="font-bold">Welcome to Service Deals</h1>
+
+      <p>
+        Please provide your valuable feedback so that we can improve our services
+      </p>
+
+      <p>
+        and also improve user experience to serve our customer in the best way possible.
+      </p>
+
+      <p>
+       We are extremely sorry if you face any issues with the portal or services provided by us.
+      </p>
+
+    </div>
+
+    <div class="col-md-6">
+      <div class="ibox-content" style="background-color: white;color: inherit;padding: 15px 20px 20px 20px;border-color: #e7eaec;border-image: none;border-style: solid solid none;border-width: 1px 0px;">
+        <div><h3>Enter Your Feedback</h3> </div>
+
+        <div class="hr-line-dashed"></div>
+        <%= form_tag create_feedback_home_index_path do %>
+
+            <div class="form-group">
+              <input type="text" class="form-control" name="user_name" value="<%= session[:user_name] %>" required="true" disabled="true">
+            </div>
+
+            <div class="form-group">
+              <%= text_area_tag :feedback,'',:class => "form-control",:placeholder => "Enter Your Feedback Here...",:name => "feedbacks[feedback]",:required => true,:row => 3,:column => 40,:maxlength => 500 %>
+            </div>
+
+            <button type="submit" class="btn btn-primary block full-width m-b" style="background-color: #18a689;
+                    border-color: #18a689;
+                    color: white;">
+              Send Feedback
+            </button>
+        <% end %>
+        <p class="m-t"></p>
+      </div>
+    </div>
+  </div>
+  <hr />
+</div>
+</div>

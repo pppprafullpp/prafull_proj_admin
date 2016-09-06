@@ -1,0 +1,119 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Pending Actions</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="<%= home_index_path %>">Home</a>
+      </li>
+      <li class="active">
+        <strong>Actions</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+  <div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+      <%= form_for @search, :as => 'search', :url => admin_pending_actions_path, :html => {:method => :get} do |f| %>
+          <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => '',:cancel_url => admin_pending_actions_path, :filter => [:status]}%>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox">
+        <div class="ibox-content" id="list_pending_actions">
+
+          <% if @pending_actions.present? %>
+              <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                <thead>
+                <tr>
+                  <th data-toggle="true">S.No.</th>
+                  <th data-toggle="true">Action Type</th>
+                  <th data-hide="all">Action Name</th>
+                  <th data-hide="all">Action Description</th>
+                  <th data-hide="phone">Status</th>
+                  <th class="text-right" data-sort-ignore="true">Action</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <% @pending_actions.each_with_index do |pa,index| %>
+                    <tr>
+                      <td><%= index + 1 %>.</td>
+                      <td>
+                        <%= PendingAction::PENDING_ACTIONS.key(pa.action_type) %>
+                      </td>
+                      <td>
+                        <%= 'NA' %>
+                      </td>
+                      <td>
+                        <%= 'NA' %>
+                      </td>
+                      <td>
+                        <span class="label <%= get_status_css(pa.status) %>"><%= get_statuses.key(pa.status) %></span>
+                      </td>
+                      <td class="text-right">
+                        <div class="btn-group">
+
+                          <% if [PendingAction::PACKAGE_PENDING,PendingAction::LAB_PENDING,PendingAction::CAMPAIGN_PENDING,PendingAction::FEEDBACK_PENDING, PendingAction::DOCTOR_PENDING].include?(pa.action_type) %>
+                              <%= link_to 'Approve',"javascript:void(0);",:class => 'btn-white btn btn-xs approve-btn',:remote => true,:pid => "#{pa.id}" %>
+                              
+                              <%= link_to 'Approve & Mark Public',"javascript:void(0);",:class => 'btn-white btn btn-xs approve-btn',:remote => true,:pid => "#{pa.id}&action_type=#{PendingAction::APPROVE_WITH_PUBLIC}" if PendingAction::PACKAGE_PENDING == pa.action_type %> 
+                              
+                              <%= link_to 'Edit',edit_admin_pending_action_path(pa),:class => 'btn-white btn btn-xs' %>
+                          <% else %>
+                              <% message,url =  get_pending_action_details(pa.action_type,pa.key)%>
+                              <%= link_to 'View Details',url,:class => 'btn-white btn btn-xs' %>
+                          <% end %>
+
+                        </div>
+                      </td>
+                    </tr>
+                <% end %>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="6">
+                    <ul class="pagination pull-right"></ul>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+          <% else %>
+              <div class="alert alert-danger" style="text-align: center;"> No Actions Pending Yet</div>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+<script type="text/javascript">
+    $(".approve-btn").click(function(){
+        id = ($(this).attr('pid'))
+        $.ajax({
+            type: "GET",
+            url: "<%= update_ajaxified_admin_pending_actions_path %>?id=" + id,
+            dataType: "script",
+            success: function (data) {
+                $(this).closest('tr').hide();
+            },
+            error: function (data) {
+                //alert(data)
+            }
+        });
+    });
+
+
+</script>
+

@@ -1,0 +1,19 @@
+<tr>
+  <td style="padding:0 0 10px">
+    <h3>Hello <%= @user.prefix %> <%= @user.first_name %> <%= @user.last_name %>,  </h3>
+  </td>
+</tr>
+<tr>
+  <td style="padding:0 0 20px">
+    Your OTP is <%= @user.otp %>. View reports online on <a href="<%= APP_CONFIG[:main_url] %>">servicedeals.com</a>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 10px">
+    Thanks have a great day!
+  </td>
+</tr>
+
+
+

@@ -1,0 +1,26 @@
+<tr>
+  <td class="content-block">
+    <h3>Welcome <%= @admin.name %> to <a href="<%= APP_CONFIG[:main_url] %>">servicedeals.com</a> </h3>
+  </td>
+</tr>
+<tr>
+  <td class="content-block">
+    You have successfully signed up servicedeals.com,
+  </td>
+</tr>
+<tr>
+  <td class="content-block">
+    your username is: <%= @admin.email %></br>
+    your password is: <%= @password %></br>
+  </td>
+</tr>
+<tr>
+  <td class="content-block">
+    Thanks for joining and have a great day!
+  </td>
+</tr>
+<tr>
+  <td class="content-block aligncenter">
+    <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+  </td>
+</tr>

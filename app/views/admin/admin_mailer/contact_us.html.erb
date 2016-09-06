@@ -1,0 +1,42 @@
+<tr>
+  <td style="padding:0 0 10px">
+    <h3>Hello  Admin, </h3>
+  </td>
+</tr>
+<tr>
+  <td>
+    <%= @name %> has send you a message. Below are the details.
+  </td>
+</tr>
+<br/>
+<tr>
+  <td style="padding:0 0 5px">
+    Name: <%= @name %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Email: <%= @email %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Mobile: <%= @mobile %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Message: <%= @message %></br>
+  </td>
+</tr>
+
+
+
+<tr>
+  <td style="padding:0 0 20px; text-align:center">
+    <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+  </td>
+</tr>

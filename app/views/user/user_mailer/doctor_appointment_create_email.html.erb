@@ -1,0 +1,30 @@
+<tr>
+  <td style="padding:0 0 20px">
+    <table style="margin:40px auto;text-align:left;width:80%">
+      <tbody>
+      <tr>
+        <td>
+          Dear <%= @user.prefix %> <%= @user.first_name %> <%= @user.last_name %>,<br>
+          You have booked Appointment please find below following details,<br/><br/>
+          Appointment# <%= @appointment.appointment_number %><br>
+          Date : <%= @appointment.book_date.strftime('%b %d %Y') %> <%= @appointment.start_time %> <%= @appointment.am_pm %><br/>
+          Doctor : <%= @doctor.first_name %> <%= @doctor.last_name %><br/>
+        </td>
+      </tr>
+
+      <tr>
+        <td style="padding:0 0 20px">
+          Thanks for using Service Deals and have a great and healthy day!
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:0 0 20px; text-align:center">
+          <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </td>
+</tr>
+

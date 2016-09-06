@@ -1,0 +1,173 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Reports</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+
+
+  <div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+
+      <%= form_for @search, :as => 'search', :url => user_reports_path , :html => {:method => :get} do |f| %>
+          <%= render :partial=>'shared/search', :locals => {:f => f,:cancel_url => user_reports_path, :filter => [:order_number]}%>
+      <% end %>
+
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox">
+        <div class="ibox-content">
+
+          <% if @reports.present? %>
+              <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
+                <thead>
+                <tr>
+
+                  <th data-toggle="true"><%= sortable('order_date','Order Date') %></th>
+                  <th data-hide="all"><%= sortable('order_number','Order No.') %></th>
+                  <th data-hide="all">Order Test</th>
+                  <th data-hide="phone">Payment Type</th>
+                  <th data-hide="phone"><%= sortable('order_price','Price') %></th>
+                  <th data-hide="phone">Status</th>
+                  <th class="text-right" data-sort-ignore="true">Action</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <% @reports.each do |report| %>
+                    <tr>
+                      <td>
+                        <%= report.order_date.strftime('%d-%m-%Y %H:%M:%S') %>
+                      </td>
+                      <td>
+                        <%= report.order_number %>
+                      </td>
+                      <td>
+                        <% test_ids = report.lab_order_tests.pluck(:test_id) %>
+                        <% lab_order_tests = Test.where(:id => test_ids).pluck(:name) %>
+                        <% lab_order_tests.each do |spec| %>
+                            <% if spec.present? %>
+                                <%= spec %><br/>
+                            <% end %>
+                        <% end %>
+                      </td>
+                      <td>
+                        <%= get_payment_types.key(report.payment_type) %>
+                      </td>
+                      <td>
+                        <%= report.order_price %>
+                      </td>
+
+                      <td>
+                        <% if report.order_status == LabOrder::CLOSE_ORDER %>
+                            <span class="label <%= get_status_css(report.order_status) %>"><%= get_order_status.key(report.order_status) %></span>
+                        <% else %>
+                            <span class="label <%= get_status_css(report.order_status) %>"><%= get_order_status.key(report.order_status) %></span>
+                        <% end %>
+                      </td>
+
+                      <td class="project-actions">
+                        
+                          <% if report.order_status == LabOrder::CLOSE_ORDER %>
+							 
+                              <% if report.lab_order_uploads.count > 1 %>
+                                  <%= link_to 'View Reports',list_report_uploads_user_reports_path(:hexcode => Base64.encode64(report.id.to_s)),:class => 'btn-white btn btn-xs' %>
+                              <% else %>
+                                  <%= link_to 'Download Report',download_report_user_reports_path(:hexcode => (Base64.encode64(report.id.to_s) + '---' + Base64.encode64(report.lab_order_uploads.first.id.to_s))),:class => 'btn-white btn btn-xs' %>
+                              <% end %>
+                              
+                              <a href="#" class="btn-white btn btn-xs share" id="order_<%= report.id %>"> share </a>
+                              
+                         <% else %>
+                              <%= 'Report Pending' %>
+                          <% end %>
+                        
+                      </td>
+                    </tr>
+                <% end %>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="8">
+                    <ul class="pagination pull-right">
+                      <%= will_paginate @reports, :container => false %>
+                    </ul>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+          <% else %>
+              <div class="alert alert-danger" style="text-align: center;"> No Report Added Yet</div>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+<!--  modal box to request admin for new test -->
+<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content animated flipInY">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Share Report</h4>
+        <small class="font-bold">You can select the doctor and share the reports with them</small>
+      </div>
+
+      <%= form_tag share_reports_user_reports_path, {:id => 'frm_share_report'} do %>
+          <div class="modal-body">
+      		<div class="form-group">
+        		<label class="control-label">Select Doctor</label>
+        			<%= select_tag :doctor_ids,options_for_select(@doctors),:data => {:placeholder => "-Select Doctor-"},:id => "doctor_ids", :multiple => true, :class => "form-control" %>
+      		</div>
+   		  </div>
+   		  <%= hidden_field_tag :order_id, '' %>
+          
+		  <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary sub_share">Share Report</button>
+          </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  
+    $( document ).ready(function() {
+
+		jQuery("#doctor_ids").chosen();
+		jQuery("#doctor_ids_chosen").css("width", "100%");
+		jQuery(".share").click(function(e) {
+			order_id = $(this).attr('id').split('_')[1];
+			jQuery("#order_id").val(order_id);
+			$('#myModal2').modal('show');
+		})
+		
+		jQuery(".sub_share").click(function(e) {
+			
+			if(jQuery("#doctor_ids").val()) {
+				jQuery("#frm_share_report").submit();
+			} else {
+				alert(jQuery("#doctor_ids").val());
+				jQuery(".default").focus();
+			}
+		});	
+   })
+
+</script>  		
+

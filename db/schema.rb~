@@ -1,0 +1,544 @@
+# encoding: UTF-8
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# Note that this schema.rb definition is the authoritative source for your
+# database schema. If you need to create the application database on another
+# system, you should be using db:schema:load, not running all the migrations
+# from scratch. The latter is a flawed and unsustainable approach (the more migrations
+# you'll amass, the slower it'll run and the greater likelihood for issues).
+#
+# It's strongly recommended that you check this file into your version control system.
+
+<<<<<<< Updated upstream
+ActiveRecord::Schema.define(version: 20151110183236) do
+=======
+ActiveRecord::Schema.define(version: 20151127221812) do
+>>>>>>> Stashed changes
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "admins", force: :cascade do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "password"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "upload"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.string   "upload_file_size"
+  end
+
+<<<<<<< Updated upstream
+  create_table "cities", force: :cascade do |t|
+    t.string "city_name"
+    t.text   "city_state"
+=======
+  create_table "campaigns", force: :cascade do |t|
+    t.string   "campaign_name"
+    t.datetime "start_date",         default: '2015-11-13 15:23:04'
+    t.datetime "end_date",           default: '2015-11-15 15:23:04'
+    t.integer  "campaign_frequency"
+    t.integer  "campaign_type"
+    t.text     "email_details"
+    t.string   "sms_details"
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+    t.integer  "campaign_for_id"
+    t.integer  "status"
+    t.text     "landmark_ids"
+    t.text     "test_ids"
+    t.integer  "notification_count", default: 0
+    t.string   "campaign_for"
+  end
+
+  create_table "cities", force: :cascade do |t|
+    t.string "city_name"
+    t.text   "city_state"
+    t.string "city_country"
+  end
+
+  create_table "city_locations", force: :cascade do |t|
+    t.integer "city_id"
+    t.string  "location"
+    t.string  "zip"
+  end
+
+  create_table "crons", force: :cascade do |t|
+    t.string   "cronname"
+    t.string   "crondesc"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer  "runstatus"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "error_description"
+>>>>>>> Stashed changes
+  end
+
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
+  create_table "doctor_addresses", force: :cascade do |t|
+    t.integer  "doctor_id"
+<<<<<<< Updated upstream
+    t.string   "nickname",       limit: 200
+    t.string   "address1",       limit: 200
+    t.string   "address2",       limit: 200
+    t.string   "landmark",       limit: 50
+    t.string   "contact_number", limit: 20
+    t.string   "city",           limit: 50
+    t.string   "zip",            limit: 10
+    t.string   "state",          limit: 50
+    t.string   "country",        limit: 50
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.string   "monday_am",      limit: 50
+    t.string   "monday_pm",      limit: 50
+    t.string   "tuesday_am",     limit: 50
+    t.string   "tuesday_pm",     limit: 50
+    t.string   "wednesday_am",   limit: 50
+    t.string   "wednesday_pm",   limit: 50
+    t.string   "thursday_am",    limit: 50
+    t.string   "thursday_pm",    limit: 50
+    t.string   "friday_am",      limit: 50
+    t.string   "friday_pm",      limit: 50
+    t.string   "saturday_am",    limit: 50
+    t.string   "saturday_pm",    limit: 50
+    t.string   "sunday_am",      limit: 50
+    t.string   "sunday_pm",      limit: 50
+=======
+    t.string   "nickname",         limit: 200
+    t.string   "address1",         limit: 200
+    t.string   "address2",         limit: 200
+    t.string   "landmark",         limit: 50
+    t.string   "contact_number",   limit: 20
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "monday_am",        limit: 50
+    t.string   "monday_pm",        limit: 50
+    t.string   "tuesday_am",       limit: 50
+    t.string   "tuesday_pm",       limit: 50
+    t.string   "wednesday_am",     limit: 50
+    t.string   "wednesday_pm",     limit: 50
+    t.string   "thursday_am",      limit: 50
+    t.string   "thursday_pm",      limit: 50
+    t.string   "friday_am",        limit: 50
+    t.string   "friday_pm",        limit: 50
+    t.string   "saturday_am",      limit: 50
+    t.string   "saturday_pm",      limit: 50
+    t.string   "sunday_am",        limit: 50
+    t.string   "sunday_pm",        limit: 50
+    t.integer  "city_id"
+    t.integer  "city_location_id"
+>>>>>>> Stashed changes
+  end
+
+  create_table "doctors", force: :cascade do |t|
+    t.string   "prefix",              limit: 6
+    t.string   "first_name",          limit: 200
+    t.string   "last_name",           limit: 200
+    t.integer  "age"
+    t.integer  "sex"
+    t.string   "mobile",              limit: 20
+    t.string   "landline",            limit: 20
+    t.string   "email",               limit: 200
+    t.string   "speciality",          limit: 250
+<<<<<<< Updated upstream
+    t.string   "qualification",       limit: 250
+=======
+>>>>>>> Stashed changes
+    t.string   "password"
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+<<<<<<< Updated upstream
+=======
+    t.string   "qualification"
+>>>>>>> Stashed changes
+    t.string   "upload"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.string   "upload_file_size"
+  end
+
+  create_table "lab_infos", force: :cascade do |t|
+    t.integer  "lab_id"
+    t.text     "description"
+    t.string   "title"
+    t.text     "meta_data"
+    t.text     "meta_description"
+    t.string   "logo"
+    t.string   "logo_file_name"
+    t.string   "logo_content_type"
+    t.string   "logo_file_size"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+  end
+
+  create_table "lab_offers", force: :cascade do |t|
+    t.integer  "lab_id"
+<<<<<<< Updated upstream
+    t.integer  "offer_type"
+=======
+>>>>>>> Stashed changes
+    t.integer  "test_category_id"
+    t.integer  "discount_type"
+    t.integer  "discount_amount"
+    t.datetime "start_date"
+    t.datetime "end_date"
+<<<<<<< Updated upstream
+=======
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.integer  "offer_type"
+    t.integer  "status"
+  end
+
+  create_table "lab_order_tests", force: :cascade do |t|
+    t.integer  "lab_order_id"
+    t.integer  "test_id"
+    t.decimal  "actual_price"
+    t.decimal  "discounted_price"
+    t.integer  "discount_type"
+    t.integer  "discount_amount"
+    t.integer  "availability"
+    t.integer  "duration"
+>>>>>>> Stashed changes
+    t.integer  "status"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "lab_order_uploads", force: :cascade do |t|
+    t.integer  "lab_order_id"
+    t.string   "title"
+    t.string   "upload"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.string   "upload_file_size"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  create_table "lab_orders", force: :cascade do |t|
+    t.integer  "lab_id"
+    t.string   "order_number",     limit: 20
+    t.datetime "order_date"
+    t.integer  "doctor_id"
+    t.integer  "user_id"
+    t.integer  "payment_type"
+<<<<<<< Updated upstream
+    t.decimal  "order_price",                 default: 0.0
+=======
+    t.decimal  "order_price"
+>>>>>>> Stashed changes
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+<<<<<<< Updated upstream
+    t.integer  "order_status",                default: 0
+    t.decimal  "remaining_amount",            default: 0.0
+    t.text     "lab_order_test",                                         array: true
+=======
+    t.text     "lab_order_test"
+    t.integer  "order_status",                default: 0
+    t.decimal  "remaining_amount",            default: 0.0
+>>>>>>> Stashed changes
+  end
+
+  create_table "lab_package_items", force: :cascade do |t|
+    t.integer  "lab_package_id"
+    t.integer  "test_id"
+    t.integer  "test_category_id"
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "lab_packages", force: :cascade do |t|
+    t.integer  "lab_id"
+    t.string   "name"
+    t.text     "description"
+    t.decimal  "actual_price"
+    t.decimal  "discounted_price"
+    t.integer  "discount_type"
+    t.integer  "discount_amount"
+    t.integer  "status"
+    t.integer  "approval_status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  create_table "lab_pics", force: :cascade do |t|
+    t.integer  "lab_id"
+    t.string   "title"
+    t.string   "photo"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.string   "photo_file_size"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+  end
+
+  create_table "lab_staffs", force: :cascade do |t|
+<<<<<<< Updated upstream
+=======
+    t.integer  "lab_id"
+>>>>>>> Stashed changes
+    t.string   "name"
+    t.string   "email"
+    t.string   "mobile"
+    t.string   "qualification"
+    t.string   "designation"
+    t.integer  "experience"
+    t.text     "description"
+    t.string   "photo"
+    t.string   "photo_file_name"
+    t.string   "photo_content_type"
+    t.string   "photo_file_size"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+<<<<<<< Updated upstream
+    t.integer  "lab_id"
+=======
+>>>>>>> Stashed changes
+  end
+
+  create_table "lab_tests", force: :cascade do |t|
+    t.integer  "lab_id"
+    t.integer  "test_category_id"
+    t.integer  "test_id"
+<<<<<<< Updated upstream
+    t.decimal  "actual_price"
+    t.decimal  "discounted_price"
+=======
+>>>>>>> Stashed changes
+    t.integer  "discount_type"
+    t.integer  "discount_amount"
+    t.integer  "availability"
+    t.integer  "duration"
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+<<<<<<< Updated upstream
+=======
+    t.decimal  "actual_price"
+    t.decimal  "discounted_price"
+>>>>>>> Stashed changes
+  end
+
+  create_table "labs", force: :cascade do |t|
+    t.string   "lab_name"
+    t.string   "email"
+<<<<<<< Updated upstream
+    t.string   "mobile"
+    t.string   "landline"
+    t.integer  "status"
+    t.string   "contact_name"
+    t.string   "password"
+    t.integer  "lab_id"
+    t.text     "description"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "state_id"
+    t.string   "city"
+    t.string   "landmark"
+    t.string   "street_address"
+    t.string   "pin_code"
+=======
+    t.integer  "status"
+    t.text     "description"
+    t.string   "contact_name"
+    t.string   "password"
+    t.integer  "lab_id"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "landmark"
+    t.string   "street_address"
+    t.string   "mobile"
+    t.string   "landline"
+>>>>>>> Stashed changes
+    t.string   "upload"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.string   "upload_file_size"
+<<<<<<< Updated upstream
+=======
+    t.integer  "city_id"
+    t.integer  "city_location_id"
+>>>>>>> Stashed changes
+  end
+
+  create_table "pending_actions", force: :cascade do |t|
+    t.integer  "action_by"
+    t.integer  "pending_with"
+    t.integer  "action_type"
+    t.integer  "key"
+    t.integer  "status"
+    t.json     "additional_info"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+<<<<<<< Updated upstream
+=======
+  create_table "sales_invoices", force: :cascade do |t|
+    t.string   "invoice_number"
+    t.datetime "invoice_date"
+    t.integer  "provider_id"
+    t.string   "provider_type"
+    t.integer  "order_id"
+    t.integer  "item_qty"
+    t.decimal  "tax_per"
+    t.decimal  "tax_amount"
+    t.decimal  "net_amount"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+>>>>>>> Stashed changes
+  create_table "sequences", force: :cascade do |t|
+    t.string  "seq_type"
+    t.integer "seq_number"
+  end
+
+  create_table "similar_tests", force: :cascade do |t|
+    t.integer  "test_id"
+    t.integer  "related_test_id"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "test_categories", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "status"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.text     "category_tests"
+  end
+
+  create_table "tests", force: :cascade do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.string   "technical_name"
+    t.string   "test_method"
+    t.string   "specimen_volume"
+    t.string   "why"
+    t.string   "when"
+    t.string   "test_preparation"
+  end
+
+  create_table "user_addresses", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "address1",           limit: 200
+    t.string   "address2",           limit: 200
+    t.string   "landmark",           limit: 50
+    t.string   "contact_number",     limit: 20
+<<<<<<< Updated upstream
+    t.string   "city",               limit: 50
+    t.string   "state",              limit: 50
+    t.string   "country",            limit: 50
+=======
+>>>>>>> Stashed changes
+    t.boolean  "is_current_address"
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+<<<<<<< Updated upstream
+=======
+    t.string   "nickname",           limit: 200
+    t.integer  "city_id"
+    t.integer  "city_location_id"
+>>>>>>> Stashed changes
+  end
+
+  create_table "user_social_login_details", force: :cascade do |t|
+    t.integer  "user_id"
+    t.string   "facebook_id",     limit: 200
+    t.string   "facebook_token",  limit: 200
+    t.string   "facebook_secret", limit: 200
+    t.string   "linkedid_id",     limit: 200
+    t.string   "linkedid_token",  limit: 200
+    t.string   "linkedid_secret", limit: 200
+    t.string   "twitter_id",      limit: 200
+    t.string   "twitter_token",   limit: 200
+    t.string   "twitter_secret",  limit: 200
+    t.string   "google_id",       limit: 200
+    t.string   "google_token",    limit: 200
+    t.string   "google_secret",   limit: 200
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  create_table "users", force: :cascade do |t|
+<<<<<<< Updated upstream
+    t.string   "prefix",                   limit: 6
+=======
+>>>>>>> Stashed changes
+    t.string   "first_name",               limit: 200
+    t.string   "last_name",                limit: 200
+    t.integer  "age"
+    t.integer  "sex"
+    t.string   "mobile",                   limit: 20
+    t.string   "landline",                 limit: 20
+    t.string   "emergency_contact_number", limit: 20
+    t.string   "email",                    limit: 200
+    t.string   "password"
+    t.integer  "status"
+    t.string   "created_by"
+    t.string   "updated_by"
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
+<<<<<<< Updated upstream
+=======
+    t.string   "prefix",                   limit: 6
+>>>>>>> Stashed changes
+    t.string   "upload"
+    t.string   "upload_file_name"
+    t.string   "upload_content_type"
+    t.string   "upload_file_size"
+  end
+
+end

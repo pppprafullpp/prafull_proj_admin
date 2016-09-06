@@ -1,0 +1,44 @@
+<div class="row border-bottom">
+  <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+
+    <ul class="nav navbar-top-links navbar-right">
+
+
+	 <li class="dropdown">
+        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+          <i class="fa fa-bell"></i>  <span class="label label-primary"><%= get_pending_actions_count %></span>
+        </a>
+        <ul class="dropdown-menu dropdown-alerts">
+          <% get_pending_actions(3).each do |pa| %>
+              <li>
+                <% message,url = get_pending_action_details(pa.action_type,pa.id) %>
+                <a href="<%= url %>">
+                  <div>
+                    <i class="fa fa-envelope fa-fw"></i> <%= message %>
+                    <span class="pull-right text-muted small"><%=  time_ago_in_words(pa.created_at, include_seconds: true) %> ago</span>
+                  </div>
+                </a>
+              </li>
+              <li class="divider"></li>
+          <% end %>
+          <li>
+            <div class="text-center link-block">
+              <a href="<%= admin_pending_actions_path %>">
+                <strong>See All Alerts</strong>
+                <i class="fa fa-angle-right"></i>
+              </a>
+            </div>
+          </li>
+        </ul>
+     </li>
+
+
+      <li>
+        <a href="<%= logout_path %>">
+          <i class="fa fa-sign-out"></i> Log out
+        </a>
+      </li>
+
+    </ul>
+  </nav>
+</div>

@@ -1,0 +1,4 @@
+<%=
+   render :partial => "dashboard/dashboards/#{session[:role].downcase}/#{session[:role].downcase}_dashboard"
+%>
+<%= javascript_include_tag "flot/jquery.flot.js","flot/jquery.flot.tooltip.min","flot/jquery.flot.resize","flot/jquery.flot.pie","flot/jquery.flot.time","flot/jquery.flot.spline","chartjs/Chart.min" %>

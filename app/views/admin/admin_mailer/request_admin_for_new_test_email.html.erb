@@ -1,0 +1,52 @@
+<tr>
+  <td style="padding:0 0 10px">
+    <h3>Hello  Admin, </h3>
+  </td>
+</tr>
+<tr>
+  <td>
+    <%= @lab.lab_name %> has raised request to create new test with name <%= @test_name %>
+  </td>
+</tr>
+<br/>
+<tr>
+  <td style="padding:0 0 5px">
+    Lab Name: <%= @lab.lab_name %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Lab Email: <%= @lab.email %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Lab Contact: <%= @lab.mobile %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Contact Name: <%= @lab.contact_name %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Street Address: <%= @lab.street_address %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Landmark: <%= @lab.landmark %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 20px; text-align:center">
+    <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+  </td>
+</tr>

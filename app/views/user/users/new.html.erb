@@ -1,0 +1,80 @@
+<% if current_user.present? %>
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+      <div class="col-lg-10">
+        <h2>Create Profile</h2>
+        <ol class="breadcrumb">
+          <li>
+            <a href="<%= user_users_path %>">Home</a>
+          </li>
+          <li class="active">
+            <strong>Create Profile</strong>
+          </li>
+        </ol>
+      </div>
+      <div class="col-lg-2">
+
+      </div>
+    </div>
+
+    <%= render :partial => 'user/users/form' %>
+
+<% else %>
+
+ <div class="loginColumns animated fadeInDown" style="padding-top:4%;padding-bottom:0%;">
+      <div class="row">
+		<%= render :partial => 'shared/login_left_panel' %>
+       
+        <div class="col-md-6">
+          <div class="ibox-content">
+          	<div><h3>Become Service Deals Member</h3> </div>
+    <div class="hr-line-dashed"></div>
+            <%= form_for [:user,@user],:html => {:id => 'submit_user'} do |f| %>
+
+                <div class="form-group">
+
+                  <%= f.text_field :first_name,:value => @user.first_name,:class => 'form-control',:placeholder => "Enter Name",:maxlength => 150 	%>
+                  <%= f.dpl_err_msg :first_name, "First Name" %>
+
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.text_field :email,:value => @user.email,:class => 'form-control',:placeholder => "Enter Email",:maxlength => 150 	%>
+                  <%= f.dpl_err_msg :email, "Email" %>
+                </div>
+
+                <div class="form-group">
+                  <%= f.text_field :mobile,:value => @user.mobile,:class => 'form-control',:placeholder => "Enter Mobile",:maxlength => 10 	%>
+                  <%= f.dpl_err_msg :mobile, "Mobile" %>
+                </div>
+
+                <div class="form-group">
+                  <%= f.password_field :password,:class => 'form-control',:placeholder => "Enter Password",:maxlength => 150 	%>
+                  <%= f.dpl_err_msg :password, "Password" %>
+                </div>
+
+
+                <div class="form-group">
+                  <%= f.password_field :password_confirmation,:class => 'form-control',:placeholder => "Enter Confirm Password",:maxlength => 150 	%>
+                  <%= f.dpl_err_msg :password_confirmation, "Password Confirmation" %>
+                </div>
+
+
+                <button type="submit" class="btn btn-w-m btn-success block full-width m-b">
+                  Join Service Deals
+                </button>
+
+                <p class="text-muted text-center"></p>
+
+            <% end %>
+            <p class="m-t"></p>
+            <a class="btn btn-sm btn-white btn-block" href="<%= user_login_path %>">Already Member? Login</a>
+          </div>
+        </div>
+      </div>
+      <hr />
+
+</div>
+
+<% end %>

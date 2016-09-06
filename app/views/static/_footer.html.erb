@@ -1,0 +1,20 @@
+<div class="footer-box" style="margin-top:2%">
+<div class="footer-col">
+  <h3>Service Deals</h3>
+</div>
+<div class="footer-col-right">
+   <p>
+        <a href="#">About Us</a> |
+        <a href="<%= root_url %>blog">Blogs</a> |
+        <a href="#">T &amp; C/Privacy Policy</a> |
+        <% if session[:role] == USER %>
+            <a href="<%= feedback_home_index_path %>">Feedback</a>
+        <% else %>
+            <a href="javascript:void(0);" onclick="alert('Please Login to provide your valuable feedback.')">Feedback</a>
+        <% end %> |
+        <a href="#">FAQs</a>
+  </p>	
+</div>
+<div class="clr"></div>
+
+</div>

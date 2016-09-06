@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= defined?(@title) ? @title : 'Service Deals | Price Comparator' %></title>
+
+
+    <!-- Include style per-controller - vendor plugins -->
+    <%= stylesheet_link_tag params[:controller] if ::Rails.application.assets.find_asset("#{params[:controller]}.css") %>
+
+    <!-- Main css styles -->
+    <%= stylesheet_link_tag 'application','home', media: 'all', 'data-turbolinks-track' => true %>
+
+    <!-- Main javascript files -->
+    <%= javascript_include_tag 'application','data-turbolinks-track' => true %>
+    <%= csrf_meta_tags %>
+    
+<!-- Main css styles -->
+  
+  <%= csrf_meta_tags %>
+  <%= favicon_link_tag(source='favicon.ico') %>
+
+</head>
+<body class="gray-bg">
+
+
+<%= render :partial => "home/home_header" %>
+<!-- Main view  -->
+<%= yield %>
+
+<%= render :partial => 'home/footer' %>
+<%= render :partial => 'home/copyright' %>
+
+
+<!-- Include javascript per-controller - vendor plugins -->
+<%= javascript_include_tag params[:controller] if ::Rails.application.assets.find_asset("#{params[:controller]}.js") %>
+
+<!-- Include javascript per-view -->
+<!-- For demo purpose we include javascript in view but you can easily start SeedProject and organize it with Rails asset pipeline as you want -->
+<%= yield :javascript %>
+
+<%# if Rails.env.production? %>
+<%= render :partial => "layouts/google_analytics" %>
+<%# end %>
+
+</body>
+</html>

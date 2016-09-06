@@ -1,0 +1,25 @@
+<nav-home class="top">
+  <ul class="right-nav">
+    <li class="order"><i></i><a href="javascript:void(0)">Track Order</a></li>
+   
+     <% if session[:cart].present? && session[:cart][:test_ids].present? %>
+        <li class="cart"><a href="<%= checkout_path%>"><i></i>Cart&nbsp;(<%= session[:cart][:test_ids].split('-').count%>)</a></li>
+    <% else %>
+        <li class="cart"><i></i>Cart</li>
+    <% end %>
+    <!--
+    <%# if current_user.present? %>
+        <li class="login"><%#= link_to "Sign out", signout_path, id: "sign_out" %></li>
+    <%# else %>
+        <li class="login"><a href="<%#= user_login_path %>"><i></i>Login/Sign Up</a></li>
+    <%# end %>
+    -->
+
+    
+    <li class="team"><a href="javascript:void(0)<%#= team_path %>">Team</a></li><!-- <i class="fa fa-users"></i> -->
+    <li><i></i><a href="<%= contact_path %>">Contact</a></li><!-- <i class="fa fa-bank"></i> -->
+
+	<li class="phone"><i></i><%= APP_CONFIG[:contact_number]%></li>
+   
+  </ul>
+</nav-home>

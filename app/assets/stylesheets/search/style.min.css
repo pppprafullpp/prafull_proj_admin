@@ -1,0 +1,470 @@
+.input-field .prefix.active,
+.medd-blue-text {
+    color: #15a6ff!important
+}
+i.material-icons,
+nav .nav-wrapper img {
+    vertical-align: middle
+}
+.circular-border,
+.modal-city .modal-footer,
+footer .copyright {
+    text-align: center
+}
+.medd-blue {
+    background-color: #15a6ff!important
+}
+.bold {
+    font-weight: 700
+}
+.strikethrough {
+    text-decoration: line-through
+}
+.inline-block {
+    display: inline-block!important
+}
+.capitalize {
+    text-transform: capitalize
+}
+.font-24 {
+    font-size: 24px!important
+}
+.font-20 {
+    font-size: 20px!important
+}
+.font-16 {
+    font-size: 16px!important
+}
+.font-12 {
+    font-size: 12px!important
+}
+.font-8 {
+    font-size: 8px!important
+}
+.font-inherit {
+    font-size: inherit
+}
+.height-400 {
+    height: 400px!important
+}
+.line-height-2 {
+    line-height: 2
+}
+.line-height-2_5 {
+    line-height: 2.5
+}
+.circular-border {
+    border: 1px solid #a8a8a8;
+    border-radius: 2rem;
+    padding: 5px 10px;
+    margin-right: 6px
+}
+.activator {
+    cursor: pointer!important
+}
+td,
+th {
+    padding: 5px
+}
+i.material-icons {
+    line-height: inherit;
+    height: inherit
+}
+section {
+    min-height: 600px
+}
+.container-80 {
+    width: 80%
+}
+.input-field input:focus,
+.input-field textarea:focus {
+    border-bottom: 1px solid #15a6ff!important;
+    -webkit-box-shadow: 0 1px 0 0 #15a6ff!important;
+    -moz-box-shadow: 0 1px 0 0 #15a6ff!important;
+    box-shadow: 0 1px 0 0 #15a6ff!important
+}
+.input-field input:focus:not([readonly])+label {
+    color: #15a6ff
+}
+.input-field input[type=radio]:checked+label:after {
+    border: 2px solid #15a6ff;
+    background-color: #15a6ff
+}
+.preloader_custom {
+    width: 100%;
+    height: .25rem;
+    background-color: rgba(63, 81, 181, .3);
+    z-index: 10001;
+    position: fixed;
+    top: 0
+}
+.preloader_custom .preloader_bar {
+    width: 0;
+    height: .25rem;
+    top: 0;
+    margin: auto;
+    background-color: #15a6ff;
+    -webkit-animation: loading 2s ease-in-out 0s infinite;
+    animation: loading 2s ease-in-out 0s infinite
+}
+.modal-city .modal-footer .btn-flat {
+    float: none!important
+}
+.modal-city .modal-footer .btn {
+    color: #15a6ff;
+    background-color: transparent
+}
+.modal-city .modal-footer .btn:hover {
+    color: #fff;
+    background-color: #15a6ff
+}
+nav .nav-wrapper {
+    padding: 0 60px
+}
+nav .nav-wrapper .brand-logo img {
+    height: 25px
+}
+nav .nav-wrapper .city-selector {
+    position: absolute;
+    display: inline-block;
+    padding: 0;
+    left: 12rem;
+    width: 16rem
+}
+nav .nav-wrapper .city-selector .city-selected {
+    color: #15a6ff;
+    border: 1px solid #15a6ff;
+    border-radius: 1rem;
+    padding: 5px 10px;
+    cursor: pointer;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -o-transition: all .4s;
+    -ms-transition: all .4s;
+    transition: all .4s
+}
+nav .nav-wrapper .city-selector .city-selected:hover {
+    color: #fff;
+    background-color: #15a6ff
+}
+nav .nav-wrapper .google-play img {
+    height: 40px
+}
+nav ul li,
+nav ul li:hover {
+    background-color: transparent
+}
+nav ul li a {
+    color: #a8a8a8;
+    -webkit-transition: all .4s;
+    -moz-transition: all .4s;
+    -o-transition: all .4s;
+    -ms-transition: all .4s;
+    transition: all .4s
+}
+nav ul li:hover a {
+    color: #15a6ff
+}
+footer .footer-nav li {
+    line-height: 2rem
+}
+.confirmation-card .card-content .card-title,
+.healthPackage-card .card-content .card-title,
+.lab-card .card-content .card-title {
+    line-height: 0
+}
+footer .footer-nav a {
+    color: #fff
+}
+footer .footer-nav input[type=email]:focus {
+    border-bottom: 1px solid #fff!important;
+    box-shadow: 0 1px 0 0 #fff
+}
+footer .copyright {
+    padding-top: 10px;
+    background: #000;
+    color: #fff;
+    font-weight: lighter;
+    display: block;
+    margin: 0
+}
+footer .copyright a {
+    font-weight: 700;
+    color: inherit
+}
+.intro .intro-text,
+.intro .intro-title {
+    font-weight: lighter;
+    text-align: center;
+    text-shadow: 1px 1px 7px rgba(0, 0, 0, .22)
+}
+footer .copyright .soc-list {
+    margin: 0 0 10px
+}
+footer .copyright .soc-list li {
+    display: inline-block
+}
+footer .copyright .soc-list .icon {
+    display: inline-block;
+    font-size: 22px;
+    color: #fff;
+    padding: 10px;
+    border-radius: 50%;
+    background: 0 0;
+    margin: 5px;
+    -webkit-transition: all .2s ease-out;
+    -moz-transition: all .2s ease-out;
+    -ms-transition: all .2s ease-out;
+    -o-transition: all .2s ease-out;
+    transition: all .2s ease-out;
+    cursor: pointer
+}
+footer .copyright .soc-list li .icon:hover {
+    background: #15a6ff
+}
+.intro {
+    background: url(../images/headerbg.jpg) center center no-repeat;
+    background-size: cover;
+    color: #444;
+    padding: 100px 0;
+    height: 650px
+}
+.intro .intro-title {
+    font-size: 50px;
+    letter-spacing: 5px
+}
+.intro .intro-text {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 4px
+}
+.intro .bg-box {
+    background-color: rgba(0, 0, 0, .65);
+    padding: 3rem 5rem
+}
+.intro .select2-container-multi {
+    border-bottom: 1px solid #fff;
+    color: #fff
+}
+.intro .select2-container-multi .select2-choices {
+    background: 0 0;
+    border: none;
+    border-bottom: 1px #fff
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice {
+    color: #fff;
+    border: 1px solid #fff;
+    background: 0 0;
+    border-radius: 2rem;
+    padding: 5px 8px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    -o-box-shadow: none
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice .testgroup-text {
+    padding-right: 14px
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice .ui-select-match-close {
+    background: 0 0!important;
+    top: 5px
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice .ui-select-match-close .close-icon {
+    color: #ddd
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice .ui-select-match-close .close-icon:hover {
+    color: #000
+}
+.intro .select2-container-multi .select2-choices .select2-search-field input {
+    color: #fff
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice-focus {
+    color: #000;
+    background: #fff
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice-focus .ui-select-match-close .close-icon {
+    color: #ddd
+}
+.intro .select2-container-multi .select2-choices .select2-search-choice-focus .ui-select-match-close .close-icon:hover {
+    color: #000
+}
+.intro .select2-container-multi .select2-results .select2-highlighted {
+    background: #15a6ff
+}
+.intro .select2-container-multi .select2-search-choice-close {
+    right: 9px;
+    left: inherit
+}
+.intro .search-btn {
+    border: 1px solid #15a6ff;
+    border-radius: 2rem;
+    height: 3rem;
+    text-transform: none
+}
+.current-step {
+    border-color: #15a6ff;
+    color: #15a6ff;
+    transition: all .3s
+}
+.current-step:hover {
+    border-color: #fff;
+    color: #fff;
+    background-color: #15a6ff
+}
+.lab-card .card-content {
+    height: 150px;
+    padding: 20px;
+    overflow: hidden
+}
+.lab-card .card-content .more_horiz {
+    border: 1px solid;
+    border-radius: 40px;
+    padding: 0 6px
+}
+.lab-card .card-action {
+    height: 92px;
+    padding: 10px 15px
+}
+.lab-card .card-action .btn {
+    margin-top: 15px
+}
+.lab-card .card-action .btn a {
+    margin: 0
+}
+.labresults-cart-card .card-action {
+    height: 115px;
+    padding: 10px 15px
+}
+.labresults-cart-card .card-action .btn {
+    padding: 0 1rem
+}
+.checkout-card .card-action {
+    height: 74px;
+    padding: 10px 15px
+}
+.checkout-card .card-action .btn {
+    padding: 0 1rem
+}
+.confirmation-card .card-content {
+    height: 190px;
+    padding: 20px;
+    overflow: hidden
+}
+.confirmation-card .card-content .more_horiz {
+    border: 1px solid;
+    border-radius: 40px;
+    padding: 0 6px
+}
+.confirmation-card .card-action {
+    height: 92px;
+    padding: 10px 15px
+}
+.confirmation-card .card-action .btn {
+    margin-top: 15px
+}
+.confirmation-card .card-action .btn a {
+    margin: 0
+}
+.healthPackage-card .card-content {
+    height: 170px;
+    padding: 15px;
+    cursor: pointer
+}
+.healthPackage-card .card-action {
+    height: 73px;
+    padding: 10px 15px
+}
+.healthPackage-card .card-action .btn {
+    margin-top: 7px
+}
+.healthPackage-card .card-action .btn a {
+    margin: 0
+}
+.specs .material-icons {
+    font-size: inherit
+}
+.faq {
+    margin: 10px 0
+}
+.faq .question {
+    font-weight: 700
+}
+.faq .answer {
+    font-size: 12px;
+    color: #999
+}
+.team-card .card-content {
+    height: 60px;
+    padding: 5px 15px
+}
+.team-card .card-content .card-title {
+    line-height: 1;
+    font-size: 18px;
+    color: #15a6ff
+}
+.team-card .card-action {
+    height: 73px;
+    padding: 10px 15px
+}
+.team-card .card-action .btn {
+    margin-top: 7px
+}
+.team-card .card-action .btn a {
+    margin: 0
+}
+.s4 .team-card {
+    width: 74%;
+    margin-left: 13%
+}
+.s3 .team-card {
+    width: 90%;
+    margin-left: 5%
+}
+@media only screen and (min-width: 992px) {
+    .intro .container {
+        width: 85%
+    }
+}
+@media only screen and (max-width: 992px) {
+    nav .nav-wrapper .brand-logo {
+        left: 25%;
+        -webkit-transform: translateX(-25%);
+        -moz-transform: translateX(-25%);
+        -ms-transform: translateX(-25%);
+        -o-transform: translateX(-25%);
+        transform: translateX(-25%)
+    }
+    nav .nav-wrapper .city-selector {
+        left: 61%
+    }
+    .intro .container {
+        width: 85%
+    }
+    .intro .intro-title {
+        font-size: 32px
+    }
+    .intro .intro-text {
+        font-size: 16px
+    }
+}
+@media only screen and (max-width: 600px) {
+    .intro .bg-box {
+        padding: 2rem
+    }
+    .intro .container {
+        width: 100%
+    }
+    .intro .intro-title {
+        font-size: 20px
+    }
+    .intro .intro-text {
+        font-size: 12px
+    }
+    footer .footer-nav {
+        padding-bottom: 30px;
+        text-align: center
+    }
+    .lab-card .card-content {
+        height: 140px
+    }
+}

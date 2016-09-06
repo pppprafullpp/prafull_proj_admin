@@ -1,0 +1,128 @@
+<div class="wrapper wrapper-content" style="padding-top:3%">
+<div class="row animated fadeInRight">
+    <div class="col-md-6">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Our Office</h5>
+            </div>
+           
+            <div>
+                <div class="ibox-content no-padding border-left-right">
+               	<div class="ibox-content profile-content">
+                   <div  class="feed-activity-list">	
+                	 <div class="feed-element">
+                        <div class="media-body ">
+                           <h4><strong>Address</strong></h4>
+                    
+                    		<p style="margin-top:1%">
+		                    	<i class="fa fa-map-marker"></i>
+                              XXX,&nbsp;XXXXXX,&nbsp;XXXXXXXXXXX,&nbsp;DALLAS, USA
+		                    </p>
+
+                    		<p><i class="fa fa-mobile"></i>&nbsp;<%= APP_CONFIG[:contact_number]%></p>
+                    
+                    		<p><i class="fa fa-phone"></i>&nbsp;<%= APP_CONFIG[:contact_number]%>
+                    	
+                    		</p>
+                        </div>
+                      </div>
+                   </div>     
+                	
+                  <p id="map" style="min-height: 300px; margin-top:5%">
+                    	
+                  </p>
+                </div>
+              </div>  
+            </div>
+        </div>
+    </div>
+    
+    
+    <div class="col-md-6">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Contact Us</h5>
+            </div>
+            <div class="ibox-content">
+				 <%= render :partial => "shared/dpl_notifier"%>
+                <div>
+                    <div class="feed-activity-list">
+						 <%= form_tag contact_path do %>
+				            
+				            <div class="form-group">
+				              <input type="text" class="form-control" placeholder="Name" required="true" name="name">
+				            </div>
+				            
+				            <div class="form-group">
+				              <input type="email" class="form-control" placeholder="Email" required="true" name="email">
+				            </div>
+				            
+				            <div class="form-group">
+				              <input type="phone" class="form-control" placeholder="Phone" required="true" name="phone">
+				            </div>
+				            
+				            <div class="form-group">
+				            	<textarea cols="70" rows="5" class="form-control" name="message"></textarea>
+				            </div>
+				            
+				            <button type="submit" class="btn btn-w-m btn-success block full-width m-b">
+				               Submit
+				            </button>
+						<% end %>
+                    </div>
+
+                   <!-- <button class="btn btn-primary btn-block m"><i class="fa fa-arrow-down"></i> Show More</button>-->
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+</div>
+
+<script>
+
+jQuery(document).ready(function() {
+	jQuery(".book").click(function(e) {
+		var book_id = jQuery(this).attr('id');
+		var form_id = book_id.split("_")[1];
+		
+		jQuery("#"+form_id).submit();
+	})
+});
+
+
+function initMap() {
+  var map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 8,
+    center: {lat: 28.5407881, lng: 77.341558}
+  });
+  var geocoder = new google.maps.Geocoder();
+  geocodeAddress(geocoder, map);
+  
+}
+
+function geocodeAddress(geocoder, resultsMap) {
+  var address = "Tapasya Corp heights, Sector 126, Noida, Uttar Pradesh"
+  geocoder.geocode({'address': address}, function(results, status) {
+    if (status === google.maps.GeocoderStatus.OK) {
+      resultsMap.setCenter(results[0].geometry.location);
+      var marker = new google.maps.Marker({
+        map: resultsMap,
+        position: results[0].geometry.location
+      });
+    } else {
+      alert('Geocode was not successful for the following reason: ' + status);
+    }
+  });
+}
+
+    </script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBfNnJ5931IhMz7sqJKXwIdfbozm_6F1Zo&signed_in=true&callback=initMap"
+        async defer>
+</script>
+
+

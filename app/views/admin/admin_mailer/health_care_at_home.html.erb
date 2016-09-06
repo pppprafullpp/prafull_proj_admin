@@ -1,0 +1,54 @@
+<tr>
+  <td style="padding:0 0 10px">
+    <h3>Hello  Admin, </h3>
+  </td>
+</tr>
+<tr>
+  <td>
+    <%= @enquiry['name'] %> has send you a enquiry for Home Service. Below are the details.
+  </td>
+</tr>
+<br/>
+<tr>
+  <td style="padding:0 0 5px">
+    Name: <%= @enquiry['name'] %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Email: <%= @enquiry['email'] %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Mobile: <%= @enquiry['mobile'] %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Category: <%= @enquiry['category'] %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Area: <%= @enquiry['area'] %></br>
+  </td>
+</tr>
+
+<tr>
+  <td style="padding:0 0 5px">
+    Message: <%=  @enquiry['message'] %></br>
+  </td>
+</tr>
+
+
+
+<tr>
+  <td style="padding:0 0 20px; text-align:center">
+    <a href="<%= APP_CONFIG[:main_url] %>" class="btn-primary">Click Here to Login</a>
+  </td>
+</tr>

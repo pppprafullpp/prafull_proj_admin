@@ -1,0 +1,106 @@
+<div id="dashboard_order_listing">
+  <div class="animated fadeInUp">
+    <div class="row">
+
+      <div class="col-lg-12">
+        <div class="row">
+
+          <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+              <div class="ibox-title">
+                <h5>Order Placed</h5>
+                <div class="ibox-tools">
+                  <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                  </a>
+                  <a class="close-link">
+                    <i class="fa fa-times"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="ibox-content">
+                <table class="table table-hover no-margins">
+                  <thead>
+                  <tr>
+                    <th>Order Number</th>
+                    <th>Date</th>
+                    <th>Amount</th>
+                    <th>Category Name</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @orders.each do |lab| %>
+                      <tr>
+                        <td>
+                          <% lab_name = lab.lab_name.present? ? truncate(lab.lab_name,:length => 20) : '' %>
+                          <span class="label label-warning"><%= link_to lab_name,edit_lab_lab_path(lab),:style => 'color: white;'  %></span>
+                        </td>
+                        <td>
+                          <i class="fa fa-clock-o"></i> <%= lab.created_at.strftime('%d/%m/%Y %I:%M%p') %>
+                        </td>
+                        <td title="<%= lab.email %>"><%= lab.mobile %></td>
+                        <% if lab.status == ACTIVE_STATUS %>
+                            <td>
+                              <span class="label label-info">Active</span>
+                            </td>
+                        <% else %>
+                            <td>
+                              <span class="label label-danger">DeActive</span>
+                            </td>
+                        <% end %>
+                      </tr>
+                  <% end %>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+              <div class="ibox-title">
+                <h5>User Registered</h5>
+                <div class="ibox-tools">
+                  <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                  </a>
+                  <a class="close-link">
+                    <i class="fa fa-times"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="ibox-content">
+                <table class="table table-hover no-margins">
+                  <thead>
+                  <tr>
+                    <th>User Name</th>
+                    <th>Date</th>
+                    <th>Contact</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% @user_registered.each do |user| %>
+                      <tr>
+                        <td>
+                          <% user_name = user.first_name.present? ? truncate(decode_api_data(user.first_name),:length => 20) : '' %>
+                          <span class="label label-warning"><%= link_to user_name,edit_user_user_path(user),:style => 'color: white;' %></span>
+                        </td>
+                        <td>
+                          <i class="fa fa-clock-o"></i> <%= user.created_at.strftime('%d/%m/%Y %I:%M%p') %>
+                        </td>
+                        <td title="<%= user.email %>"><%= decode_api_data(user.mobile) %></td>
+                      </tr>
+                  <% end %>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

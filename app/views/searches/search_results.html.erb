@@ -1,0 +1,252 @@
+<%= stylesheet_link_tag "search/select.min","search/style.min","search/materialize.min" %>
+<%#= javascript_include_tag "jquery.raty" %>
+
+<div id="search_result" style="padding-top:2%">
+
+
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <div class="row" style="margin-top: 5px;margin-bottom: 5%;">
+    <p class="center-align bold font-20" style="padding-bottom:2%">Lab Results for <%= @test_name.join(',') %> Test in <span class="capitalize"><%= params[:location_id].camelize%></span></p>
+
+
+    <% if @search_results['response']['numFound'] > 0
+         labs = @search_results['response']['docs']
+    %>
+
+        <% labs.each do |search_result| %>
+        <%
+           lab = Lab.find(search_result['id'])
+          #puts @test_ids.gsub("'",'').inspect
+          lab_tests = lab.lab_tests.where('test_id IN (?)', @test_ids).group('id')
+          #raise lab_tests.inspect
+          lab_id = search_result['id']
+          lab_name = search_result['lab_name']
+          lab_address = search_result['street_address'] + ' ' +search_result['landmark']
+          landline = search_result['landline']
+          mobile = search_result['mobile']
+          city = search_result['city_id']
+          location_id = search_result['lab_location_id']
+          lab_seo_name = search_result['lab_seo_name']
+          actual_price = 0
+          discounted_price = 0
+        %>
+            <%
+               lab_tests.each do |lt|
+                 actual_price += lt.actual_price.to_f
+                 discounted_price += lt.discounted_price.to_f
+               end
+            %>
+            
+            <div class="col l6 m8 s12">
+              <div class="col s12 m12 l12">
+                <div class="lab-card card white ">
+                  <div class="card-content">
+                    <div class="medd-blue-text">
+                      <span class="card-title font-24 medd-blue-text bold ">
+
+                        <a href="/diagnostic-centers/<%= city%>/<%= location_id%>/<%= lab_seo_name%>" target="_blank"><%= lab_name %></a>
+          				<%= rating_for lab, "lab_rating", :star => 5, :disable_after_rate => false, :enable_half => true, :half_show => true %>
+                      </span>
+                      <i class="material-icons more_horiz right activator">more_horiz</i>
+                    </div>
+                    <div class="">
+                <span class="grey-text lighten-2 font-12 ">
+                  <%= lab_address %><br/>
+                  <%= mobile %><br/>
+                  <%= landline %>
+                </span>
+                    </div>
+
+                    <div class="row specs">
+                      <div class="col l5 m6 s12 facility">
+                        <% if lab.present? and lab.nabl_certified %>
+                            <i class="fa fa-plus-square-o green-text"> </i>
+                            <span>NABL certified</span>
+                        <% else %>
+                            <i class="fa fa-plus-square-o red-text"> </i>
+                            <span>NABL <span>not</span> certified</span>
+                        <% end %>
+                      </div>
+
+                      <div class="col l6 m6 s12 facility">
+                        <% if lab.present? and lab.home_collection %>
+                            <i class="fa fa-plus-square-o green-text"> </i>
+                            <span>Home collection available</span>
+                        <% else %>
+                            <i class="fa fa-plus-square-o red-text"> </i>
+                            <span>Home collection <span>not</span> available</span>
+                        <% end %>
+                      </div>
+
+                    </div>
+
+                  </div>
+                  <div class="card-action">
+                    <div class=" ">
+                      <div class="col s6">
+                      <span class="grey-text font-12">
+                        List Price : <span class="strikethrough actual-price"><%= show_price(actual_price) %></span>
+                        <span style="display: none;" class="fwd-lab-id"><%= lab_id%></span>
+                        <span style="display: none;" class="fwd-test-ids"><%= lab_tests.pluck(:id).join('-') %></span>
+                        <%# if discount_type == FLAT_DISCOUNT %>
+                        <% discount_amount =  100 - ((discounted_price / actual_price) * 100).round(2) if actual_price > 0 %>
+                        <span class="medd-blue-text "><%= show_price(discount_amount) %>% Off</span>
+                        <%# elsif discount_type == PERCENTAGE_DISCOUNT %>
+                        <!--<span class="medd-blue-text ">Rs. <%#= discount_amount %> Off</span>-->
+                        <%# end %>
+                      </span>
+                        <br>
+                        <span class="font-20 discounted-price"><%= show_price(discounted_price) %>/-</span>
+                        <div class="font-12 activator medd-blue-text">View Price Breakup</div>
+                      </div>
+                      <div class="col s6">
+                        <% if lab.listing_only %>
+                            <button class="btn waves-effect waves-light medd-blue right select-test-btn">
+                              Call : <%= lab.mobile.present? ? lab.mobile : 'CONTACT LAB' %>
+                            </button>
+                        <% else %>
+                            <% if discounted_price > 0 %>
+                                <button class="btn waves-effect waves-light medd-blue right select-test-btn" data-toggle="modal" data-target="#myModal">
+                                  Select
+                                </button>
+                            <% end %>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-reveal">
+                    <span class="card-title medd-blue-text ">
+                      <%#= link_to lab_name,"javascript:void(0)",:class => 'lab-profile',:id => "#{search_result.id}" %>
+                      <%#= link_to lab_name,"#{home_lab_profile_path}?id=#{lab_id}",:target => '_blank' %>
+                      <a href="/diagnostic-centers/<%= city%>/<%= location_id%>/<%= lab_seo_name%>" target="_blank"><%= lab_name %></a>
+                      <i class="material-icons right">close</i></span>
+                    <table>
+                      <thead>
+                      <tr class="lab-table">
+                        <th class="">Index</th>
+                        <th class="">Test Name</th>
+                        <th class="">MRP</th>
+                        <th class="">Discount</th>
+                        <th class="">Our Price</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+
+                      <% lab_tests.each_with_index do |lt,index| %>
+                          <tr class="lab-table">
+                            <td class=""><%= index + 1 %></td>
+                            <td class=""><%= lt.test.name %></td>
+                            <td class=""><%= show_price(lt.actual_price) %></td>
+                            <% if lt.discount_type == FLAT_DISCOUNT %>
+                                <td class=""><%= show_price(lt.discount_amount) %></td>
+                            <% elsif lt.discount_type == PERCENTAGE_DISCOUNT %>
+                                <td class=""><%= show_price(lt.discount_amount) %>%</td>
+                            <% end %>
+                            <td class=""><%= show_price(lt.discounted_price) %></td>
+                          </tr>
+                      <% end %>
+
+                      <tr style="border-top:1px solid #d0d0d0">
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>Total</td>
+                        <td><span class="bold "><%= show_price(discounted_price) %></span></td>
+                      </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+        <% end %>
+
+
+    <% else %>
+        <div class="col l6 m8 s12">
+          <center>Sorry! Currently, No Labs found for these tests</center>
+        </div>
+    <% end %>
+
+    <div class="col l3 m4 s12 modal inmodal" id="myModal" style="display: none;max-height:40%;margin-left: 40%" role="dialog" style="max-height:40%">
+
+      <div class="col s12">
+        <div class="card labresults-cart-card white ">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">Cart</h4>
+          </div>
+
+          <%= form_tag '/checkout', {:id => 'dpl_chk'} do %>
+              <input type="hidden" name="lab_id" id="input-lab-id" value="">
+              <input type="hidden" name="test_ids" id="input-test-ids" value="">
+              <div class="card-action">
+                <div class=" ">
+                  <div class="col l12 m12 s12 center-align">
+											<span class="grey-text font-12">
+												Total Price:
+												<span class="strikethrough" id="order-price"></span>
+											</span>
+                    <br>
+                    <span class="font-16 " id="our-price">DoctorPlab Price: Rs.  /-</span>
+                  </div>
+                  <div class="col l12 m12 s12 center-align" style="margin:6px 0;">
+                    <button class="btn waves-effect waves-light medd-blue checkout-btn">
+                      Checkout
+                    </button>
+                  </div>
+                </div>
+              </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- JS Files -->
+<%= javascript_include_tag "search/libs.min" %>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('.select-test-btn').click(function() {
+            var discounted_price = $(this).closest('.card-action').find('.discounted-price').html();
+            var actual_price = $(this).closest('.card-action').find('.actual-price').html();
+            var lab_id = $(this).closest('.card-action').find('.fwd-lab-id').html();
+            var test_ids = $(this).closest('.card-action').find('.fwd-test-ids').html();
+            $('#order-price').html(actual_price);
+            $('#our-price').html('DoctorPlab Price: ' + discounted_price);
+            $('#input-lab-id').val(lab_id);
+            $('#input-test-ids').val(test_ids);
+            //$('#cart-class').show();
+        });
+    });
+
+    $(".lab-profile").click(function() {
+        lab_id = this.id
+        $.ajax({
+            type: "GET",
+            url: "<%= home_lab_profile_path %>?id=" + lab_id,
+            dataType: "script",
+            success: function (data) {
+                $('#search_result').hide();
+            },
+            error: function (data) {
+                //alert(data)
+            }
+        });
+    });
+
+    $(".checkout-btn").click(function() {
+        var lab_id = $('#input-lab-id').val();
+        var test_ids = $('#input-test-ids').val();
+        jQuery("dpl_chk").submit('');
+    });
+
+</script>
+
+</div>

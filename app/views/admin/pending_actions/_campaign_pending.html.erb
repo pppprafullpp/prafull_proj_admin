@@ -1,0 +1,64 @@
+<% obj = Campaign.find(@pending_action.key) %>
+<% if obj.present? %>
+    <%= tinymce_assets %>
+    <%= tinymce %>
+    <div class="form-group"><label class="col-sm-2 control-label">Campaign Type:</label>
+      <div class="col-sm-10">
+        <span class="form-control"><%= get_campaign_types.key(obj.campaign_type) %></span>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">Campaign Name:</label>
+      <div class="col-sm-10">
+        <span class="form-control"><%= obj.campaign_name %></span>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">Start Date:</label>
+      <div class="col-sm-10">
+        <span class="form-control"><%= obj.start_date.strftime('%d-%m-%Y') %></span>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">End Date:</label>
+      <div class="col-sm-10">
+        <span class="form-control"><%= obj.end_date.strftime('%d-%m-%Y') %></span>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">Campaign Frequency:</label>
+      <div class="col-sm-10">
+        <span class="form-control"><%= get_campaign_frequency.key(obj.campaign_frequency) %></span>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">Email Description:</label>
+      <div class="col-sm-10">
+        <%# email_details = obj.email_details.html_safe %>
+        <%#= text_area_tag :email_details, email_details,{:class => "form-control  tinymce", :maxlength => 1000,:disabled => true} %>
+        <%=text_area_tag :email_details,obj.email_details,:class => 'form-control tinymce',:disabled => true %>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">SMS Description:</label>
+      <div class="col-sm-10">
+        <span class="form-control"><%= obj.sms_details %></span>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">Target Location:</label>
+      <div class="col-sm-10">
+        <% landmark_ids =  obj.landmark_ids.present? ? eval(obj.landmark_ids) : []%>
+        <%= select_tag :landmark_ids,options_for_select(get_locations,:selected => landmark_ids),{:class => 'form-control chosen-select',:multiple => true,:disabled => true} %>
+      </div>
+    </div>
+
+    <div class="form-group"><label class="col-sm-2 control-label">Target Test:</label>
+      <div class="col-sm-10">
+        <% test_ids =  obj.test_ids.present? ? eval(obj.test_ids) : []%>
+        <%= select_tag :test_ids,options_for_select(get_tests,:selected => test_ids),{:class => 'form-control chosen-select',:multiple => true,:disabled => true} %></div>
+    </div>
+
+<% end %>
+
+
