@@ -128,6 +128,7 @@ Myapp::Application.routes.draw do
       collection do
       end
     end
+    resources :orders
   end
 
   namespace :api do

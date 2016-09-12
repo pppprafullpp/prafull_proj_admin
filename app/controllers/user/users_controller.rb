@@ -1,14 +1,21 @@
 class User::UsersController < User::UserApplicationController
 
-  before_filter :set_layout
+  before_filter :set_layout,:set_search
 
   def index
+    params[:search] = {} unless params[:search].present?
+
     @breadcrumb = {'Home' => home_url, 'Profile' => ''}
-    if is_admin?
-      @users = User.all
-    else   
-      @users = User.where(:id => session[:id])
-    end  
+    @users = AppUser.search(params[:search])
+
+    if params[:sort].present?
+      dir = (params[:direction].eql?('asc')) ? params[:direction] : 'desc'
+      @users = @users.order("#{ params[:sort]} #{dir}")
+    else
+      @users = @users.order("created_at DESC")
+    end
+
+    @users = @users.paginate(:page => params[:page], :per_page => PER_PAGE)
   end
 
   def new
@@ -162,5 +169,9 @@ class User::UsersController < User::UserApplicationController
 
   def set_layout
     self.class.layout(session[:id].blank? ? 'empty' : 'application')
+  end
+
+  def set_search
+    @search = AppUser.new
   end
 end
