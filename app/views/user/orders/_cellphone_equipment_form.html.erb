@@ -1,0 +1,37 @@
+<div class="form-group ">
+    <label>Model*</label>
+    <%#list=options_for_select(deal_equipments.pluck(:model,:id))%>
+ 	<%#= select_tag :equipment_id,list,:class => 'form-control', :style=>"width: 100%;",:name =>'deal_equipments[equipment_id]',id: "drop_equipment_id" %>
+ 	<%= select_tag(:equipment_id, options_for_select(deal_equipments.collect { |p|
+              ["#{p.model}($#{p.price})", p.id] }),:class => 'form-control',:id => "drop_equipment_id") %>
+    <%= hidden_field_tag :equipment_id,'',{:name=> 'order_equipments[equipment_id]',:id=> 'equipment_id'}%>
+    <%= hidden_field_tag :equipment_price,'',{:name=> 'order_equipments[equipment_price]', :id=> 'equipment_price'}%>
+</div>
+
+
+
+<script>
+<% if deal_equipments.present? %>
+  var effective_price = $('#update_effective_price').html().split('$')[1];
+  var first_price = $("#drop_equipment_id option:selected").text().split('$')[1].split(')')[0];
+  $("#drop_equipment_id").change(function(e){
+    var first =$("#drop_equipment_id option:selected").text();
+    if(first ==  0){
+      current_equipment = $('#drop_equipment_id option:selected').text().split('$')[1].split(')')[0];
+      total_price = parseFloat(effective_price) + parseFloat(current_equipment) - parseFloat(current_equipment)
+      $('#update_effective_price').html("$" + parseFloat(total_price));
+      $('#effective_price').val(parseFloat(total_price));
+      $('#equipment_id').val(parseInt($('#drop_equipment_id').val()));
+      $('#equipment_price').val(current_equipment);
+    }
+    else{
+      current_equipment = $('#drop_equipment_id option:selected').text().split('$')[1].split(')')[0];
+      total_price = parseFloat(effective_price) + parseFloat(current_equipment) - parseFloat(first_price);
+      $('#update_effective_price').html("$" + parseFloat(total_price));
+      $('#effective_price').val(parseFloat(total_price));
+      $('#equipment_id').val(parseInt($('#drop_equipment_id').val()));
+      $('#equipment_price').val(current_equipment);
+    }
+  });
+<% end %>
+</script>

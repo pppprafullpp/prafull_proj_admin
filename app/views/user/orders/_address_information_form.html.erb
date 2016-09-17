@@ -1,0 +1,82 @@
+<div class="col-sm-6 b-r tab-pane" id="c" >
+              <h3 id="billing_address">Billing Address</h3>
+              <div class= "billing_address_body">
+                <label style="width: 41%;">Address Name*</label>
+                <div class="input-group m-b">
+                  <%= f.text_field :address_name,:value => '',:id=>"billing_address_name",:class => 'form-control',:placeholder => "Enter Address Name",:name => "billing_addresses[address_name]",:maxlength => 150,:style => "width: 50%;" %>
+                  <%= hidden_field_tag :address_type,2,{:name=> 'billing_addresses[address_type]'}%>
+                </div>
+                <div class="form-group ">
+                  <label>Address1*</label>
+                  <%= f.text_field :address1,:value => '', :id=>"billing_address_1",:class => 'form-control',:placeholder => "Enter Address1",:maxlength => 150,:name=>"billing_addresses[address1]"%>
+                </div>
+                <div class="form-group">
+                  <label>Address2*</label>
+                  <%= f.text_field :address2,:value => '',:id=>"billing_address_2",:class => 'form-control',:placeholder => "Enter Address2",:maxlength => 150,:name=>"billing_addresses[address2]"%>
+                </div>
+                <label style="width: 41%;">City*</label>
+                <label>State*</label>
+                <div class="input-group m-b ">
+                  <%= f.text_field :city,:value => '',:id=>"billing_city",:class => 'form-control',:placeholder => "Enter City",:maxlength => 150,:style => "width: 50%;",:name=>"billing_addresses[city]" %>
+                  <%= select_tag(:state,options_for_select( AppUser::STATES,''),:class => 'form-control',:prompt => 'Please Select State',:name=>"billing_addresses[state]", :id=>"billing_state",:style => "width: 50%;") %>
+                </div>
+                <div class="form-group ">
+                  <label>Zip*</label>
+                  <%= f.text_field :zip,:value => '',:id=>"billing_zip",:class => 'form-control',:placeholder => "Enter Zip",:maxlength => 150, :name=>"billing_addresses[zip]"%>
+                </div>
+              </div>
+              </br>
+              <h3 id="shipping_address">Shipping Address</h3>
+              <div id="shipping_address_body">
+                <label style="width: 41%;">Address Name*</label>
+                <div class="input-group m-b ">
+                  <%= f.text_field :address_name,:value => '',:id=>"shipping_address_name",:class => 'form-control',:placeholder => "Enter Address Name",:name => "shipping_addresses[address_name]",:maxlength => 150,:style => "width: 50%;" %>
+                  <%= hidden_field_tag :address_type,1,{:name=> 'shipping_addresses[address_type]'}%>
+                </div>
+                <div class="form-group ">
+                  <label>Address1*</label>
+                  <%= f.text_field :address1,:value => '',:id=>"shipping_address_1",:class => 'form-control',:placeholder => "Enter Address1",:maxlength => 150,:name=>"shipping_addresses[address1]"%>
+                </div>
+                <div class="form-group ">
+                  <label>Address2*</label>
+                  <%= f.text_field :address2,:value => '',:id=>"shipping_address_2",:class => 'form-control',:placeholder => "Enter Address2",:maxlength => 150,:name=>"shipping_addresses[address2]"%>
+                </div>
+                <label style="width: 41%;">City*</label>
+                <label>State*</label>
+                <div class="input-group m-b ">
+                  <%= f.text_field :city,:value => '',:id=>"shipping_city",:class => 'form-control',:placeholder => "Enter City",:maxlength => 150,:style => "width: 50%;",:name=>"shipping_addresses[city]" %>
+                  <%= select_tag(:state,options_for_select( AppUser::STATES,''),:class => 'form-control',:prompt => 'Please Select State',:name=>"shipping_addresses[state]", :id=>"shipping_state",:style => "width: 50%;") %>
+                </div>
+                <div class="form-group ">
+                  <label>Zip*</label>
+                  <%= f.text_field :zip,:value => '',:id=>"shipping_zip",:class => 'form-control',:placeholder => "Enter Zip",:maxlength => 150, :name=>"shipping_addresses[zip]"%>
+                </div>
+              </div>
+              </br>
+              <h3 id= "service_address">Service Address</h3>
+              <div class ="service_address_body ">
+                <label style="width: 41%;">Address Name*</label>
+                <div class="input-group m-b ">
+                  <%= f.text_field :address_name,:value => '',:id=>"service_address_name",:class => 'form-control',:placeholder => "Enter Address Name",:name => "service_addresses[address_name]",:maxlength => 150,:style => "width: 50%;" %>
+                  <%= hidden_field_tag :address_type,0,{:name=> 'service_addresses[address_type]'}%>
+                </div>
+                <div class="form-group ">
+                  <label>Address1*</label>
+                  <%= f.text_field :address1,:value => '',:id=>"service_address_1",:class => 'form-control',:placeholder => "Enter Address1",:maxlength => 150,:name=>"service_addresses[address1]"%>
+                </div>
+                <div class="form-group">
+                  <label>Address2*</label>
+                  <%= f.text_field :address2,:value => '',:id=>"service_address_2",:class => 'form-control',:placeholder => "Enter Address2",:maxlength => 150,:name=>"service_addresses[address2]"%>
+                </div>
+                <label style="width: 41%;">City*</label>
+                <label>State*</label>
+                <div class="input-group m-b ">
+                  <%= f.text_field :city,:value => '',:id=>"service_city",:class => 'form-control',:placeholder => "Enter City",:maxlength => 150,:style => "width: 50%;",:name=>"service_addresses[city]" %>
+                  <%= select_tag(:state,options_for_select( AppUser::STATES,''),:class => 'form-control',:prompt => 'Please Select State',:name=>"service_addresses[state]", :id=>"service_state",:style => "width: 50%;") %>
+                </div>
+                <div class="form-group ">
+                  <label>Zip*</label>
+                  <%= f.text_field :zip,:value => '',:id=>"service_zip",:class => 'form-control',:placeholder => "Enter Zip",:maxlength => 150, :name=>"service_addresses[zip]"%>
+                </div>
+              </div>
+            </div>

@@ -1,0 +1,15 @@
+<% deal_equipments.each do |deal_equipment| %>
+<div class="col-md-12">
+<strong>Name:</strong> <%=deal_equipment.try(:name)%>
+</div>
+<div class="col-md-12">
+<strong>Make:</strong> <%=deal_equipment.try(:make)%>
+</div>
+<div class="col-md-12">
+<strong>Price:</strong> <%=deal_equipment.try(:price)%>
+</div>
+<div class="col-md-12">
+<strong>Installation:</strong> <%=deal_equipment.try(:installation)%>
+</div>
+
+<% end %>

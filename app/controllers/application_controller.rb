@@ -91,6 +91,20 @@ class ApplicationController < ActionController::Base
     return Base64.encode64(data)
   end
 
+  def encoding_data(params)
+    if params[:app_user].present?
+      record = {}
+      params[:app_user].each do |key,value|
+      if(key == 'first_name' || key == 'last_name' || key == 'mobile')
+        record[key] = encode_api_data(value)
+      else
+        record[key] = value
+      end
+    end
+      record
+    end
+  end
+
   private
   #Set headers for cross-domain request
   def set_access_control_headers

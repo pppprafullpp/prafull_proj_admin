@@ -110,6 +110,12 @@ Myapp::Application.routes.draw do
         get 'login'
         get 'forgot_password'
         post 'forgot_password'
+        get 'user_detail'
+        get 'app_user_type'
+        get 'app_user_deals'
+        get 'business_information'
+        get 'addresses'
+        get 'personal_details'
       end
 
       member do
@@ -128,7 +134,11 @@ Myapp::Application.routes.draw do
       collection do
       end
     end
-    resources :orders
+    resources :orders do 
+      collection do
+      get 'deal_details'
+    end
+    end
   end
 
   namespace :api do

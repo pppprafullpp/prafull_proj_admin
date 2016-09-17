@@ -23,7 +23,7 @@ class AppUser < ActiveRecord::Base
   # before_save :encode_data
   ##before_save :encrypt_data
   validates :email, :presence => true, :uniqueness => true
-  validates :password, :presence => true, :confirmation => true, :on => :create
+  # validates :password, :presence => true, :confirmation => true, :on => :create
 
   ## user type
   RESIDENCE = 'residence'
@@ -84,6 +84,7 @@ class AppUser < ActiveRecord::Base
 
 
   def self.update_app_user(params,app_user_id,order = nil)
+
     app_user = self.where(:id => app_user_id).first
     params[:app_user].each do |key,value|
       app_user[key] = value unless key == 'email'
@@ -98,6 +99,23 @@ class AppUser < ActiveRecord::Base
       app_user
     else
       app_user
+    end
+  end
+
+  def self.create_new_user(params)
+    users = []
+    users_param = params[:app_user]
+    if users_param.present?
+      users_param.each do |user|
+        user_record = self.new
+        user.each do |key,value|
+          user_record[key] = value
+        end
+        if user_record.save!
+          users << user_record
+        end
+      end
+      users
     end
   end
 

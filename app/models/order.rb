@@ -27,6 +27,17 @@ class Order < ActiveRecord::Base
 	COMPLETED = 'Completed'
 	CANCELLED = 'Cancelled'
 
+	ORDER_STATUS = [NEW_ORDER, IN_PROGRESS, VERIFICATION_PENDING, ASSIGNED_TO_VENDOR, PROCESS_STARTED, PAYMENT_PENDING, SHIPMENT_DONE, INSTALLATION_DONE , SERVICE_ACTIVATED, COMPLETED, CANCELLED ]
+
+
+	def self.search(params)
+  	conditions = []
+  	# conditions << "deal_id like '%#{params[:deal_id]}%'" if params[:deal_id].present?
+  	condition = conditions.join(' and ')
+  	self.where(condition)
+  end
+ 
+
 	def order_place_time
 		self.created_at.strftime("%d/%m/%Y %I:%M %p")
 	end
