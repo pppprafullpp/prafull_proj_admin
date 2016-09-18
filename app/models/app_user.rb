@@ -33,7 +33,7 @@ class AppUser < ActiveRecord::Base
   SECONDARY_ID = ["Major credit card" , "Driving License","Passport"," State ID Card", "US Military Card", "US Military Department ID Card", "US Coast Guard Merchant Mariner Card", "EAD", "Birth certificate" ]
   USER_TYPES = [RESIDENCE,BUSINESS]
   # STATES = Statelist.all.pluck(:state).uniq
-  STATES = Statelist.all.order('state ASC').pluck(:state).uniq
+    STATES = Statelist.all.order('state ASC').pluck(:state).uniq
 
   def self.search(params)
     conditions = []
