@@ -25,29 +25,37 @@
                     <th>Order Number</th>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Category Name</th>
-                  </tr>
+                    <th>Status<th>
+                   </tr>
                   </thead>
                   <tbody>
-                  <% @orders.each do |lab| %>
+                  <% @orders.each do |order| %>
                       <tr>
                         <td>
-                          <% lab_name = lab.lab_name.present? ? truncate(lab.lab_name,:length => 20) : '' %>
-                          <span class="label label-warning"><%= link_to lab_name,edit_lab_lab_path(lab),:style => 'color: white;'  %></span>
+                          <%=order.order_id%>
                         </td>
                         <td>
-                          <i class="fa fa-clock-o"></i> <%= lab.created_at.strftime('%d/%m/%Y %I:%M%p') %>
+                          <i class="fa fa-clock-o"></i> <%= order.created_at.strftime('%d/%m/%Y %I:%M%p') %>
                         </td>
-                        <td title="<%= lab.email %>"><%= lab.mobile %></td>
-                        <% if lab.status == ACTIVE_STATUS %>
+                        <td><%= order.deal_price.present? ? "$"+ order.deal_price.to_s : "$0" %></td>
+                        <% if order.status == "In-progress" %>
                             <td>
-                              <span class="label label-info">Active</span>
+                              <span class="label label-danger">In Progress</span>
                             </td>
-                        <% else %>
+                        <% elsif order.status == Order::COMPLETED %>
                             <td>
-                              <span class="label label-danger">DeActive</span>
+                              <span class="label label-danger">Completed</span>
+                          </td>
+                          <% elsif order.status == Order::NEW_ORDER %>
+                              <td>
+                                <span class="label label-success">New Order</span>
+                            </td>
+                            <%else%>
+                            <td>
+                              <span class="label label-success"><%=order.status%></span>
                             </td>
                         <% end %>
+
                       </tr>
                   <% end %>
 
@@ -60,7 +68,7 @@
           <div class="col-lg-6">
             <div class="ibox float-e-margins">
               <div class="ibox-title">
-                <h5>User Registered</h5>
+                <h5>User Registered(<%=@user_registered.count%>)</h5>
                 <div class="ibox-tools">
                   <a class="collapse-link">
                     <i class="fa fa-chevron-up"></i>
