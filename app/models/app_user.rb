@@ -37,7 +37,7 @@ class AppUser < ActiveRecord::Base
 
   def self.search(params)
     conditions = []
-    conditions << "first_name like '%#{params[:first_name]}%'" if params[:first_name].present?
+    conditions << "first_name like '%#{params[:first_name]}%' or last_name like '%#{params[:first_name]}%'" if params[:first_name].present?
     conditions << "user_type = '#{params[:user_type]}'" if params[:user_type].present?
     conditions << "mobile = '#{params[:mobile]}'" if params[:mobile].present?
     conditions << "email like '%#{params[:email]}%'" if params[:email].present?

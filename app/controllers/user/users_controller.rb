@@ -1,6 +1,6 @@
 class User::UsersController < User::UserApplicationController
 
-  before_filter :set_layout,:set_search
+  before_filter :set_layout,:set_search,:encode_search_filter_data
 
   def index
     params[:search] = {} unless params[:search].present?

@@ -2,12 +2,12 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  
+
   helper_method :is_admin?, :is_sales_executive?,:current_user, :auth_display_name, :auth_display_pic,:current_controller, :sort_direction,:decode_api_data
-  
+
   ## modules ##
   include Notify
-   
+
 
   def init_servicedeals_session(auth_details)
     session[:id] = auth_details.id
@@ -95,14 +95,23 @@ class ApplicationController < ActionController::Base
     if params[:app_user].present?
       record = {}
       params[:app_user].each do |key,value|
-      if(key == 'first_name' || key == 'last_name' || key == 'mobile')
-        record[key] = encode_api_data(value)
-      else
-        record[key] = value
+        if(key == 'first_name' || key == 'last_name' || key == 'mobile')
+          record[key] = encode_api_data(value)
+        else
+          record[key] = value
+        end
       end
-    end
       record
     end
+  end
+
+  def encode_search_filter_data
+    if params[:search].present?
+      params[:search][:first_name] = encode_api_data(params[:search][:first_name]) if params[:search][:first_name].present?
+      params[:search][:last_name] = encode_api_data(params[:search][:last_name]) if params[:search][:last_name].present?
+      #params[:search][:email] = encode_api_data(params[:search][:email]) if params[:search][:email].present?
+    end
+    params
   end
 
   private
