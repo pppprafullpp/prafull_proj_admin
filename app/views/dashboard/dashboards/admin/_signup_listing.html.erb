@@ -91,13 +91,13 @@
                   <% @user_registered.each do |user| %>
                       <tr>
                         <td>
-                          <% user_name = user.first_name.present? ? truncate(decode_api_data(user.first_name),:length => 20) : '' %>
+                          <% user_name = user.first_name.present? ? truncate(user.first_name,:length => 20) : '' %>
                           <span class="label label-warning"><%= link_to user_name,edit_user_user_path(user),:style => 'color: white;' %></span>
                         </td>
                         <td>
                           <i class="fa fa-clock-o"></i> <%= user.created_at.strftime('%d/%m/%Y %I:%M%p') %>
                         </td>
-                        <td title="<%= user.email %>"><%= decode_api_data(user.mobile) %></td>
+                        <td title="<%= user.email %>"><%= user.mobile%></td>
                       </tr>
                   <% end %>
 
