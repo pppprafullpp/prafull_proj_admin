@@ -1,0 +1,74 @@
+
+
+ <div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>New Order</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="<%= user_users_path %>">Home</a>
+      </li>
+      <li class="active">
+        <strong>Create Order</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+ <ul class="nav nav-tabs">
+    <li><a href="#a" data-toggle="tab">Order Information</a></li>
+    <li><a href="#b" id="personal_information" data-toggle="tab">Personal Information</a></li>
+     <li><a class="hidden" id="business_information" href="#d" data-toggle="tab">Business Information</a></li>
+    <li><a href="#c" id="address_information" data-toggle="tab">Address Information</a></li>
+   
+  </ul>
+  <!-- @order, :url => user_orders_path -->
+  
+  <%= form_for(@order, :url => user_orders_path ,:html => {:id => 'submit_user'} ) do |f| %>
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <div class="ibox-tools">
+          <a class="collapse-link">
+          <i class="fa fa-chevron-up"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content" style="display: block;">
+        <div class="row">
+          <div class="tab-content">
+          <div class="col-sm-6 b-r tab-pane " id="a" >
+  <div class="form-group ">
+    <label>Order Id</label>
+    <%= f.text_field :order_number,:value =>@order.order_number,:name=>"order[order_id]",:class => 'form-control',:placeholder => "Enter Email",:maxlength => 150, read_only: true %>
+  </div>
+   <div class="form-group ">
+    <label>Order Status</label>
+    <%= select_tag(:status,options_for_select(Order::ORDER_STATUS,@order.status),:class => 'form-control',:prompt => 'Select your User Type', :name=> 'order[status]') %>
+  </div>
+  <div class="form-group ">
+    <label>Activation Date</label>
+    <%= f.text_field :activation_date,:value =>@order.activation_date,:name=>"order[activation_date]",:class => 'form-control',:placeholder => "Enter Email",:maxlength => 150, read_only: true %>
+  </div>
+  </div>
+           
+            <%= render :partial=>"personal_information_form", locals: {f: f}%>
+            <%= render :partial=>"business_information_form"%>
+            <%= render :partial=>"address_information_form", locals: {f: f}%>
+
+
+          </div>
+          <div class="col-sm-6">
+            <h3 class="m-t-none m-b"></h3>
+            <p></p>
+            <div class="form-group" id="deal_detail">
+            </div>
+          </div>
+        </div>
+        <div>
+          <button class="btn btn-primary" style="width: 100%;" type="submit" id="submit_user_button">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

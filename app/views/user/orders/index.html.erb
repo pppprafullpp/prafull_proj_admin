@@ -1,6 +1,6 @@
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
-    <h2>Users</h2>
+    <h2>Orders</h2>
     <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
   </div>
   <div class="col-lg-2">
@@ -22,9 +22,9 @@
 
         <div class="ibox-content m-b-sm border-bottom">
           <div class="row">
-            <%= form_for @search, :as => 'search', :url => user_users_path, :html => {:method => :get} do |f| %>
-                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => new_user_user_path,:cancel_url => user_users_path, :filter => [:first_name,:mobile,:email,:user_type]}%>
-            <% end %>
+            <%#= form_for @search, :as => 'search', :url => user_orders_path, :html => {:method => :get} do |f| %>
+                <%#@= render :partial=>'shared/search', :locals => {:f => f, :add_url => new_user_order_path,:cancel_url => user_orders_path, :filter => [:deal_id]}%>
+            <%# end %>
           </div>
         </div>
       </div>
@@ -36,50 +36,43 @@
     <div class="col-lg-12">
       <div class="ibox">
         <div class="ibox-title">
-          <h5>User Lists</h5>
+          <h5>Order Lists</h5>
           <div class="ibox-tools">
-            <%= link_to 'Create New User',new_user_user_path, :class => "btn btn-w-m btn-primary", :title => "Click here to create new User", "data-toggle" => "modal", "data-target" => "#myModal2"%>
+            <%= link_to 'Create Order User',new_user_order_path, :class => "btn btn-w-m btn-primary", :title => "Click here to create new Orderr"%>
           </div>
 
         </div>
         <div class="ibox-content">
-          <%= render :partial => "shared/dpl_notifier"%>
-          <% if @users.present? %>
+          <%#= render :partial => "shared/dpl_notifier"%>
+          <% if @orders.present? %>
               <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                 <thead>
                 <tr>
 
-                  <th data-toggle="true">User Type</th>
+                  <th data-toggle="true">Deal</th>
                   <th data-hide="all">Name</th>
-                  <th data-hide="phone">Mobile</th>
-                  <th data-hide="phone">Email</th>
                   <th data-hide="phone">Created At</th>
                   <th class="text-right" data-sort-ignore="true">Action</th>
 
                 </tr>
                 </thead>
                 <tbody>
-                <% @users.each do |user| %>
+                <% @orders.each do |order| %>
                     <tr>
                       <td>
-                        <%= user.user_type %>
+                        <%= order.order_items.first.try(:deal).try(:title)%>
                       </td>
                       <td>
-                        <%= link_to "#{decode_api_data(user.first_name)} #{decode_api_data(user.last_name)}",edit_user_user_path(user) %>
-                      </td>
-
-                      <td>
-                        <%= decode_api_data(user.mobile) %>
+                         <%= link_to "#{decode_api_data(order.app_user.first_name)} #{decode_api_data(order.app_user.last_name)}",''%>
+                        <%#= decode_api_data(order.app_user.first_name)%>
                       </td>
                       <td>
-                        <%= user.email %>
-                      </td>
-                      <td>
-                        <%= user.created_at.strftime('%d-%m-%Y %H:%M:%S') %>
+                        <%= order.created_at.strftime('%d-%m-%Y %H:%M:%S') %>
                       </td>
                       <td class="text-right">
                         <div class="btn-group">
-                          <%= link_to 'Edit',edit_user_user_path(user),:class => 'btn-white btn btn-xs' %>
+                          <%#= link_to 'Edit','',:class => 'btn-white btn btn-xs',"data-toggle" => "modal", "data-target" => "#myModal2" ,id: "edit_user",remote: true, :onclick => "get_data(#{user.id})"%>
+                          <%= link_to 'Edit',edit_user_order_path(order),:class => 'btn-white btn btn-xs'%>
                           <%#= link_to("Destroy",lab_lab_order_path(tc), method: :delete,:class => 'btn-white btn btn-xs') %>
                         </div>
                       </td>
@@ -116,13 +109,14 @@
         <small class="font-bold">Registering a new user is very simple.</small>
       </div>
 
-      <%= form_tag user_users_path do %>
+      <%= form_tag user_orders_path do %>
           <div class="modal-body">
-            First Name : <input type="text" name="app_user[first_name]" value="" required class="form-control">
-            Last Name : <input type="text" name="app_user[last_name]" value="" required class="form-control">
-            Email : <input type="email" name="app_user[email]" value="" required class="form-control">
-            User Type : <%= select_tag(:user_type, options_for_select(AppUser::USER_TYPES), { :include_blank => "-Select-",:class => 'form-control', :name=> "app_user[user_type]" , required: true})%>
-            Mobile : <input type="text" name="app_user[mobile]" value="" required class="form-control">
+            First Name : <input type="text" name="user[first_name]" value="" required class="form-control">
+            Last Name : <input type="text" name="user[last_name]" value="" required class="form-control">
+            Email : <input type="text" name="user[email]" value="" required class="form-control">
+            User Type : <%= select_tag('user[user_type]', options_for_select(AppUser::USER_TYPES), { :include_blank => "-Select-",:class => 'form-control'})%>
+            Mobile : <input type="text" name="user[mobile]" value="" required class="form-control">
+            Zip : <input type="text" name="user[zip]" value="" required class="form-control">
           </div>
 
           <div class="modal-footer">
@@ -135,17 +129,31 @@
   </div>
 </div>
 
-<% content_for :javascript do %>
+ 
+
 
     <script type="text/javascript">
 
-
-        $(function() {
-
-            $('.footable').footable();
-
-        });
+    function get_data(id) {
+       $.ajax({
+        // url: "/user/users/"+id+"/edit",
+        url: "<%=user_detail_user_users_path%>",
+        type:"get",
+        data: {
+          id : id,
+        },
+        success: function(d){
+          console.log(d);
+          // $("#earnings-txt").html("Total Earnings "+d["total_amount"]);
+          // if(d["total_amount"]>0){
+          //   $("#redeem-form").css("display","none").html("Error!");
+          // }
+        }
+      });
+    }
+ 
+   
 
     </script>
 
-<% end %>
+

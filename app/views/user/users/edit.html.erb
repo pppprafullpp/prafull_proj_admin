@@ -1,3 +1,40 @@
+<%
+  if @business.present?
+    addresses = @business.business_addresses.where(address_type: 2).order('updated_at DESC').first
+  else
+    addresses = @user.app_user_addresses.last
+  end
+  
+   if addresses.present?
+    address_type = addresses.address_type
+    address_name = addresses.address_name
+    address_1 = addresses.address1
+    address_2 = addresses.address2
+    city = addresses.city
+    state = addresses.state
+  
+    zip = addresses.zip
+    contact_number = addresses.contact_number
+  end
+  
+  
+  if @user.primary_id_number.present?
+  primary_id_number = @user.primary_id_number.split('===').last
+  primary_state = @user.primary_id_number.split('===').first
+  end
+  if @user.secondary_id_number.present?
+  secondary_id_number = @user.secondary_id_number.split('===').last
+  secondary_state = @user.secondary_id_number.split('===').first
+  end
+  
+  %>
+<%
+  business_name = @business.present? ? @business.business_name : ''
+  business_type = @business.present? ? @business.business_type : ''
+  federal_number = @business.present? ? @business.federal_number : ''
+  ssn = @business.present? ? @business.ssn : ''
+  business_name=Base64.decode64(business_name) if business_name.present?
+  %>
 <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
     <h2>Edit Profile</h2>
@@ -11,8 +48,293 @@
     </ol>
   </div>
   <div class="col-lg-2">
-
   </div>
 </div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <%= form_for(@user, :url => user_user_path(@user),:html => {:id => 'submit_user'} ) do |f| %>
+  <div class="ibox float-e-margins">
+    <div class="ibox-title">
+      <h5>Personal Information<small></small></h5>
+      <div class="ibox-tools">
+        <a class="collapse-link">
+        <i class="fa fa-chevron-up"></i>
+        </a>
+      </div>
+    </div>
+    <div class="ibox-content" style="display: block;">
+      <div class="row">
+        <div class="col-sm-6 b-r">
+          <h3 class="m-t-none m-b"></h3>
+          <p></p>
+          <label style="width: 41%;">First Name*</label>
+          <label>Last Name*</label>
+          <div class="input-group m-b ">
+            <%= f.text_field :first_name,:value => decode_api_data(@user.first_name),:class => 'form-control',:placeholder => "Enter First Name",:maxlength => 150,:style => "width: 50%;" %>
+            <%= f.hidden_field :id,:value => @user.id, name: 'user[id]' %>
+            <%= f.text_field :last_name,:value => decode_api_data(@user.last_name),:class => 'form-control',:placeholder => "Enter Last Name",:maxlength => 150,:style => "width: 50%;" %>
+          </div>
+          <div class="form-group ">
+            <label>Email</label>
+            <%= f.email_field :email,:value => @user.email,:class => 'form-control',:placeholder => "Enter Email",:maxlength => 150 , readonly: true%>
+          </div>
+          <div class="form-group ">
+            <label>Mobile*</label>
+            <%= f.text_field :mobile,:value => decode_api_data(@user.mobile),:class => 'form-control',:placeholder => "Enter Mobile Number",:maxlength => 11 %>
+          </div>
+          <div class="form-group">
+            <label>Primary Id*</label>
+            <%= select_tag(:primary_id,options_for_select( AppUser::PRIMARY_ID),:class => 'form-control',:prompt => 'Please Select ID Type',:name=>"app_user[primary_id]",:style => "width: 100%;",:onchange =>"show_states(this)") %> 
+          </div>
+          <div class="form-group ">
+            <label>Primary Id Number</label>
+           
+            <%= select_tag(:state,options_for_select( AppUser::STATES),:class => 'form-control hidden',:prompt => 'Please Select State',:onchange =>"show_states()") %>
+             <%= f.text_field :primary_id_number,:value => primary_id_number,:class => 'form-control',:placeholder => "Enter Primary Id Number",:maxlength => 150 %>
+          </div>
+          <div class="form-group ">
+            <label>Secondary Id*</label>
+            <%= select_tag(:secondary_id,options_for_select( AppUser::SECONDARY_ID),:class => 'form-control',:prompt => 'Please Select ID Type',:name=>"app_user[secondary_id]",:style => "width: 100%;",:onchange =>"show_states(this)") %> 
+            <%#= f.text_field :secondary_id,:value => @user.secondary_id,:class => 'form-control',:placeholder => "Enter Secondary Id",:maxlength => 150 %>
+          </div>
+          <div class="form-group ">
+            <label>Secondary Id Number</label>
+            <%= f.text_field :secondary_id_number,:value => secondary_id_number,:class => 'form-control',:placeholder => "Enter Secondary Id Number",:maxlength => 150 %>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <h3 class="m-t-none m-b"></h3>
+          <p></p>
+          <div class="form-group ">
+            <label>User Type*</label>
+            <%= select_tag(:user_type,options_for_select([[AppUser::USER_TYPES.first.titleize, AppUser::USER_TYPES.first], [AppUser::USER_TYPES.last.titleize, AppUser::USER_TYPES.last]],@user.user_type),:class => 'form-control',:prompt => 'Select your User Type', :name=> 'app_user[user_type]') %>
+          </div>
+          <div class="form-group  hidden"  id="business_name_div">
+            <%= text_field_tag(:business_name,business_name,:class => "form-control",:placeholder => "Enter Business name", :name=>"business[business_name]") %>
+            <br />
+            <select id="business_type" name="business[business_type]" class="form-control" onchange="show_business_type()">
+              <option value="">Select Business type</option>
+              <option value="SOLE_PROPRIETOR">Sole Proprietor</option>
+              <option value="REGISTERED">Registered</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <input type="text" value="<%= ssn %>" name="business[ssn]" id="ssn" class="form-control hidden" placeholder = "Enter SSN" />
+            <input type="text" value="<%= federal_number %>" name="business[federal_number]" id="federal_number" class="form-control hidden"  placeholder = "Enter Federal Number" />
+          </div>
+          <label style="width: 41%;">Address Name*</label>
+          <label>Address Type</label>
+          <div class="input-group m-b">
+            <%= f.text_field :address_name,:value => address_name,:class => 'form-control',:placeholder => "Enter Address Name",:name => "addresses[address_name]",:maxlength => 150,:style => "width: 50%;" %>
+            <%= select_tag :address_type,options_for_select({"Billing Address"=>2},address_type),:class => 'form-control input-md',:name => "addresses[address_type]",:style => "width: 50%;"%>
+          </div>
+          <div class="form-group ">
+            <label>Address1*</label>
+            <%= f.text_field :address1,:value => address_1,:class => 'form-control',:placeholder => "Enter Address1",:maxlength => 150,:name=>"addresses[address1]"%>
+          </div>
+          <div class="form-group ">
+            <label>Address2</label>
+            <%= f.text_field :address2,:value => address_2,:class => 'form-control',:placeholder => "Enter Address2",:maxlength => 150,:name=>"addresses[address2]"%>
+          </div>
+          <label style="width: 41%;">City*</label>
+          <label>State*</label>
+          <div class="input-group m-b ">
+            <%= f.text_field :city,:value => city,:class => 'form-control',:placeholder => "Enter City",:maxlength => 150,:style => "width: 50%;",:name=>"addresses[city]" %>
+            <%= f.dpl_err_msg :city, "City" %>
+            <%= select_tag(:state,options_for_select( AppUser::STATES,state),:class => 'form-control',:prompt => 'Please Select State',:name=>"addresses[state]", :id=>"billing_state",:style => "width: 50%;") %>
+          </div>
+          <div class="form-group">
+            <label>Zip*</label>
+            <%= f.text_field :zip,:value => zip,:class => 'form-control',:placeholder => "Enter Zip",:maxlength => 150, :name=>"addresses[zip]"%>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-primary" style="width: 100%;" type="submit" id="submit_user_button">Save Changes</button>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>
+<script type="text/javascript">
+  function show_states(obj){
+    if($("#primary_id option:selected").val()=="Driving License"){
+      $("#state").removeClass("hidden");
+    }
+    else {
+      $("#state").addClass("hidden");
+    }
+  }
+  
+  $( document ).ready(function() {
+    if ($("#user_type option:selected").val() == "business") {
+      $("#business_name_div").removeClass("hidden");
+      $(".height_popup").css("height", "700px")
+    }
+    else {
+      $("#business_name_div").addClass("hidden");
+    }
+    
+    $("#user_type").change(function(){
+      if (  $("#user_type option:selected").val() == "business") {
+        $("#business_name_div").removeClass("hidden");
+        $(".height_popup").css("height", "700px")
+      }
+      else {
+        $("#business_name_div").addClass("hidden");
+      }
+    });
+    
+    $("#submit_user_button").click(function(){
+      var check = true
+  
+      var a = $('#app_user_first_name').val().trim();
+      if (a == null || a == "") {
+        $('#app_user_first_name').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#app_user_first_name').removeClass('custom-input-error')
+      }
+  
+      var a = $('#app_user_last_name').val().trim();
+      if (a == null || a == "") {
+        $('#app_user_last_name').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#app_user_last_name').removeClass('custom-input-error')
+      }
+  
+      var a = $('#app_user_mobile').val().trim();
+      if (a == null || a == "" || a.length < 10) {
+        $('#app_user_mobile').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#app_user_mobile').removeClass('custom-input-error')
+      }
+  
+      var a = $('#primary_id').val().trim();
+      if (a == null || a == "" ) {
+        $('#primary_id').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#primary_id').removeClass('custom-input-error')
+      }
 
-<%= render :partial => 'user/users/form' %>
+      var a = $('#secondary_id').val().trim();
+      if (a == null || a == "" ) {
+        $('#secondary_id').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#secondary_id').removeClass('custom-input-error')
+      }
+              
+      var a = $('#app_user_address_name').val().trim();
+      if (a == null || a == "" ) {
+        $('#app_user_address_name').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#app_user_address_name').removeClass('custom-input-error')
+      }
+     
+      var a = $('#app_user_address1').val().trim();
+      if (a == null || a == "" ) {
+        $('#app_user_address1').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#app_user_address1').removeClass('custom-input-error')
+      }
+  
+      var a = $('#user_type').val().trim();
+      if (a == null || a == "" ) {
+        $('#user_type').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#user_type').removeClass('custom-input-error')
+      }
+  
+      var a = $('#app_user_city').val().trim();
+      if (a == null || a == "" ) {
+        $('#app_user_city').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#app_user_city').removeClass('custom-input-error')
+      }
+  
+      var a = $('#billing_state').val().trim();
+      if (a == null || a == "" ) {
+        $('#billing_state').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#billing_state').removeClass('custom-input-error')
+      }
+
+      var a = $('#app_user_zip').val().trim();
+      if (a == null || a == "" ) {
+        $('#app_user_zip').addClass('custom-input-error')
+        check = false
+      }else{
+        $('#app_user_zip').removeClass('custom-input-error')
+      }
+  
+      if($('#user_type option:selected').val() == 'business'){
+        var a = $('#business_name').val().trim();
+        if (a == null || a == "" ) {
+          $('#business_name').addClass('custom-input-error')
+          check = false
+        }else{
+          $('#business_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#business_type').val().trim();
+        if (a == null || a == "" ) {
+          $('#business_type').addClass('custom-input-error')
+          check = false
+        }else{
+          $('#business_type').removeClass('custom-input-error')
+        }
+
+        if($('#business_type option:selected').val() == 'SOLE_PROPRIETOR'){
+          var a = $('#ssn').val().trim();
+          if (a == null || a == "" ) {
+            $('#ssn').addClass('custom-input-error')
+            check = false
+          }else{
+            $('#ssn').removeClass('custom-input-error')
+          }
+        }
+        
+        if($('#business_type option:selected').val() == 'REGISTERED'){
+          var a = $('#federal_number').val().trim();
+          if (a == null || a == "" ) {
+            $('#federal_number').addClass('custom-input-error')
+            check = false
+          }else{
+            $('#federal_number').removeClass('custom-input-error')
+          }
+        }
+      }
+  
+      if (check){
+        $("#app_user_primary_id_number").val($("#state option:selected").val()+"==="+$("#app_user_primary_id_number").val());
+        $('#submit_user').submit()
+      }else{
+        return false
+      }
+    });
+  
+  });
+  
+  function show_business_type() {
+    if($("#business_type option:selected").val() == "SOLE_PROPRIETOR") {
+      $("#ssn").removeClass("hidden");
+    }
+    else{
+      $("#ssn").addClass("hidden");
+    }
+    if($("#business_type option:selected").val() == "REGISTERED") {
+      $("#federal_number").removeClass("hidden");
+    }
+    else{
+      $("#federal_number").addClass("hidden");
+    }
+  }
+</script>
