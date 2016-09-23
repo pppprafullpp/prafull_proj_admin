@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :is_admin?, :is_sales_executive?,:current_user, :auth_display_name, :auth_display_pic,:current_controller, :sort_direction,:decode_api_data
+  helper_method :is_admin?, :is_sales_executive?,:current_user, :auth_display_name, :auth_display_pic,:current_controller, :sort_direction,:decode_api_data, :get_zipcodes
 
   ## modules ##
   include Notify
@@ -139,4 +139,13 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+    def get_zipcodes
+      zipcodes = Rails.cache.fetch(:expire_in => 24.hours) do
+        Zipcode.all.map { |r| [r.code+' - '+r.city, r.id] }
+      end
+      return zipcodes
+    end
+
+
 end

@@ -1,0 +1,198 @@
+<%zipcodes = get_zipcodes%>
+<div class="container">
+<!-- <table cellpadding='0' cellspacing='0' class='tabbed' height='100%' width='100%' > -->
+  <tr>
+    <td class='main' id='main' valign='top'>
+      <div class='title_tools'>
+        <%#= link_to "View All Deals", deals_path %>
+      </div>
+      <%= form_for(@new_deal, :url =>create_new_deal_dashboard_dashboards_path, :html => {style:"overflow-y:scroll;height:1000px"}) do |f| %>
+          <br/>
+          <% if @new_deal.errors.any? %>
+              <div id="error_explanation">
+                <div class="alert alert-danger">
+                  The form contains <%= pluralize(@new_deal.errors.count, "error") %>.
+                </div>
+                <ul>
+                  <% @new_deal.errors.full_messages.each do |msg| %>
+                      <li><%= msg %></li>
+                  <% end %>
+                </ul>
+              </div>
+          <% end %>
+          <br/>
+          <div><span style="color:#4285F4"><i>Fields marked * are mandatory</i></span></div>
+          <table class="table table-hover no-margins">
+            <tr>
+              <td style="width:50%;">
+                <div>Service Category:<span id="mandat">*</span> </div>
+                <%= f.select :service_category_id, ServiceCategory.all.map { |r| [r.name, r.id]},{:include_blank => "---Select---"},:onchange=>"populate_service_provider(this);", :class => "form-control" %>
+                </div>
+              </td>
+              <td style="width:50%;">
+                <div>Service Provider:<span id="mandat">*</span> </div>
+                <%= f.select :service_provider_id, [],{:include_blank => "---Select---"}, :class => "form-control" %>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>Title:<span id="mandat">*</span></div>
+                <%= f.text_field :title, :class => "form-control" %></div>
+              </td>
+              <td>
+                <div>Image:<span id="mandat">*</span></div>
+                <%= f.file_field :image, :class => "form-control" %></div>
+                <%#= f.hidden_field :image_cache %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>Price:<span id="mandat">*</span> </div>
+                <%= f.text_field :price, :class => "form-control" %></div>
+              </td>
+              <td>
+                <div>URL:</div>
+                <%= f.text_field :url, :class => "form-control" %></div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div><%= f.check_box :is_contract, :id=>'is_contract' %> Is Contract?</div>
+              </td>
+              <td>
+                <div>Contract Period (months):</div>
+                <%= f.text_field :contract_period, :id=>'contract_period', :class => "form-control",:disabled=>true %></div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>Enter a Short Description:<span id="mandat">*</span> </div>
+                <%= f.text_area :short_description, :class => "form-control" %></div>
+              </td>
+              <td>
+                <div>Enter Detail Description:<span id="mandat">*</span> </div>
+                <%= f.text_area :detail_description, :class => "form-control" %></div>
+              </td>
+            </tr>
+            <tr>
+              <td valign="top">
+                <div style="width:49%;display: inline-block;vertical-align: top;">
+                  <div><%= f.check_box :is_nationwide,:id=>'deal-nationwide', :checked=>'checked' %> Is Nationwide? </div>
+                </div>
+                <div style="width:50%;display: inline-block;">
+                    <%= f.label 'Included Zipcodes:' %>
+                  <%=f.select :zipcode_ids, options_for_select(zipcodes),{},{id: "deal-include-zipcode",multiple: true,size: 10 , class: "form-control"  }%>
+                </div>
+              </td>
+              <td>
+                <%= f.label 'Exclude Zipcodes:' %>
+                <%= f.select :zipcode_ids, options_for_select(zipcodes),{},{ id: "deal-exclude-zipcode",multiple: true,size: 10, class: "form-control"  } %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>Start Date:<span id="mandat">*</span></div>
+                <%= f.text_field :start_date, :class => "form-control" %>
+              </td>
+              <td>
+                <div>End Date:<span id="mandat">*</span></div>
+                <%= f.text_field :end_date, :class => "form-control" %>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div>Deal Type:</div>
+                <%= f.select :deal_type,[["Residence", "residence"],["Business","business"]], :class => "form-control" %>
+              </td>
+              <td>
+                <div><%= f.check_box :is_active %> Is Active? </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div><%= f.check_box :is_sponsored %> Is Sponsored? </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div><%= f.check_box :is_customisable %> Is Customizable? </div>
+              </td>
+            </tr>
+            <tr>
+              <td><%= f.submit "Create", :class=>"btn btn-success" %></td>
+            </tr>
+          </table>
+
+          <!--
+          <%#= f.fields_for :internet_deal_attributes do |builder| %>
+              <%#= render 'internet_attribute', f: builder %>
+          <%# end %>
+
+          <%#= f.fields_for :telephone_deal_attributes do |builder| %>
+              <%#= render 'telephone_attribute', f: builder %>
+          <%# end %>
+
+          <%#= f.fields_for :cable_deal_attributes do |builder| %>
+              <%#= render 'cable_attribute', f: builder %>
+          <%# end %>
+
+          <%#= f.fields_for :cellphone_deal_attributes do |builder| %>
+              <%#= render 'cellphone_attribute', f: builder %>
+          <%# end %>
+
+          <%#= f.fields_for :bundle_deal_attributes do |builder| %>
+              <%#= render 'bundle_attribute', f: builder %>
+          <%# end %>
+          -->
+
+          <%#= f.fields_for :additional_offers do |builder| %>
+          <%#= render :partial=>'additional_offer_fields', :locals => {:f => builder, :@zipcodes => zipcodes} %>
+          <%# end %>
+          <%#= link_to_add_fields "Add Additional Offer", f, :additional_offers %>
+      <% end %>
+    </td>
+  </tr>
+<!-- </table> -->
+
+<script>
+function populate_service_provider(obj)
+{
+    if (obj.value != '')
+	{
+		var handleResponse = function (status, response) {
+		   	var data=JSON.parse(response);
+		   	var selectList = document.getElementById("deal_service_provider_id");
+		   	selectList.options.length = 0;
+		   	for(var i=0;i<data.length;i++){
+				var option = document.createElement("option");
+   				option.value = data[i].id;
+    			option.text = data[i].name;
+    			selectList.appendChild(option);
+			}
+
+		}
+		var handleStateChange = function () {
+		   switch (xmlhttp.readyState) {
+		      case 0 : // UNINITIALIZED
+		      case 1 : // LOADING
+		      case 2 : // LOADED
+		      case 3 : // INTERACTIVE
+		      break;
+		      case 4 : // COMPLETED
+		      handleResponse(xmlhttp.status, xmlhttp.responseText);
+		      break;
+		      default: alert("error");
+		   }
+		}
+		var xmlhttp=new XMLHttpRequest();
+		xmlhttp.onreadystatechange=handleStateChange;
+		xmlhttp.open("GET", "/get_service_providers/?category="+obj.value,true);
+		xmlhttp.send(null);
+	}
+}
+$(document).ready(function(){
+  $("#deal_deal_type").addClass("form-control");
+})
+</script>
+<div>

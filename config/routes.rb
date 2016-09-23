@@ -68,10 +68,15 @@ Myapp::Application.routes.draw do
         get :populate_graph_ajaxified
         get :list_orders_ajaxified
         get :list_signups_ajaxified
+        get :deals_data
+        get :create_deal
+        get :create_new_deal
+        get :delete_deal
+        get :edit_deal
       end
     end
   end
-
+  get "/get_service_providers" => "dashboard/dashboards#get_service_providers"
 
   namespace :admin do
     # Directs /admin/products/* to Admin::ProductsController
@@ -134,7 +139,7 @@ Myapp::Application.routes.draw do
       collection do
       end
     end
-    resources :orders do 
+    resources :orders do
       collection do
       get 'deal_details'
     end
@@ -154,7 +159,7 @@ Myapp::Application.routes.draw do
     end
   end
 
-  
+
   post "/news_letters" => 'news_letters#add_news_letters', as: 'news_letters_add' , :defaults => { :format => 'js' }
 
   get '/members/login', :to => "user/users#login", :as => :user_login

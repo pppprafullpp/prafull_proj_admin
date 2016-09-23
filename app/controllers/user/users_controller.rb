@@ -105,15 +105,6 @@ class User::UsersController < User::UserApplicationController
         :status=>app_user
       }
   end
- 
-
-
-
-
-
-
-
-
 
   def fetch_user_details
     mobile = params[:mobile]
@@ -138,7 +129,7 @@ class User::UsersController < User::UserApplicationController
           if session[:cart].present?
             redirect_to checkout_path and return
           elsif session[:doctor_appointment].present?
-            redirect_to book_appointment_appointments_path and return  
+            redirect_to book_appointment_appointments_path and return
           elsif params[:referer].present?
             redirect_to session[:referer_url] and return
           else
@@ -213,6 +204,10 @@ class User::UsersController < User::UserApplicationController
         redirect_to forgot_password_user_users_path and return
       end
     end
+  end
+
+  def create_deals
+    
   end
 
   private

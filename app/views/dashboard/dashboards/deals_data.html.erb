@@ -1,0 +1,3 @@
+<%if session[:role] == "Admin" %>
+<%=render :partial => "dashboard/dashboards/#{session[:role].downcase}/deals", :locals => {:deals => @deals, :new_deal => @new_deal}%>
+<%end%>

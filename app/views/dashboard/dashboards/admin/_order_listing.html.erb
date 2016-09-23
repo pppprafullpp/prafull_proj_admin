@@ -52,7 +52,7 @@
                         <%=name%>
                       </td>
                     <td><%=user_details.email%></td>
-                    <td><%=decode_api_data(user_details.mobile )%></td>
+                    <td><%=user_details.mobile%></td>
                     <td><%=order_request.deal_id.present? ? Deal.find(order_request.deal_id) : "NILL" %></td>
                   </tr>
               <% end %>
