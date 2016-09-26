@@ -41,7 +41,7 @@
               <ul class="nav nav-second-level collapse"id="admin_menu"  style="height: 0px;">
                 <li class="<%= 'active' if current_controller.eql? 'user/users' %>"><a href="<%= user_users_path %>">Create User</a></li>
                 <li class="<%= 'active' if current_controller.eql? 'user/orders' %>"><a href="<%= user_orders_path %>">Create Order</a></li>
-                <li class="<%= 'active' if current_controller.eql? 'user/orders' %>"><a href="<%= deals_data_dashboard_dashboards_path %>">Create Deals</a></li>
+                <li class="<%= 'active' if current_controller.eql? 'user/orders' %>"><a href="<%= admin_deals_path %>">Create Deals</a></li>
                 <li class="<%= 'active' if current_controller.eql? 'admin/pending_actions' %>"><a href="<%= admin_pending_actions_path %>">Pending Actions</a></li>
                 <li class="<%= 'active' if ['home'].include? current_controller%>"><a href="<%= change_password_home_index_path %>">Change Password</a></li>
               </ul>

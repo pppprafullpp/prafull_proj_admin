@@ -50,10 +50,13 @@ GEM
     autoprefixer-rails (6.2.3)
       execjs
       json
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
     bootstrap-sass (3.3.5)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
     builder (3.2.2)
+    byebug (9.0.5)
     capistrano (2.15.7)
       highline
       net-scp (>= 1.0.0)
@@ -78,6 +81,7 @@ GEM
     commontator (4.10.5)
       jquery-rails
       rails (>= 3.1)
+    debug_inspector (0.0.2)
     delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
     delayed_job_active_record (4.1.0)
@@ -206,6 +210,8 @@ GEM
     tilt (1.4.1)
     tinymce-rails (4.3.2)
       railties (>= 3.1.1)
+    toastr-rails (1.0.3)
+      railties (>= 3.1.0)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
     uglifier (2.7.2)
@@ -217,6 +223,11 @@ GEM
       raindrops (~> 0.7)
     validates_email_format_of (1.6.3)
       i18n
+    web-console (2.3.0)
+      activemodel (>= 4.0)
+      binding_of_caller (>= 0.7.2)
+      railties (>= 4.0)
+      sprockets-rails (>= 2.0, < 4.0)
     will_paginate (3.0.7)
     will_paginate-bootstrap (1.0.1)
       will_paginate (>= 3.0.3)
@@ -226,6 +237,7 @@ PLATFORMS
 
 DEPENDENCIES
   bootstrap-sass (~> 3.3.5)
+  byebug
   capistrano (~> 2.15.5)
   capistrano-ext
   capistrano-unicorn
@@ -236,6 +248,7 @@ DEPENDENCIES
   exception_notification!
   font-awesome-rails (= 4.3.0.0)
   jbuilder (~> 1.2)
+  jquery-rails
   koala (~> 2.2)
   mysql2 (~> 0.3.18)
   nokogiri
@@ -248,11 +261,13 @@ DEPENDENCIES
   sdoc
   sms_owl
   tinymce-rails
+  toastr-rails
   uglifier (>= 1.3.0)
   unicorn
   validates_email_format_of
+  web-console
   will_paginate (~> 3.0.6)
   will_paginate-bootstrap
 
 BUNDLED WITH
-   1.10.6
+   1.12.5

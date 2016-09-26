@@ -34,7 +34,7 @@ group :doc do
   gem 'sdoc', require: false
 end
 
-
+gem 'byebug'
 gem 'paperclip', "~> 4.3"
 #gem "galetahub-simple_captcha", :require => "simple_captcha"
 gem 'tinymce-rails'
@@ -67,3 +67,6 @@ gem 'validates_email_format_of'
 gem 'ratyrate'
 gem 'commontator', '~> 4.10.0'
 gem 'nokogiri'
+gem 'toastr-rails'
+gem 'web-console'
+gem 'jquery-rails'

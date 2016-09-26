@@ -32,7 +32,7 @@ class Deal < ActiveRecord::Base
 
   # mount_uploader :image, ImageUploader
 
-  validates_presence_of :service_category_id, :service_provider_id, :title, :short_description, :detail_description, :price, :url, :start_date, :end_date, :image
+  validates_presence_of :service_category_id, :title, :short_description, :detail_description, :price, :url, :start_date, :end_date, :image
   before_save :update_effective_price
   ### CONSTANTS ###
   INTERNET_CATEGORY = 1
@@ -312,6 +312,17 @@ def self.build_custom_json(order_id)
     order_items_array << order_items_hash
   end
   order_items_array
+end
+
+def self.search(params)
+  # raise params.to_yaml
+  conditions = []
+  conditions << "title like '%#{params[:title]}%'" if params[:title].present?
+  conditions << "deal_type = '#{params[:deal_type]}'" if params[:deal_type].present?
+  conditions << "service_category_id = '#{params[:service_category_id]}'" if params[:service_category_id].present?
+  conditions << "service_provider_id = '#{params[:service_provider_id]}'" if params[:service_provider_id].present?
+  condition = conditions.join(' and ')
+  self.where(condition)
 end
 
 

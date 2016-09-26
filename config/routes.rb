@@ -83,6 +83,15 @@ Myapp::Application.routes.draw do
     # (app/controllers/admin/products_controller.rb)
     resources :access
     resources :branches
+    resources :deals
+    resources :deals do
+      collection do
+        get 'create_deal'
+        get 'edit_deal'
+        get 'create_new_deal'
+        get 'delete_deal'
+      end
+    end
     resources :admins do
       collection do
         get 'login'

@@ -30,22 +30,7 @@ class Dashboard::DashboardsController < ApplicationController
     end
   end
 
-  def deals_data
-    @deals = Deal.all
-    @new_deal = Deal.new
-    respond_to do |format|
-      format.js
-      format.html
-    end
 
-  end
-
-  def create_deal
-    @new_deal=Deal.new
-  end
-
-  def create_new_deal
-  end
 
   def get_service_providers
     #@ServiceProviders=ServiceProvider.select("id, name").where(service_category_name: params[:category])
@@ -53,12 +38,5 @@ class Dashboard::DashboardsController < ApplicationController
     render :json => @ServiceProviders
   end
 
-  def delete_deal
-    Deal.find(params[:id]).destroy
-    redirect_to :back
-  end
 
-  def edit_deal
-    @deal_details = Deal.find(params[:id])
-  end
 end
