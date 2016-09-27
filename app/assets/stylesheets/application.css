@@ -12,6 +12,8 @@
  *= require font-awesome
  *= require animate/animate.css
  *= require chosen/chosen.css
+ *= require owl.carousel
+ *= require owl.theme
  *= require style
  *= require commontator/application
  */

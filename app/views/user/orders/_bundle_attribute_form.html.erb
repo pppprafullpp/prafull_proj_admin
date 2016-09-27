@@ -1,0 +1,18 @@
+
+    <% if deal_attributes.try(:first).try(:free_channels).present? %>
+        <h5 class="margin_bot20">More Information</h5>
+        <table class="table table-bordered">
+          <thead>
+          <tr class="active">
+            <th colspan="3">Channels</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td width="20%">General</td>
+            <td width="80%" colspan="2"><%= deal_attributes. try(:first).try(:free_channels_list) %>
+              <!-- <a href="#" data-toggle="modal" data-target="#myModal2">View More</a> --> </td>
+          </tr>
+          </tbody>
+        </table>
+    <% end %>

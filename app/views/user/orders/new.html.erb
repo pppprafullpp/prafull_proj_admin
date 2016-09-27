@@ -77,13 +77,83 @@
           </div>
         </div>
         <div>
-          <button class="btn btn-primary" style="width: 100%;" type="submit" id="submit_user_button">Save Changes</button>
+          <button onclick="check_for_options()" class="btn btn-primary" style="width: 100%;" type="submit" id="submit_user_button">Save Changes</button>
         </div>
       </div>
     </div>
   <% end %>
 </div>
 <script>
+
+
+function check_for_options(){
+   deal_attributes=[];
+    $("input[name='deal_attributes']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj3 ={};
+    jsonObj3["ref_id"]=value.split("_")[0];
+    jsonObj3["ref_type"]=value.split("_")[1];
+    deal_attributes.push(jsonObj3)
+    });
+    $("input[name='deal_channel_packages']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj4 ={};
+    jsonObj4["equipment_id"]=value.split("_")[0];
+    jsonObj3["ref_type"]=value.split("_")[1];
+    deal_attributes.push(jsonObj3)
+    });
+
+    cable_deal_equipments=[];
+    $("input[name='cable_deal_equipments']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj3 ={};
+    jsonObj3["equipment_id"]=value.split("_")[0];
+    // jsonObj3["ref_type"]=value.split("_")[1];
+    cable_deal_equipments.push(jsonObj3)
+    });
+
+    deal_extra_services=[];
+    $("input[name='deal_extra_services']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj2 ={};
+    jsonObj2["deal_extra_service_id"]=value.split("_")[0];
+    deal_extra_services.push(jsonObj2)
+    });
+
+    
+    localStorage["deal_attributes"] = JSON.stringify(deal_attributes);
+    localStorage["deal_extra_services"] = JSON.stringify(deal_extra_services);
+    // localStorage["deal_equipments"] = JSON.stringify(deal_equipments);
+    localStorage["cable_deal_equipments"] = JSON.stringify(cable_deal_equipments);
+
+
+    deal_equipments=[];
+    $("input[name='deal_equipments']:checked").each(function(){
+    value=$(this).attr("val");
+    var id = value.split("_")[0];
+
+        console.log(id);
+
+        $("input[type='radio']:checked").each(function(){ 
+            value=this.id;
+            console.log("value");
+            if(value!="option1" && this.id.split("_")[1] == id ) {
+               console.log("color id="+this.id.split("_")[2])
+            }
+          });
+
+    jsonObj3 ={};
+    // jsonObj3["ref_id"]=value.split("_")[0];
+    // jsonObj3["ref_type"]=value.split("_")[1];
+    deal_equipments.push(jsonObj3)
+    });
+   
+
+
+}
+
+
+
 
 
 
@@ -217,8 +287,8 @@ $('.btnNext').click(function(){
            business = d["status"]
            console.log(business);
              $('#business_name').val(Base64.decode(business['business_name']));
-             $('#business_manager_name').val(Base64.decode(business['manager_name']));
-             $('#business_manager_contact').val(Base64.decode(business['manager_contact']));
+             $('#business_manager_name').val(business['manager_name']);
+             $('#business_manager_contact').val(business['manager_contact']);
              if(business['business_type'] = 1){
               $('#ssn_div').hide();
               $('#business_type').prop('selectedIndex', 2); 

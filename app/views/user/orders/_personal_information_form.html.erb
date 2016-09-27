@@ -8,7 +8,7 @@
               </div>
               <div class="form-group ">
                 <label>Email*</label>
-                <%= f.email_field :email,:value =>'',:name=>"app_user[email]",:class => 'form-control',:placeholder => "Enter Email",:maxlength => 150 %>
+                <%= f.email_field :email,:value =>'',:name=>"app_user[email]",:class => 'form-control',:placeholder => "Enter Email",:maxlength => 150, readonly: true%>
               </div>
               <div class="form-group ">
                 <label>Mobile*</label>
@@ -16,7 +16,8 @@
               </div>
               <div class="form-group ">
                 <label>Primary Id*</label>
-                <%= f.text_field :primary_id,:name=>"order[primary_id]",:value => '',:class => 'form-control',:placeholder => "Enter Primary Id",:maxlength => 150 %>
+                <%#= f.text_field :primary_id,:name=>"order[primary_id]",:value => '',:class => 'form-control',:placeholder => "Enter Primary Id",:maxlength => 150 %>
+                <%= select_tag(:primary_id,options_for_select( AppUser::PRIMARY_ID),:class => 'form-control',:prompt => 'Please Select ID Type',:name=>"order[primary_id]",:style => "width: 100%;", id: "order_primary_id") %> 
               </div>
               <div class="form-group ">
                 <label>Primary Id Number</label>
@@ -24,7 +25,8 @@
               </div>
               <div class="form-group ">
                 <label>Secondary Id*</label>
-                <%= f.text_field :secondary_id,:value => '',:class => 'form-control',:name=>"order[secondary_id]",:placeholder => "Enter Secondary Id",:maxlength => 150 %>
+                <%#= f.text_field :secondary_id,:value => '',:class => 'form-control',:name=>"order[secondary_id]",:placeholder => "Enter Secondary Id",:maxlength => 150 %>
+                 <%= select_tag(:secondary_id,options_for_select( AppUser::SECONDARY_ID),:class => 'form-control',:prompt => 'Please Select ID Type',:name=>"order[secondary_id]",:style => "width: 100%;", id: "order_secondary_id" )%> 
               </div>
               <div class="form-group ">
                 <label>Secondary Id Number</label>

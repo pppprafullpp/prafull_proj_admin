@@ -44,6 +44,7 @@ gem 'delayed_job_active_record'
 gem "exception_notification", github: "smartinez87/exception_notification", branch: "master"
 gem "omniauth"
 gem "omniauth-facebook"
+gem "byebug"
 
 
 gem 'capistrano-ext'
@@ -67,3 +68,5 @@ gem 'validates_email_format_of'
 gem 'ratyrate'
 gem 'commontator', '~> 4.10.0'
 gem 'nokogiri'
+gem 'owlcarousel-rails'
+

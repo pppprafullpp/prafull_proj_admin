@@ -105,6 +105,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def encoding_business_data(params)
+    if params[:business].present?
+      record = {}
+      params[:business].each do |key,value|
+        if(key == 'business_name' || key == 'ssn' || key == 'federal_number')
+          record[key] = encode_api_data(value)
+        else
+          record[key] = value
+        end
+      end
+      record
+    end
+  end
+
   def encode_search_filter_data
     if params[:search].present?
       params[:search][:first_name] = encode_api_data(params[:search][:first_name]) if params[:search][:first_name].present?
