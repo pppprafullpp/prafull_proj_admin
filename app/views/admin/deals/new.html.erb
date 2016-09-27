@@ -16,7 +16,7 @@
         <div class='title_tools'>
           <%#= link_to "View All Deals", deals_path %>
         </div>
-        <%= form_for(@new_deal, :url =>create_new_deal_dashboard_dashboards_path) do |f| %>
+        <%= form_for(@new_deal, :url =>"/admin/deals", :method => "post") do |f| %>
             <br/>
             <% if @new_deal.errors.any? %>
                 <div id="error_explanation">
@@ -40,7 +40,7 @@
                 </td>
                 <td style="width:50%;">
                   <div>Service Provider:<span id="mandat">*</span> </div>
-                  <%= f.select :service_provider_id, [],{:include_blank => "---Select---"}, :class => "form-control" %>
+                  <%= f.select :service_provider_id, [],{:include_blank => "---Select---"}, :class => "form-control", :disabled =>"true", :disabled => true %>
                   </div>
                 </td>
               </tr>
@@ -71,7 +71,7 @@
                 </td>
                 <td>
                   <div>Contract Period (months):</div>
-                  <%= f.text_field :contract_period, :id=>'contract_period', :class => "form-control",:disabled=>true %></div>
+                  <%= f.text_field :contract_period, :id=>'contract_period', :class => "form-control" %></div>
                 </td>
               </tr>
               <tr>
@@ -178,6 +178,7 @@
      				option.value = data[i].id;
       			option.text = data[i].name;
       			selectList.appendChild(option);
+            $("#deal_service_provider_id").prop("disabled",false);
   			}
 
   		}

@@ -32,7 +32,7 @@
 
   <div class="ibox ibox-title float-e-margins">
    <div class="ibox-tools">
-     <a class="btn btn-w-m btn-primary" href="<%=create_deal_admin_deals_path%>" title="Click here to create new Order" href="/user/orders/new">Create Deal</a>
+     <%=button_to "Create Deal","/admin/deals/new", :method=>"get", :class=>"btn btn-w-m btn-primary"%>
    </div>
   </div>
 
