@@ -1,4 +1,5 @@
 <!-- <div class="form-group <%#= f.dpl_err_cls :address_name %> " id="deal_detail"> -->
+
 <%deal_attributes = @deal['deal_attributes']%>
 <%deal_equipments = @deal['deal_equipments']%>
 <h4>Deals Detail</h4>
@@ -35,9 +36,16 @@
 </div>
 
 
-<% if deal_equipments.present? %>
-<h4 id="deal_equipments">Deals Equipments</h4>
+<% if deal_equipments.present? && @deal['is_customisable'] != true %>
   <%= render :partial => "#{@deal['service_category_name'].downcase}_equipment_form", :locals => { :deal_equipments => deal_equipments } %>
+<% end %>
+
+<% if deal_attributes.present? && @deal['is_customisable'] != true %>
+  <%= render :partial => "#{@deal['service_category_name'].downcase}_attribute_form", :locals => { :deal_attributes => deal_attributes } %>
+<% end %>
+
+<% if @deal['is_customisable'] == true %>
+  <%= render :partial => "#{@deal['service_category_name'].downcase}_customize_form", :locals => { :deals => @deal } %>
 <% end %>
 
 
@@ -52,5 +60,7 @@
 $('#deal_equipments').onclick(function(){
 	$('#deal_equipment_detail').show();
 });
+
+
 </script>
 

@@ -32,11 +32,12 @@ class Order < ActiveRecord::Base
 
 	def self.search(params)
   	conditions = []
-  	# conditions << "deal_id like '%#{params[:deal_id]}%'" if params[:deal_id].present?
+		conditions << "order_number like '%#{params[:order_number]}%'" if params[:order_number].present?
+		conditions << "status like '%#{params[:status]}%'" if params[:status].present?
   	condition = conditions.join(' and ')
   	self.where(condition)
   end
- 
+
 
 	def order_place_time
 		self.created_at.strftime("%d/%m/%Y %I:%M %p")

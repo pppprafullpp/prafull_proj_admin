@@ -19,10 +19,10 @@
     <li><a href="#b" id="personal_information" data-toggle="tab">Personal Information</a></li>
      <li><a class="hidden" id="business_information" href="#d" data-toggle="tab">Business Information</a></li>
     <li><a href="#c" id="address_information" data-toggle="tab">Address Information</a></li>
-   
+
   </ul>
   <!-- @order, :url => user_orders_path -->
-  
+
   <%= form_for(@order, :url => user_orders_path ,:html => {:id => 'submit_user'} ) do |f| %>
     <div class="ibox float-e-margins">
       <div class="ibox-title">
@@ -40,7 +40,7 @@
               <p></p>
               <div class="form-group <%= f.dpl_err_cls :user_type %>">
                 <label>User Type*</label>
-                <%= select_tag(:user_type,options_for_select([[AppUser::USER_TYPES.first.titleize, AppUser::USER_TYPES.first], [AppUser::USER_TYPES.last.titleize, AppUser::USER_TYPES.last]],''),:class => 'form-control',:prompt => 'Select your User Type', :name=> 'app_user[user_type]') %>
+                <%= select_tag(:user_type,options_for_select([["User Type",0],[AppUser::USER_TYPES.first.titleize, AppUser::USER_TYPES.first], [AppUser::USER_TYPES.last.titleize, AppUser::USER_TYPES.last]],''),:class => 'form-control', :name=> 'app_user[user_type]') %>
                 <%= f.dpl_err_msg :user_type, "User Type" %>
               </div>
               <div class="form-group <%= f.dpl_err_cls :user_type %>">
@@ -52,9 +52,9 @@
                 <label>Deal*</label>
                 <%= select_tag :deal_id, [],:class=>'form-control', name: 'order_items[deal_id]'%>
                 <%= hidden_field_tag :status,'new_order',{:name=> 'order_items[status]'}%>
-               
-
               </div>
+                <%=button_tag("Next ", :id => "personal_details_btn",:class=>"btn btn-block btn-outline btn-primary", :onclick => "show_personal_details()")%>
+                <button onclick="reset_deal_frame()" class="btn btn-block btn-outline btn-danger" type="submit" id="reset_user_button">Reset</button>
             </div>
 
 
@@ -62,7 +62,7 @@
               <%#= hidden_field_tag :status,'new_order',{:name=> 'order_items[status]'}%>
               <%#= hidden_field_tag :deal_price,20,{:name=> 'order_items[deal_price]'}%>
               <%#= hidden_field_tag :effective_price,40,{:name=> 'order_items[effective_price]'}%>
-           
+
             <%= render :partial=>"personal_information_form", locals: {f: f}%>
             <%= render :partial=>"business_information_form"%>
             <%= render :partial=>"address_information_form", locals: {f: f}%>
@@ -77,58 +77,130 @@
           </div>
         </div>
         <div>
-          <button class="btn btn-primary" style="width: 100%;" type="submit" id="submit_user_button">Save Changes</button>
+          <button onclick="check_for_options()" class="btn btn-block btn-outline btn-primary hidden" type="submit" id="submit_user_button">Save Changes</button>
+
         </div>
       </div>
     </div>
   <% end %>
 </div>
 <script>
+function reset_deal_frame(){
+  event.preventDefault();
+  $("#deal_id").find("option").remove();
+  $("#user_type option[value = 0]").prop("selected","selected");
+  $("#app_user_id").val('').trigger("chosen:updated");
+  }
+function show_personal_details() {
+  event.preventDefault();
+  if ($("#user_type").prop("value")!="" &&  $("#app_user_id option:selected").prop("value")!=undefined && $("#deal_id option:selected").prop("value")!=undefined){
+    $("#personal_information").tab("show");
+  }
+  else {
+    $('#user_type').addClass('custom-input-error')
+    $('#app_user_id').addClass('custom-input-error')
+    $('#deal_id').addClass('custom-input-error')
+  }
+}
+
+function check_for_options(){
+   deal_attributes=[];
+    $("input[name='deal_attributes']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj3 ={};
+    jsonObj3["ref_id"]=value.split("_")[0];
+    jsonObj3["ref_type"]=value.split("_")[1];
+    deal_attributes.push(jsonObj3)
+    });
+    $("input[name='deal_channel_packages']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj4 ={};
+    jsonObj4["equipment_id"]=value.split("_")[0];
+    jsonObj3["ref_type"]=value.split("_")[1];
+    deal_attributes.push(jsonObj3)
+    });
+
+    cable_deal_equipments=[];
+    $("input[name='cable_deal_equipments']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj3 ={};
+    jsonObj3["equipment_id"]=value.split("_")[0];
+    // jsonObj3["ref_type"]=value.split("_")[1];
+    cable_deal_equipments.push(jsonObj3)
+    });
+
+    deal_extra_services=[];
+    $("input[name='deal_extra_services']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj2 ={};
+    jsonObj2["deal_extra_service_id"]=value.split("_")[0];
+    deal_extra_services.push(jsonObj2)
+    });
+
+
+    localStorage["deal_attributes"] = JSON.stringify(deal_attributes);
+    localStorage["deal_extra_services"] = JSON.stringify(deal_extra_services);
+    // localStorage["deal_equipments"] = JSON.stringify(deal_equipments);
+    localStorage["cable_deal_equipments"] = JSON.stringify(cable_deal_equipments);
+
+
+    deal_equipments=[];
+    $("input[name='deal_equipments']:checked").each(function(){
+    value=$(this).attr("val");
+    var id = value.split("_")[0];
+
+        console.log(id);
+
+        $("input[type='radio']:checked").each(function(){
+            value=this.id;
+            console.log("value");
+            if(value!="option1" && this.id.split("_")[1] == id ) {
+               console.log("color id="+this.id.split("_")[2])
+            }
+          });
+
+    jsonObj3 ={};
+    // jsonObj3["ref_id"]=value.split("_")[0];
+    // jsonObj3["ref_type"]=value.split("_")[1];
+    deal_equipments.push(jsonObj3)
+    });
 
 
 
+}
 
-$('.btnNext').click(function(){
-  $('.nav-tabs > .active').next('li').find('a').trigger('click');
-});
+  $("#user_type").change(function(){
+      if (  $("#user_type option:selected").val() == "business") {
+        $("#business_information").removeClass("hidden");
+        $("#d").removeClass("hidden");
 
-  $('.btnPrevious').click(function(){
-  $('.nav-tabs > .active').prev('li').find('a').trigger('click');
-});
-
- $("#user_type").change(function(){
-          if (  $("#user_type option:selected").val() == "business") {
-            $("#business_information").removeClass("hidden");
-            $("#d").removeClass("hidden");
-
-            $("#business_name_div").removeClass("hidden");
-            $(".height_popup").css("height", "700px")
-          }
-          else {
-            $("#business_name_div").addClass("hidden");
-            $("#business_information").addClass("hidden");
-          }
-        });
+        $("#business_name_div").removeClass("hidden");
+        $(".height_popup").css("height", "700px")
+      }
+      else {
+        $("#business_name_div").addClass("hidden");
+        $("#business_information").addClass("hidden");
+      }
+    });
   $('#shipping_address').click(function(){
-     
      $('#service_address_body').hide();
      $('#billing_address_body').hide();
      $('#shipping_address_body').show();
-  
+
    });
    $('#billing_address').click(function(){
      $('#shipping_address_body').hide();
      $('#service_address_body').hide();
      $('#billing_address_body').show();
-  
+
    });
    $('#service_address').click(function(){
      $('#shipping_address_body').hide();
      $('#billing_address_body').hide();
       $('#service_address_body').show();
-  
+
    });
-  
+
    $("#user_type").click(function(){
       $('#app_user_id').empty();
        extra_service_id = $("#user_type").val();
@@ -144,16 +216,22 @@ $('.btnNext').click(function(){
            deals = d["status"]
            for (var i=0;i<deals.length;i++){
              $('<option/>').val(deals[i]['id']).html((Base64.decode(deals[i]['first_name']))).appendTo('#app_user_id');
-           } 
+           }
+           $("#app_user_id").trigger("chosen:updated").chosen({
+             disable_search_threshold: 1,
+             no_results_text: "Oops, nothing found!",
+             width: "95%",
+             search:true
+           });
          }
        });
      }
    });
-   
-   $("#app_user_id").click(function(){
-      $('#deal_id').empty();
+
+   $("#app_user_id").on("change",function(){
+      // $('#deal_id').empty();
        user_type =$("#user_type").val();
-       extra_service_id = $("#app_user_id").val();
+       extra_service_id = $("#app_user_id option:selected").prop("value");
      if(extra_service_id != ""){
        $.ajax({
          url:"<%= app_user_deals_user_users_path %>",
@@ -164,29 +242,46 @@ $('.btnNext').click(function(){
          },
          success: function(d){
            // console.log(d["status"].length);
+           $("#deal_id").find("option").remove();
            deals = d["status"]
            for (var i=0;i<deals.length;i++){
              $('<option/>').val(deals[i]['id']).html(deals[i]['title']).appendTo('#deal_id');
-           } 
+           }
+           $("#deal_id").focus();
          }
        });
      }
    });
-   
-   $("#deal_id").click(function(){
-      // $('#deal_detail').empty();
-     user_type =$("#deal_id").val();
-     extra_service_id = $("#deal_id").val();
-     if(extra_service_id != ""){
-       $.ajax({
-         url:"<%= deal_details_user_orders_path %>",
-         type:"get",
-         data: {
-           deal_id : extra_service_id 
-         },
-       });
-     }
-   });
+
+    $("#deal_id").on("click",function(){
+    user_type =$("#deal_id").val();
+    extra_service_id = $("#deal_id").val();
+    if(extra_service_id != ""){
+    $.ajax({
+    url:"<%= deal_details_user_orders_path %>",
+    type:"get",
+    data: {
+    deal_id : extra_service_id
+    },
+    });
+    }
+    });
+
+    $("#deal_id").on("focus",function(){
+    // $('#deal_detail').empty();
+
+    user_type =$("#deal_id").val();
+    extra_service_id = $("#deal_id").val();
+    if(extra_service_id != ""){
+    $.ajax({
+    url:"<%= deal_details_user_orders_path %>",
+    type:"get",
+    data: {
+    deal_id : extra_service_id
+    },
+    });
+    }
+    });
 
    $('#business_type').change(function(){
     if ($("#business_type option:selected").val() == 0){
@@ -196,7 +291,7 @@ $('.btnNext').click(function(){
       else{
         $('#ssn_div').hide();
         $('#federal_number_div').show();
-        
+
       }
    });
 
@@ -210,23 +305,23 @@ $('.btnNext').click(function(){
          url:"<%=  business_information_user_users_path %>",
          type:"get",
          data: {
-          id : user_id 
+          id : user_id
          },
          success: function(d){
            console.log(d);
            business = d["status"]
            console.log(business);
              $('#business_name').val(Base64.decode(business['business_name']));
-             $('#business_manager_name').val(Base64.decode(business['manager_name']));
-             $('#business_manager_contact').val(Base64.decode(business['manager_contact']));
+             $('#business_manager_name').val(business['manager_name']);
+             $('#business_manager_contact').val(business['manager_contact']);
              if(business['business_type'] = 1){
               $('#ssn_div').hide();
-              $('#business_type').prop('selectedIndex', 2); 
+              $('#business_type').prop('selectedIndex', 2);
               $('#federal_number').val(Base64.decode(business['federal_number']));
             }
             else{
              $('#ssn').val(Base64.decode(business['federal_number']));
-             $('#business_type').prop('selectedIndex', 1); 
+             $('#business_type').prop('selectedIndex', 1);
               $('#federal_number_div').hide();
             }
          }
@@ -389,7 +484,7 @@ $('.btnNext').click(function(){
             $('#business_type').removeClass('custom-input-error')
         }
       }
-      
+
 
         if (check){
           // $(this).tab('show');
@@ -452,7 +547,7 @@ $("#business_information").click(function(){
         }
 
 
-      
+
 
         if (check){
           // $(this).tab('show');
@@ -696,8 +791,8 @@ $('#personal_information').click(function(){
 
   });
 
-   
-   
-   
-      
+
+
+
+
 </script>

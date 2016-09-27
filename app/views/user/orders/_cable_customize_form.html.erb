@@ -1,0 +1,111 @@
+<% deal_attributes =  @deal['deal_attributes'] 
+deal_equipments = @deal['deal_equipments'] 
+deal_extra_services = @deal['deal_extra_services'] 
+deal_channel_packages = @deal['channel_packages']
+ %>
+
+<section>
+	<div class='equipments-details col-md-12'>	
+		<h5>Choose Your Custom TV Plan</h5>
+		<div id="deal_attributes" class="owl-carousel">
+			<% deal_attributes.each do |deal_attribute| %>
+				<div class="text-center">
+					<div class="sd-deal-sty">
+						<h6><%= deal_attribute["title"]%></h6>	
+						<p><%=deal_attribute["channel_count"]%>+ Channels</p>	
+						<p><%= deal_attribute["hd_channels"]%>+ HD</p>	
+						<p><%= deal_attribute["description"]%></p>	
+						<p>Price $20<%#= deal_channel_package["price"]%>/mo</p>	
+						<div class="text-left">
+							<div class="checkbox checkbox-info">
+							<input type="checkbox" id="deal_attribute_<%=deal_attribute['id']%>" name="deal_attributes" 
+							val="<%=deal_attribute['id']%>_20.0" />
+							<%#=deal_attribute['data_plan_price'].to_f %>
+							<label for="deal_attribute_<%=deal_attribute['id']%>" >Select</label>
+				  	</div>
+				  </div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+	<div class='equipments-details col-md-12'>	
+		<h5>Get More With Premium Channels</h5>
+		<div id="channel_package" class="owl-carousel">
+			<% deal_channel_packages.each do |deal_channel_package| %>
+				<div class="text-center">
+					<div class="sd-deal-sty " style="height:250px">
+						<h6><%= deal_channel_package["package_name"]%></h6>	
+						<p><%=deal_channel_package["channel_count"]%>+Channels</p>	
+						<p>Domestic minutes <%= deal_channel_package["description"]%></p>	
+						<p>Price $20<%#= deal_channel_package["price"]%>/mo</p>	
+						<div class="text-left">
+							<div class="checkbox checkbox-info">
+								<input type="checkbox" id="deal_channel_package_<%=deal_channel_package['id']%>" name="deal_channel_packages" 
+								val="<%=deal_channel_package['id']%>_10.0%>" />
+								<label for="deal_channel_package_<%=deal_channel_package['id']%>" >Select</label>
+							</div>
+				  	</div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+
+	<div class='equipments-details col-md-12'>	
+		<h5>Cable Equipments</h5>
+		<div id="cable_deal_equipments" class="owl-carousel">
+			<% deal_equipments.each do |deal_equipment| %>
+				<div class="text-center">
+					<div class="sd-deal-sty" style="height: 200px;">
+						<h6><%= deal_equipment["name"]%></h6>	
+						<p>Price $<%= deal_equipment["price"]%>/mo</p>	
+						<div class="text-left">
+							<div class="checkbox checkbox-info">
+								<input type="checkbox" id="cable_deal_equipment_<%=deal_equipment['id']%>" name="cable_deal_equipments" 
+								val="<%=deal_equipment['id']%>_<%=deal_equipment['price'].to_f%>" />
+							<label for="cable_deal_equipment_<%=deal_equipment['id']%>" >Select</label>
+			  		</div>
+			  	</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+
+</section>
+
+<script>
+ $('#cable_deal_equipments,#deal_attributes,#channel_package').owlCarousel({
+    loop:true,
+    margin:10,
+    responsiveClass:true,
+   items:3,
+  });
+
+ $(document).ready(function() {
+  var effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+  var chkId = 0;
+  $('input[type=checkbox]').on('change', function() {
+    $(this).each ( function() {
+      effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+      if($(this).prop('checked') == true){
+        effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+        chkId =$(this).attr("val").split("_")[1];
+        effective_value = effective_price + parseFloat(chkId); 
+        $('#update_effective_price').text("$" + effective_value);
+      }
+      else{
+        effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+        chkId =$(this).attr("val").split("_")[1];
+        effective_value = effective_price - parseFloat(chkId);
+        $('#update_effective_price').text("$" + effective_value );
+      }
+      localStorage["effective_price"] = JSON.stringify(effective_value);
+    });
+  });
+});
+</script>
+	

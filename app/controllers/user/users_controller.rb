@@ -64,7 +64,7 @@ class User::UsersController < User::UserApplicationController
 
   def app_user_type
     # users = AppUser.select('id,first_name').where(user_type: params[:user_type]).limit(10)
-    users = AppUser.select('id,first_name').where(user_type: params[:user_type]).order("created_at DESC").limit(10)
+    users = AppUser.select('id,first_name').where(user_type: params[:user_type]).order("created_at DESC")
     render :json=>{
         :status=>users
       }
@@ -207,7 +207,7 @@ class User::UsersController < User::UserApplicationController
   end
 
   def create_deals
-    
+
   end
 
   private

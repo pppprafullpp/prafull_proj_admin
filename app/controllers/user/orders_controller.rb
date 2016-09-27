@@ -3,18 +3,10 @@ class User::OrdersController < User::UserApplicationController
 
   def index
     params[:search] = {} unless params[:search].present?
-
-    @breadcrumb = {'Home' => home_url, 'Profile' => ''}
-    @orders = Order.search(params[:search])
-
-    if params[:sort].present?
-      dir = (params[:direction].eql?('asc')) ? params[:direction] : 'desc'
-      @orders = @orders.order("#{ params[:sort]} #{dir}")
-    else
-      @orders = @orders.order("created_at DESC")
-    end
-
+    @breadcrumb = {'Home' =>"/user/orders", 'Orders' => ''}
+    @orders = Order.search(params[:search]).order("ID DESC")
     @orders = @orders.paginate(:page => params[:page], :per_page => PER_PAGE)
+    @search = Order.new
   end
 
   def new
@@ -38,7 +30,7 @@ class User::OrdersController < User::UserApplicationController
         app_user = AppUser.update_app_user(app_user_hash,order.app_user_id,order)
         address_hash = {:business_addresses => [params[:shipping_addresses],params[:billing_addresses],params[:service_addresses]] }  if params[:app_user][:user_type] == "business"
         address_hash = {:app_user_addresses => [params[:shipping_addresses],params[:billing_addresses],params[:service_addresses]] }  if params[:app_user][:user_type] == "residence"
-       
+
         order_addresses = OrderAddress.create_order_addresses(address_hash,order.id)
         if user_type == AppUser::BUSINESS
           business = Business.create_business(params)
@@ -46,16 +38,16 @@ class User::OrdersController < User::UserApplicationController
             business_addresses = BusinessAddress.create_business_addresses(address_hash,business.id)
             business_user = BusinessAppUser.create_business_app_user(business.id,app_user.id)
           end
-          OrderMailer.delay.order_confirmation(app_user,order)
+          # OrderMailer.delay.order_confirmation(app_user,order)
         else
           app_user_addresses = AppUserAddress.create_app_user_addresses(address_hash,app_user.id)
-          OrderMailer.delay.order_confirmation(app_user,order)
+          # OrderMailer.delay.order_confirmation(app_user,order)
         end
       end
       redirect_to user_orders_path
     end
 
-      
+
   end
 
   def edit
@@ -67,13 +59,21 @@ class User::OrdersController < User::UserApplicationController
   end
 
   def destroy
-
+    # Order.find(params[:id]).update_attributes(:status => "Cancelled")
+    flash[:success] = "Cancelled"
+    redirect_to :back
   end
 
   def deal_details
     @deal = Deal.find(params[:deal_id])
-    @deal = @deal.as_json(:except => [:created_at, :updated_at, :image, :price],:methods => [ :deal_price,:service_category_name, :service_provider_name,:deal_equipments,:deal_attributes])
-end
+    if @deal.is_customisable == true && @deal.service_category_id == Deal::CELLPHONE_CATEGORY
+      @deal = @deal.as_json(:include =>{:deal_equipments =>{:except=>[:available_colors],:methods => [:available_color,:cellphone_name,:brand,:description]},:deal_extra_services => {:methods => [:service_name,:service_description]} },:except => [:created_at, :updated_at, :image, :price],:methods => [:deal_price,:service_category_name, :service_provider_name,:deal_attributes])
+    elsif  @deal.is_customisable == true && @deal.service_category_id == Deal::CABLE_CATEGORY
+      @deal =  @deal.as_json(:include =>{:channel_packages => {:methods=>[:channel_name]},:deal_attributes => {:methods => [:channel_name]},:deal_extra_services => {:methods => [:service_name,:service_description]}},:except => [:created_at, :updated_at, :image, :price],:methods => [:deal_price,:service_category_name, :service_provider_name,:deal_equipments])
+    else
+      @deal = @deal.as_json(:except => [:created_at, :updated_at, :image, :price],:methods => [ :deal_price,:service_category_name, :service_provider_name,:deal_equipments,:deal_attributes])
+    end
+  end
 
   private
 
