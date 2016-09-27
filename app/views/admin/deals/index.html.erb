@@ -8,32 +8,32 @@
   </div>
 </div>
 <div class="animated fadeInUp">
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="ibox float-e-margins">
-          <div class="ibox-title">
-            <h5>Search Deals</h5>
-            <div class="ibox-tools">
-              <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
-            </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Search Deals</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
           </div>
+        </div>
 
-          <div class="ibox-content m-b-sm border-bottom">
-            <div class="row">
-              <%= form_for @search, :as => 'search', :url => admin_deals_path, :html => {:method => :get} do |f| %>
-                  <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_deals_path, :filter => [:title,:service_category_id, :deal_type, :service_provider_id]}%>
-              <% end %>
-            </div>
+        <div class="ibox-content m-b-sm border-bottom">
+          <div class="row">
+            <%= form_for @search, :as => 'search', :url => admin_deals_path, :html => {:method => :get} do |f| %>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_deals_path, :filter => [:title,:service_category_id, :deal_type, :service_provider_id]}%>
+            <% end %>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
 
   <div class="ibox ibox-title float-e-margins">
-   <div class="ibox-tools">
-     <%=button_to "Create Deal","/admin/deals/new", :method=>"get", :class=>"btn btn-w-m btn-primary"%>
-   </div>
+    <div class="ibox-tools">
+      <%=button_to "Create Deal","/admin/deals/new", :method=>"get", :class=>"btn btn-w-m btn-primary"%>
+    </div>
   </div>
 
   <div class="row">
@@ -51,7 +51,8 @@
           </div>
         </div>
         <div class="ibox-content">
-            <%= will_paginate @deals, :class=>"pagination pull-right" %>
+          <%= will_paginate @deals, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
+
           <table class="table table-hover no-margins">
             <thead>
             <tr>
@@ -69,37 +70,38 @@
               <th>Action</th>
             </tr>
             <%@deals.each do |deal|%>
-            <tr>
-              <td><%=deal.id%></td>
-              <td><%=deal.service_category.name%></td>
-              <td><%=deal.service_provider.name%></td>
-              <td><%=deal.title%></td>
-              <td><%=deal.price%></td>
-              <td>"NA"</td>
-              <td><%=deal.is_nationwide%></td>
-              <td><%=deal.deal_type%></td>
-              <td><%=deal.start_date%></td>
-              <td><%=deal.end_date%></td>
-              <td><%=deal.is_sponsored%></td>
-              <td>
-                <table>
-                  <tr>
-                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="<%= edit_admin_deal_path(id:deal.id)%>"><i class="fa fa-edit"></i></a></td>
-                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="/add_equipments?id=<%=deal.id%>"><i class="fa fa-mobile"></i></a></td>
-                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit Attributes" href="/edit_attributes?id=<%=deal.id%>"><i class="fa fa-tag"></i></a></td>
-                    <td><%=button_to "X", admin_deal_path(deal), :class => "btn btn-outline btn-danger", method: :delete %></td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
+                <tr>
+                  <td><%=deal.id%></td>
+                  <td><%=deal.service_category.name%></td>
+                  <td><%=deal.service_provider.name%></td>
+                  <td><%=deal.title%></td>
+                  <td><%=deal.price%></td>
+                  <td>"NA"</td>
+                  <td><%=deal.is_nationwide%></td>
+                  <td><%=deal.deal_type%></td>
+                  <td><%=deal.start_date%></td>
+                  <td><%=deal.end_date%></td>
+                  <td><%=deal.is_sponsored%></td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="<%= edit_admin_deal_path(id:deal.id)%>"><i class="fa fa-edit"></i></a></td>
+                        <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="/add_equipments?id=<%=deal.id%>"><i class="fa fa-mobile"></i></a></td>
+                        <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit Attributes" href="/edit_attributes?id=<%=deal.id%>"><i class="fa fa-tag"></i></a></td>
+                        <td><%=button_to "X", admin_deal_path(deal), :class => "btn btn-outline btn-danger", method: :delete %></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
 
             <%end%>
             </thead>
           </table>
-          </div>
 
         </div>
+
       </div>
     </div>
   </div>
+</div>
 </div>
