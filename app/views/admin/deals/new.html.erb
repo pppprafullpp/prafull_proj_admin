@@ -11,17 +11,21 @@
 <div class="ibox-content">
   <%zipcodes = get_zipcodes%>
   <!-- <table cellpadding='0' cellspacing='0' class='tabbed' height='100%' width='100%' > -->
-  <tr>
-    <td class='main' id='main' valign='top'>
-      <div class='title_tools'>
-        <%#= link_to "View All Deals", deals_path %>
-      </div>
-      <%= form_for(@new_deal, :url =>"/admin/deals", :method => "post") do |f| %>
-          <br/>
-          <% if @new_deal.errors.any? %>
-              <div id="error_explanation">
-                <div class="alert alert-danger">
-                  The form contains <%= pluralize(@new_deal.errors.count, "error") %>.
+
+    <tr>
+      <td class='main' id='main' valign='top'>
+        <%= form_for(@new_deal, :url =>"/admin/deals", :method => "post") do |f| %>
+            <br/>
+            <% if @new_deal.errors.any? %>
+                <div id="error_explanation">
+                  <div class="alert alert-danger">
+                    The form contains <%= pluralize(@new_deal.errors.count, "error") %>.
+                  </div>
+                  <ul>
+                    <% @new_deal.errors.full_messages.each do |msg| %>
+                        <li><%= msg %></li>
+                    <% end %>
+                  </ul>
                 </div>
                 <ul>
                   <% @new_deal.errors.full_messages.each do |msg| %>

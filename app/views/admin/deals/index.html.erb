@@ -70,29 +70,32 @@
               <th>Action</th>
             </tr>
             <%@deals.each do |deal|%>
-                <tr>
-                  <td><%=deal.id%></td>
-                  <td><%=deal.service_category.name%></td>
-                  <td><%=deal.service_provider.name%></td>
-                  <td><%=deal.title%></td>
-                  <td><%=deal.price%></td>
-                  <td>"NA"</td>
-                  <td><%=deal.is_nationwide%></td>
-                  <td><%=deal.deal_type%></td>
-                  <td><%=deal.start_date%></td>
-                  <td><%=deal.end_date%></td>
-                  <td><%=deal.is_sponsored%></td>
-                  <td>
-                    <table>
-                      <tr>
-                        <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="<%= edit_admin_deal_path(id:deal.id)%>"><i class="fa fa-edit"></i></a></td>
-                        <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="/add_equipments?id=<%=deal.id%>"><i class="fa fa-mobile"></i></a></td>
-                        <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit Attributes" href="/edit_attributes?id=<%=deal.id%>"><i class="fa fa-tag"></i></a></td>
-                        <td><%=button_to "X", admin_deal_path(deal), :class => "btn btn-outline btn-danger", method: :delete %></td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
+            <tr>
+              <td><%=deal.id%></td>
+              <td><%=deal.service_category.name%></td>
+              <td><%=deal.service_provider.name%></td>
+              <td><%=deal.title%></td>
+              <td><%=deal.price%></td>
+              <td>"NA"</td>
+              <td><%=deal.is_nationwide%></td>
+              <td><%=deal.deal_type%></td>
+              <td><%=deal.start_date%></td>
+              <td><%=deal.end_date%></td>
+              <td><%=deal.is_sponsored%></td>
+              <td>
+                <table>
+                  <tr>
+                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="<%= edit_admin_deal_path(id:deal.id)%>"><i class="fa fa-edit"></i></a></td>
+                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="/add_equipments?id=<%=deal.id%>"><i class="fa fa-mobile"></i></a></td>
+                    <td>
+                      <%= button_to deal_attributes_admin_deals_path(:deal_id=>deal.id),:class => "btn btn-outline btn-success" do%>
+                      <i class="fa fa-tag"></i>
+                      <%end%>
+                    <td><%=button_to "X", admin_deal_path(deal), :class => "btn btn-outline btn-danger", method: :delete %></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
             <%end%>
             </thead>

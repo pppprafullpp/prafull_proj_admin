@@ -90,6 +90,10 @@ Myapp::Application.routes.draw do
         get 'edit_deal'
         get 'create_new_deal'
         get 'delete_deal'
+        post 'deal_attributes'
+        post 'update_deal_attributes'
+        post 'view_all_deal_attributes'
+        post 'edit_deal_attribute'
       end
     end
     resources :admins do
