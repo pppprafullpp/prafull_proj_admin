@@ -1,0 +1,82 @@
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox">
+      <div class="ibox-title">
+        <%if params[:action] == "edit_deal_attribute"%>
+        <h5>Edit Deal Attribute  </h5>
+        <%else%>
+        <h5>Add New Deal Attribute  </h5>
+        <%end%>
+        <div class="ibox-tools <%= 'hidden' if params[:action] == 'edit_deal_attribute'%>">
+          <%= button_to 'View All Deal Attributes',view_all_deal_attributes_admin_deals_path(deal_id:@deal.id,category:@category_name),:method =>"post", :class => "btn btn-w-m btn-primary"%>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ibox float-e-margins">
+  <div class="ibox-content">
+    <%= form_tag update_deal_attributes_admin_deals_path,:class=>"form-horizontal",:id=>"internet_attribute_form", method: "post" do %>
+    <%= hidden_field_tag :attribute_id, @deal_attribute.id,:name => 'deal_attributes[id]' %>
+
+      <%if @deal.present?%>
+    <%= hidden_field_tag :deal_id,@deal.id,:name => 'deal_attributes[deal_id]' %>
+    <%end%>
+     
+    <%= hidden_field_tag :category_name,@category_name %>
+
+     <div class="form-group">
+      <label class="col-sm-2 control-label">Description:</label>
+      <div class="col-md-10">  <%= text_field_tag :description,@deal_attribute.try(:description),:placeholder => 'Input description',:name => 'deal_attributes[description]', :class => "form-control" %></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Download(mbps):<span id="mandat">*</span></label>
+      <div class="col-md-10">  <%= text_field_tag :download,@deal_attribute.download,:placeholder => 'Input download',:name => 'deal_attributes[download]', :class => "form-control" %></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Upload(mbps):<span id="mandat">*</span></label>
+      <div class="col-md-10">  <%= text_field_tag :upload,@deal_attribute.upload,:placeholder => 'Input upload',:name => 'deal_attributes[upload]', :class => "form-control" %></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">  Data:<span id="mandat">*</span></label>
+      <div class="col-md-10">  <%= text_field_tag :data,@deal_attribute.data,:placeholder => 'Input data',:name => 'deal_attributes[data]', :class => "form-control" %></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">Email:<span id="mandat">*</span></label>
+      <div class="col-md-10">    <%= text_field_tag :email,@deal_attribute.email,:placeholder => 'Input email',:name => 'deal_attributes[email]', :class => "form-control" %></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">  Online Storage:<span id="mandat">*</span></label>
+      <div class="col-md-10">  <%= text_field_tag :online_storage,@deal_attribute.online_storage,:placeholder => 'Input online_storage',:name => 'deal_attributes[online_storage]', :class => "form-control" %></div>
+    </div>
+
+    <div class="form-group">
+      <label class="col-sm-2 control-label">  Static IP:<span id="mandat">*</span></label>
+      <div class="col-md-10">    <%= text_field_tag :static_ip,@deal_attribute.static_ip,:placeholder => 'Input static_ip',:name => 'deal_attributes[static_ip]', :class => "form-control" %></div>
+    </div>
+    <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary", :onclick=>"check_validations()" %>
+    <p class="alert alert-danger hidden" id="error-msg"></p>
+    <% end %>
+  </div>
+</div>
+<script>
+function check_validations(){
+  event.preventDefault();
+  description = $("#description").val();
+  download = $("#download").val();
+  upload = $("#upload").val();
+  if(description == "" || download == "" || upload == "") {
+    $('#error-msg').removeClass("hidden").addClass('custom-input-error').addClass("flash").html("<b>Please Enter Description, Download speed and Upload Speed</b>");
+  }
+  else {
+    $("#internet_attribute_form").submit();
+  }
+}
+</script>
