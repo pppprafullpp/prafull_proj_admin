@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160829062423) do
+ActiveRecord::Schema.define(version: 20160910111756) do
 
   create_table "account_referral_amounts", force: :cascade do |t|
     t.integer  "account_referral_id",     limit: 4
@@ -80,10 +80,11 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.string   "address2",       limit: 255
     t.integer  "address_type",   limit: 4
     t.string   "contact_number", limit: 255
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.text     "state",          limit: 65535
     t.string   "city",           limit: 255
+    t.boolean  "is_default",                   default: false
   end
 
   create_table "app_users", force: :cascade do |t|
@@ -122,8 +123,8 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.string   "mobile",                   limit: 255
     t.integer  "is_service_address_same",  limit: 4
     t.integer  "is_shipping_address_same", limit: 4
-    t.string   "primary_id",               limit: 45
-    t.string   "secondary_id",             limit: 45
+    t.string   "primary_id",               limit: 255
+    t.string   "secondary_id",             limit: 255
     t.string   "primary_id_number",        limit: 255
     t.string   "secondary_id_number",      limit: 255
     t.string   "email_verification_token", limit: 255
@@ -169,6 +170,7 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.text     "hd_channels_list",           limit: 65535
     t.datetime "created_at",                               null: false
     t.datetime "updated_at",                               null: false
+    t.text     "description",                limit: 65535
   end
 
   create_table "bundle_equipments", force: :cascade do |t|
@@ -215,10 +217,11 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.string   "contact_number",  limit: 255
     t.string   "manager_name",    limit: 255
     t.string   "manager_contact", limit: 255
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
     t.text     "state",           limit: 65535
     t.string   "city",            limit: 255
+    t.boolean  "is_default",                    default: false
   end
 
   create_table "business_app_users", force: :cascade do |t|
@@ -259,6 +262,8 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.text     "channel_ids",           limit: 65535
     t.text     "channel_package_ids",   limit: 65535
     t.integer  "channel_count",         limit: 4
+    t.text     "description",           limit: 65535
+    t.string   "title",                 limit: 255
   end
 
   add_index "cable_deal_attributes", ["deal_id"], name: "index_cable_deal_attributes_on_deal_id", using: :btree
@@ -299,23 +304,34 @@ ActiveRecord::Schema.define(version: 20160829062423) do
 
   create_table "cellphone_deal_attributes", force: :cascade do |t|
     t.integer  "deal_id",                    limit: 4
-    t.integer  "no_of_lines",                limit: 4,                            default: 0,     null: false
-    t.decimal  "price_per_line",                         precision: 5,  scale: 2, default: 0.0,   null: false
+    t.integer  "no_of_lines",                limit: 4,                              default: 0,     null: false
+    t.decimal  "price_per_line",                           precision: 5,  scale: 2, default: 0.0,   null: false
     t.string   "domestic_call_minutes",      limit: 255
     t.string   "domestic_text",              limit: 255
     t.string   "international_call_minutes", limit: 255
     t.string   "international_text",         limit: 255
     t.float    "data_plan",                  limit: 24
-    t.decimal  "data_plan_price",                        precision: 5,  scale: 2, default: 0.0,   null: false
+    t.decimal  "data_plan_price",                          precision: 5,  scale: 2, default: 0.0,   null: false
     t.float    "additional_data",            limit: 24
-    t.decimal  "additional_data_price",                  precision: 5,  scale: 2, default: 0.0,   null: false
-    t.boolean  "rollover_data",                                                   default: false
-    t.datetime "created_at",                                                                      null: false
-    t.datetime "updated_at",                                                                      null: false
-    t.decimal  "effective_price",                        precision: 10
+    t.decimal  "additional_data_price",                    precision: 5,  scale: 2, default: 0.0,   null: false
+    t.boolean  "rollover_data",                                                     default: false
+    t.datetime "created_at",                                                                        null: false
+    t.datetime "updated_at",                                                                        null: false
+    t.decimal  "effective_price",                          precision: 10,           default: 0
+    t.text     "description",                limit: 65535
+    t.string   "title",                      limit: 255
   end
 
   add_index "cellphone_deal_attributes", ["deal_id"], name: "index_cellphone_deal_attributes_on_deal_id", using: :btree
+
+  create_table "cellphone_details", force: :cascade do |t|
+    t.string   "cellphone_name", limit: 255
+    t.string   "brand",          limit: 255
+    t.text     "description",    limit: 65535
+    t.boolean  "status"
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "cellphone_equipments", force: :cascade do |t|
     t.integer  "cellphone_deal_attribute_id", limit: 4
@@ -330,6 +346,8 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.datetime "created_at",                                                                       null: false
     t.datetime "updated_at",                                                                       null: false
     t.integer  "deal_id",                     limit: 4
+    t.text     "available_colors",            limit: 65535
+    t.integer  "cellphone_detail_id",         limit: 4
   end
 
   create_table "cellphone_service_preferences", force: :cascade do |t|
@@ -348,15 +366,17 @@ ActiveRecord::Schema.define(version: 20160829062423) do
   add_index "cellphone_service_preferences", ["service_preference_id"], name: "index_cellphone_service_preferences_on_service_preference_id", using: :btree
 
   create_table "channel_packages", force: :cascade do |t|
-    t.string   "package_name",  limit: 255
-    t.string   "package_code",  limit: 255
-    t.integer  "channel_count", limit: 4
-    t.text     "channel_ids",   limit: 65535
-    t.string   "image",         limit: 255
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-    t.boolean  "status"
-    t.text     "description",   limit: 65535
+    t.string   "package_name",        limit: 255
+    t.string   "package_code",        limit: 255
+    t.integer  "channel_count",       limit: 4
+    t.text     "channel_ids",         limit: 65535
+    t.text     "description",         limit: 65535
+    t.string   "image",               limit: 255
+    t.boolean  "status",                                                    default: true
+    t.datetime "created_at",                                                               null: false
+    t.datetime "updated_at",                                                               null: false
+    t.decimal  "price",                             precision: 5, scale: 2
+    t.integer  "service_provider_id", limit: 4
   end
 
   create_table "channels", force: :cascade do |t|
@@ -367,9 +387,9 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.text     "description",         limit: 65535
     t.boolean  "is_hd",                             default: false
     t.string   "image",               limit: 255
+    t.boolean  "status",                            default: true
     t.datetime "created_at",                                           null: false
     t.datetime "updated_at",                                           null: false
-    t.boolean  "status"
     t.integer  "service_provider_id", limit: 4
   end
 
@@ -403,6 +423,16 @@ ActiveRecord::Schema.define(version: 20160829062423) do
 
   add_index "configurables", ["name"], name: "index_configurables_on_name", using: :btree
 
+  create_table "deal_extra_services", force: :cascade do |t|
+    t.integer  "extra_service_id", limit: 4
+    t.integer  "deal_id",          limit: 4
+    t.decimal  "price",                      precision: 5, scale: 2
+    t.boolean  "status"
+    t.integer  "service_term",     limit: 4
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+  end
+
   create_table "deal_include_zipcodes", force: :cascade do |t|
     t.integer  "deal_id",    limit: 4, null: false
     t.integer  "zipcode_id", limit: 4, null: false
@@ -430,6 +460,7 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.datetime "updated_at",                                                                      null: false
     t.boolean  "is_sponsored",                                              default: false
     t.decimal  "effective_price",                   precision: 5, scale: 2
+    t.boolean  "is_customisable",                                           default: false
   end
 
   add_index "deals", ["service_category_id"], name: "index_deals_on_service_category_id", using: :btree
@@ -483,6 +514,22 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.integer  "device_register_id", limit: 4
   end
 
+  create_table "equipment_colors", force: :cascade do |t|
+    t.string   "color_name", limit: 255
+    t.boolean  "status"
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
+
+  create_table "extra_services", force: :cascade do |t|
+    t.string   "service_name",        limit: 255
+    t.integer  "service_category_id", limit: 4
+    t.boolean  "status"
+    t.text     "service_description", limit: 65535
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
   create_table "gifts", force: :cascade do |t|
     t.string   "name",                       limit: 255
     t.string   "description",                limit: 255
@@ -505,6 +552,7 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.boolean  "static_ip"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.text     "description",           limit: 65535
   end
 
   add_index "internet_deal_attributes", ["deal_id"], name: "index_internet_deal_attributes_on_deal_id", using: :btree
@@ -576,12 +624,31 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.string   "city",            limit: 255
   end
 
+  create_table "order_attributes", force: :cascade do |t|
+    t.integer  "order_id",   limit: 4
+    t.integer  "ref_id",     limit: 4
+    t.string   "ref_type",   limit: 255
+    t.decimal  "price",                  precision: 5, scale: 2
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+  end
+
   create_table "order_equipments", force: :cascade do |t|
     t.integer  "order_id",        limit: 4
     t.integer  "equipment_id",    limit: 4
-    t.decimal  "equipment_price",           precision: 5, scale: 2
-    t.datetime "created_at",                                        null: false
-    t.datetime "updated_at",                                        null: false
+    t.decimal  "equipment_price",               precision: 5, scale: 2
+    t.datetime "created_at",                                            null: false
+    t.datetime "updated_at",                                            null: false
+    t.text     "color",           limit: 65535
+  end
+
+  create_table "order_extra_services", force: :cascade do |t|
+    t.integer  "order_id",              limit: 4
+    t.integer  "deal_extra_service_id", limit: 4
+    t.string   "service_name",          limit: 255
+    t.decimal  "price",                             precision: 5, scale: 2
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
   end
 
   create_table "order_items", force: :cascade do |t|
@@ -752,6 +819,7 @@ ActiveRecord::Schema.define(version: 20160829062423) do
     t.text     "features",                         limit: 65535
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
+    t.text     "description",                      limit: 65535
   end
 
   add_index "telephone_deal_attributes", ["deal_id"], name: "index_telephone_deal_attributes_on_deal_id", using: :btree
