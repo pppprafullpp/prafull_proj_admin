@@ -7,7 +7,5 @@
 
   </div>
 </div>
-
-
-
-<%=render :partial => "#{@category_name}_deal_attribute_form"%>
+<%#=raise "Ss"%>
+<%= render :partial => "#{params[:category].downcase}_deal_attribute_table", :locals =>{:@table_data => @table_data}%>

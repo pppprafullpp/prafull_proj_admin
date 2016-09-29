@@ -20,7 +20,7 @@
     <%@all_deal_attributes.each do |f|%>
     <tr>
       <td><%=f.id%></td>
-      <td><%=button_to "Edit", edit_deal_attribute_admin_deals_path(attribute_id:f.id,category:@category_name,deal_id:@deal.id), :method => "post", :class=>"btn btn-primary"%><td>
+      <td><%=button_to "Edit", edit_deal_attribute_admin_deals_path(attribute_id:f.id,category:@category_name,deal_id:@deal.id), :method => "get", :class=>"btn btn-primary"%><td>
     </tr>
     <%end%>
   </table>

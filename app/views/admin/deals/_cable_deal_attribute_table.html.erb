@@ -1,0 +1,195 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Deal Attributes for <%=@deal.title%></h5>
+         <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <!-- id: integer, deal_id: integer, free_channels: integer, free_channels_list: text, premium_channels: integer,
+      premium_channels_list: text, hd_channels: integer, hd_channels_list: text, created_at: datetime, updated_at: datetime,
+       channel_ids: text, channel_package_ids: text, channel_count: integer, description: text, title: string, amount: decimal -->
+      <div class="ibox-content">
+        <button class = "btn btn-primary pull-right" value="Add new deal Attribute" onclick="show_telephone_modal()">Add new Deal Attribute</button>
+        <div class="ibox-content">
+        <%= will_paginate @table_data, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" if @table_data.present? %>
+        </div>
+        <table class="table table-hover no-margins">
+          <tr>
+            <th>Description</th>
+            <th>free_channels</th>
+            <th>hd_channels</th>
+            <th>hd_channels_list</th>
+            <th>Premium Channels</th>
+            <th>hd_channels_list</th>
+            <th>channel_ids</th>
+            <th>channel_package_ids</th>
+            <th>channel_count</th>
+            <th>channel_package_ids</th>
+          </tr>
+          <%@table_data.each do |t|%>
+          <tr>
+            <td id="<%=t.id%>_description"><%=t.description%></td>
+            <td id="<%=t.id%>_free_channels"><%=t.free_channels%></td>
+            <td id="<%=t.id%>_hd_channels"><%=t.hd_channels%></td>
+            <td id="<%=t.id%>_hd_channels_list"><%=t.hd_channels_list%></td>
+            <td id="<%=t.id%>_premium_channels"><%=t.premium_channels%></td>
+            <td id="<%=t.id%>_hd_channels_list"><%=t.hd_channels_list%></td>
+            <td id="<%=t.id%>_channel_ids"><%=t.channel_ids%></td>
+            <td id="<%=t.id%>_channel_package_ids"><%=t.channel_package_ids%></td>
+            <td id="<%=t.id%>_channel_counts"><%=t.channel_count%></td>
+            <td id="<%=t.id%>_channel_package_ids"><%=t.channel_package_ids%></td>
+            <td>
+              <table>
+                <tr>
+                  <td><button class = "btn btn-primary pull-right"  onclick="show_edit_telephone_modal(<%=t.id%>)">Edit</button></td>
+                  <td><button class = "btn btn-danger pull-right"  readonly = "readonly" onclick="show_edit_telephone_modal()">Delete</button></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <%end%>
+          <tr>
+          </tr>
+        </table>
+      </div>
+    </div>
+    </div>
+    </div>
+
+
+    <div class="modal inmodal in" id="cellphoneModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+    <div class="modal-content animated swing">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+          <i class="fa fa-tag modal-icon"></i>
+          <h4 id="modal-title" class="modal-title">Modal title</h4>
+       </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="ibox">
+              <div class="ibox-title hidden">
+                <div class="ibox-tools <%= 'hidden' if params[:action] == 'edit_deal_attribute'%>">
+                  <%#= button_to 'View All Deal Attributes',view_all_deal_attributes_admin_deals_path(deal_id:@deal.id,category:@category_name),:method =>"post", :class => "btn btn-w-m btn-primary"%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ibox float-e-margins">
+          <div class="ibox-content">
+
+            <%= form_tag update_deal_attributes_admin_deals_path,:class=>"form-horizontal",:id=>"telephone_attribute_form", method: "post" do %>
+
+            <%= hidden_field_tag :attribute_id,"",:name => 'deal_attributes[id]' %>
+
+            <%= hidden_field_tag :deal_id,params[:deal_id],:name => 'deal_attributes[deal_id]' %>
+
+            <%= hidden_field_tag :category_name,"cable" %>
+
+            <div class="form-group">
+            <div class="col-md-12">  <%= text_field_tag :description,"",:placeholder => 'description',:name => 'deal_attributes[description]', :class => "form-control" %></div>
+            </div>
+
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :free_channels_list,"",:placeholder => 'free_channels_list',:name => 'deal_attributes[free_channels_list]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :premium_channels,"",:placeholder => 'premium_channels',:name => 'deal_attributes[premium_channels]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :premium_channels_list,"",:placeholder => 'premium_channels_list',:name => 'deal_attributes[premium_channels_list]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :hd_channels,"",:placeholder => 'hd_channels',:name => 'deal_attributes[hd_channels]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :hd_channels_list,"",:placeholder => 'hd_channels_list',:name => 'deal_attributes[hd_channels_list]', :class => "form-control" %></div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :channel_ids,"",:placeholder => 'channel_ids',:name => 'deal_attributes[channel_ids]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :channel_package_ids,"",:placeholder => 'channel_package_ids',:name => 'deal_attributes[channel_package_ids]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :channel_count,"",:placeholder => 'channel_count',:name => 'deal_attributes[channel_count]', :class => "form-control" %></div>
+            </div>
+            <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary", :onclick=>"check_validations()" %>
+            <p class="alert alert-danger hidden" id="error-msg"></p>
+            <% end %>
+          </div>
+        </div>
+
+        <script>
+        function check_validations(){
+          event.preventDefault();
+          domestic_call_minutes = $("#domestic_call_minutes").val();
+          international_call_minutes = $("#international_call_minutes").val();
+
+          if(international_call_minutes == "" || domestic_call_minutes == "") {
+            $('#error-msg').removeClass("hidden").addClass('custom-input-error').addClass("flash").html("<b>Please Enter international_call_minutes, international_call_minutes</b>");
+          }
+          else {
+            $("#telephone_attribute_form").submit();
+          }
+        }
+        </script>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    <script>
+    function show_telephone_modal(){
+      $("#description").val("");
+      $("#domestic_call_minutes").val("");
+      $("#international_call_minutes").val("");
+      $("#domestic_text").val("")
+      $("#international_text").val("");
+      $("#data_plan").val("");
+      $("#data_plan_price").val("");
+      $("#modal-title").text("Add New Attribute")
+      $("#cellphoneModal").modal("show");
+    }
+    function show_edit_telephone_modal(id) {
+      description = $("#"+id+"_description").text();
+      domestic_call_minutes=$("#"+id+"_domestic_call_minutes").text();
+      international_call_minutes=$("#"+id+"_international_call_minutes").text();
+      domestic_text=$("#"+id+"_domestic_text").text();
+      international_text=$("#"+id+"_international_text").text();
+      data_plan=$("#"+id+"_data_plan").text();
+      data_plan_price=$("#"+id+"_data_plan_price").text();
+      no_of_lines=$("#"+id+"_no_of_lines").text();
+      $("#description").val(description);
+      $("#domestic_call_minutes").val(domestic_call_minutes);
+      $("#international_call_minutes").val(international_call_minutes);
+      $("#domestic_text").val(domestic_text);
+      $("#international_text").val(international_text);
+      $("#data_plan").val(data_plan);
+      $("#data_plan_price").val(data_plan_price);
+      $("#no_of_lines").val(no_of_lines);
+      $("#attribute_id").val(id);
+      $("#modal-title").text("Edit Attribute")
+      $("#cellphoneModal").modal("show");
+    }
+    </script>

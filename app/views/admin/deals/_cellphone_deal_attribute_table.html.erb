@@ -1,0 +1,188 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Deal Attributes for <%=@deal.title%></h5>
+         <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+<!-- id: integer, deal_id: integer, no_of_lines: integer, price_per_line: decimal,
+domestic_call_minutes: string, domestic_text: string, international_call_minutes: string,
+international_text: string, data_plan: float, data_plan_price: decimal,
+additional_data: float, additional_data_price: decimal, rollover_data: boolean -->
+
+      <div class="ibox-content">
+        <button class = "btn btn-primary pull-right" value="Add new deal Attribute" onclick="show_telephone_modal()">Add new Deal Attribute</button>
+        <div class="ibox-content">
+        <%= will_paginate @table_data, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" if @table_data.present? %>
+        </div>
+        <table class="table table-hover no-margins">
+          <tr>
+            <th>Description</th>
+            <th>Domestic Call Minutes</th>
+            <th>Inernational Call Minutes</th>
+            <th>Domestic Text</th>
+            <th>International Text</th>
+            <th>Data plan</th>
+            <th>Data Plan Price</th>
+            <th>No of lines</th>
+          </tr>
+          <%@table_data.each do |t|%>
+          <tr>
+            <td id="<%=t.id%>_description"><%=t.description%></td>
+            <td id="<%=t.id%>_domestic_call_minutes"><%=t.domestic_call_minutes%></td>
+            <td id="<%=t.id%>_international_call_minutes"><%=t.international_call_minutes%></td>
+            <td id="<%=t.id%>_domestic_text"><%=t.domestic_text%></td>
+            <td id="<%=t.id%>_international_text"><%=t.international_text%></td>
+            <td id="<%=t.id%>_data_plan"><%=t.data_plan%></td>
+            <td id="<%=t.id%>_data_plan_price"><%=t.data_plan_price%></td>
+            <td id="<%=t.id%>_no_of_lines"><%=t.no_of_lines%></td>
+            <td>
+              <table>
+                <tr>
+                  <td><button class = "btn btn-primary pull-right"  onclick="show_edit_telephone_modal(<%=t.id%>)">Edit</button></td>
+                  <td><button class = "btn btn-danger pull-right"  readonly = "readonly" onclick="show_edit_telephone_modal()">Delete</button></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <%end%>
+          <tr>
+          </tr>
+        </table>
+      </div>
+    </div>
+    </div>
+    </div>
+
+
+    <div class="modal inmodal in" id="cellphoneModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+    <div class="modal-content animated swing">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+          <i class="fa fa-tag modal-icon"></i>
+          <h4 id="modal-title" class="modal-title">Modal title</h4>
+       </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="ibox">
+              <div class="ibox-title hidden">
+                <div class="ibox-tools <%= 'hidden' if params[:action] == 'edit_deal_attribute'%>">
+                  <%#= button_to 'View All Deal Attributes',view_all_deal_attributes_admin_deals_path(deal_id:@deal.id,category:@category_name),:method =>"post", :class => "btn btn-w-m btn-primary"%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ibox float-e-margins">
+          <div class="ibox-content">
+
+            <%= form_tag update_deal_attributes_admin_deals_path,:class=>"form-horizontal",:id=>"telephone_attribute_form", method: "post" do %>
+
+            <%= hidden_field_tag :attribute_id,"",:name => 'deal_attributes[id]' %>
+
+            <%= hidden_field_tag :deal_id,params[:deal_id],:name => 'deal_attributes[deal_id]' %>
+
+            <%= hidden_field_tag :category_name,"cellphone" %>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :description,"",:placeholder => 'description',:name => 'deal_attributes[description]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :domestic_call_minutes,"",:placeholder => 'domestic_call_minutes',:name => 'deal_attributes[domestic_call_minutes]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :international_call_minutes,"",:placeholder => 'international_call_minutes',:name => 'deal_attributes[international_call_minutes]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :domestic_text,"",:placeholder => 'domestic_text',:name => 'deal_attributes[domestic_text]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :international_text,"",:placeholder => 'international_text',:name => 'deal_attributes[international_text]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :data_plan,"",:placeholder => 'Data plan',:name => 'deal_attributes[data_plan]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :data_plan_price,"",:placeholder => 'Data plan price',:name => 'deal_attributes[data_plan_price]', :class => "form-control" %></div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :no_of_lines,"",:placeholder => 'No of lines',:name => 'deal_attributes[no_of_lines]', :class => "form-control" %></div>
+            </div>
+            <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary", :onclick=>"check_validations()" %>
+            <p class="alert alert-danger hidden" id="error-msg"></p>
+            <% end %>
+          </div>
+        </div>
+
+        <script>
+        function check_validations(){
+          event.preventDefault();
+          domestic_call_minutes = $("#domestic_call_minutes").val();
+          international_call_minutes = $("#international_call_minutes").val();
+
+          if(international_call_minutes == "" || domestic_call_minutes == "") {
+            $('#error-msg').removeClass("hidden").addClass('custom-input-error').addClass("flash").html("<b>Please Enter international_call_minutes, international_call_minutes</b>");
+          }
+          else {
+            $("#telephone_attribute_form").submit();
+          }
+        }
+        </script>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    <script>
+    function show_telephone_modal(){
+      $("#description").val("");
+      $("#domestic_call_minutes").val("");
+      $("#international_call_minutes").val("");
+      $("#domestic_text").val("")
+      $("#international_text").val("");
+      $("#data_plan").val("");
+      $("#data_plan_price").val("");
+      $("#modal-title").text("Add New Attribute")
+      $("#cellphoneModal").modal("show");
+    }
+    function show_edit_telephone_modal(id) {
+      description = $("#"+id+"_description").text();
+      domestic_call_minutes=$("#"+id+"_domestic_call_minutes").text();
+      international_call_minutes=$("#"+id+"_international_call_minutes").text();
+      domestic_text=$("#"+id+"_domestic_text").text();
+      international_text=$("#"+id+"_international_text").text();
+      data_plan=$("#"+id+"_data_plan").text();
+      data_plan_price=$("#"+id+"_data_plan_price").text();
+      no_of_lines=$("#"+id+"_no_of_lines").text();
+      $("#description").val(description);
+      $("#domestic_call_minutes").val(domestic_call_minutes);
+      $("#international_call_minutes").val(international_call_minutes);
+      $("#domestic_text").val(domestic_text);
+      $("#international_text").val(international_text);
+      $("#data_plan").val(data_plan);
+      $("#data_plan_price").val(data_plan_price);
+      $("#no_of_lines").val(no_of_lines);
+      $("#attribute_id").val(id);
+      $("#modal-title").text("Edit Attribute")
+      $("#cellphoneModal").modal("show");
+    }
+    </script>
