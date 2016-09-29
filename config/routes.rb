@@ -91,7 +91,9 @@ Myapp::Application.routes.draw do
         get 'create_new_deal'
         get 'delete_deal'
         get 'deal_attributes'
+        get 'show_deal_equipments'
         post 'update_deal_attributes'
+        post :update_deal_equipments
       end
     end
     resources :admins do

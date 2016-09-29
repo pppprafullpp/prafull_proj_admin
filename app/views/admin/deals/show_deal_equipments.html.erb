@@ -1,0 +1,11 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Deal Equipment</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+<%#=raise "Ss"%>
+<%= render :partial => "#{params[:category].downcase}_deal_equipment_table", :locals =>{:@deal_equipments => @deal_equipments,:@deal => @deal}%>

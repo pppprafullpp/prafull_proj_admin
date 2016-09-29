@@ -86,7 +86,7 @@
                 <table>
                   <tr>
                     <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="<%= edit_admin_deal_path(id:deal.id)%>"><i class="fa fa-edit"></i></a></td>
-                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="/add_equipments?id=<%=deal.id%>"><i class="fa fa-mobile"></i></a></td>
+                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="<%= show_deal_equipments_admin_deals_path(deal_id:deal.id,category:deal.service_category.name)%>"><i class="fa fa-mobile"></i></a></td>
                     <td>
                       <%=link_to deal_attributes_admin_deals_path(:deal_id=>deal.id,:category=>deal.service_category.name),:class => "btn btn-outline btn-success",:method => "get" do%>
                       <i class="fa fa-tag"></i>

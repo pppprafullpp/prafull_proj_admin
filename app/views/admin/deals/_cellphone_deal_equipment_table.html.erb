@@ -1,0 +1,186 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Deal equipments for <%=@deal.title%></h5>
+         <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content">
+        <button class = "btn btn-primary pull-right" value="Add new deal Attribute" onclick="show_equipment_modal()">Add new Deal equipment</button>
+        <div class="ibox-content">
+        <%= will_paginate @deal_equipments, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" if @table_data.present? %>
+       </div>
+       <!-- TelephoneEquipment(id: integer, telephone_deal_attribute_id: integer, name: string, make: string,
+       price: decimal, installation: text, activation: string, offer: string, is_active: boolean,
+       created_at: datetime, updated_at: datetime, deal_id: integer) -->
+
+
+        <table class="table table-hover no-margins">
+          <tr>
+            <th>Model</th>
+            <th>Make</th>
+            <th>Price</th>
+            <th>Installation</th>
+            <th>Activation</th>
+            <th>Offer</th>
+            <th>Active</th>
+            <th>Cellphone Equipment ID</th>
+            <th>Actions</th>
+          </tr>
+          <%@deal_equipments.each do |t|%>
+          <tr>
+            <td id="<%=t.id%>_model"><%=t.model%></td>
+            <td id="<%=t.id%>_make"><%=t.make%></td>
+            <td id="<%=t.id%>_price">$<%=t.price%></td>
+            <td id="<%=t.id%>_installation"><%=t.installation%></td>
+            <td id="<%=t.id%>_activation"><%=t.activation%></td>
+            <td id="<%=t.id%>_offer"><%=t.offer%></td>
+            <td id="<%=t.id%>_active"><%=t.is_active%></td>
+            <td id="<%=t.id%>_active"><%=t.cellphone_detail_id%></td>
+             <td>
+              <table>
+                <tr>
+                  <td><button class = "btn btn-primary pull-right"  onclick="show_edit_equipment_modal(<%=t.id%>)">Edit</button></td>
+                  <td><button class = "btn btn-danger pull-right"  disabled = "disabled" onclick="show_edit_equipment_modal()">Delete</button></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <%end%>
+          <tr>
+          </tr>
+        </table>
+      </div>
+    </div>
+    </div>
+    </div>
+
+
+    <div class="modal inmodal in" id="interneteqModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+    <div class="modal-dialog">
+    <div class="modal-content animated swing">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+          <i class="fa fa-tag modal-icon"></i>
+          <h4 id="modal-title" class="modal-title">Modal title</h4>
+       </div>
+      <div class="modal-body">
+
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="ibox">
+              <div class="ibox-title hidden">
+                <div class="ibox-tools <%= 'hidden' if params[:action] == 'edit_deal_attribute'%>">
+                  <%#= button_to 'View All Deal equipments',view_all_deal_equipments_admin_deals_path(deal_id:@deal.id,category:@category_name),:method =>"post", :class => "btn btn-w-m btn-primary"%>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ibox float-e-margins">
+          <div class="ibox-content">
+            <%= form_tag update_deal_equipments_admin_deals_path,:class=>"form-horizontal",:id=>"internet_attribute_form", method: "post" do %>
+
+            <%= hidden_field_tag :equipment_id,"",:name => 'deal_equipments[id]' %>
+
+            <%= hidden_field_tag :deal_id,params[:deal_id],:name => 'deal_equipments[deal_id]' %>
+
+            <%= hidden_field_tag :category_name,"cellphone" %>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :model,"",:placeholder => 'Model',:name => 'deal_equipments[model]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :make,"",:placeholder => 'Make',:name => 'deal_equipments[make]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :price,"",:placeholder => 'price',:name => 'deal_equipments[price]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :installation,"",:placeholder => 'Installation',:name => 'deal_equipments[installation]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :activation,"",:placeholder => 'activation',:name => 'deal_equipments[activation]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :offer,"",:placeholder => 'offer',:name => 'deal_equipments[offer]', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :active,"",:placeholder => 'active',:name => 'deal_equipments[is_active]', :class => "form-control" %></div>
+            </div>
+            <div class="form-group">
+              <div class="col-md-12">  <%= text_field_tag :cellphone_detail_id,"",:placeholder => 'active',:name => 'deal_equipments[cellphone_detail_id]', :class => "form-control" %></div>
+            </div>
+            <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary", :onclick=>"check_validations()" %>
+            <p class="alert alert-danger hidden" id="error-msg"></p>
+            <% end %>
+          </div>
+        </div>
+
+        <script>
+        function check_validations(){
+          event.preventDefault();
+          make = $("#make").val();
+          name = $("#name").val();
+          price = $("#price").val();
+           if(make == "" || name == "" || price == "" ) {
+            $('#error-msg').removeClass("hidden").addClass('custom-input-error').addClass("flash").html("<b>Please Enter price, name and make</b>");
+          }
+          else {
+            $("#internet_attribute_form").submit();
+          }
+        }
+        </script>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+    </div>
+    </div>
+    <script>
+    function show_equipment_modal(){
+      $("#model").val("");
+      $("#make").val("");
+      $("#price").val("");
+      $("#activation").val("");
+      $("#installation").val("");
+      $("#offer").val("");
+      $("#attribute_id").val("");
+      $("#modal-title").text("Add New Equipment")
+      $("#interneteqModal").modal("show");
+    }
+    function show_edit_equipment_modal(id) {
+      name = $("#"+id+"_model").text();
+      make = $("#"+id+"_make").text();
+      price = $("#"+id+"_price").text();
+      activation = $("#"+id+"_activation").text();
+      installation = $("#"+id+"_installation").text();
+      offer = $("#"+id+"_offer").text();
+      cellphone_detail_id = $("#"+id+"_cellphone_detail_id")
+      $("#model").val(name);
+      $("#make").val(make);
+      $("#price").val(price);
+      $("#installation").val(installation);
+      $("#activation").val(activation);
+      $("#cellphone_detail_id").val(cellphone_detail_id);
+      $("#equipment_id").val(id);
+      $("#equipment_id").val(id);
+      $("#modal-title").text("Edit Attribute")
+      $("#interneteqModal").modal("show");
+    }
+    </script>
