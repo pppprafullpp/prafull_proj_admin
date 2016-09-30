@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922061830) do
+ActiveRecord::Schema.define(version: 20160930065015) do
 
   create_table "account_referral_amounts", force: :cascade do |t|
     t.integer  "account_referral_id",     limit: 4
@@ -587,6 +587,28 @@ ActiveRecord::Schema.define(version: 20160922061830) do
   end
 
   add_index "internet_service_preferences", ["service_preference_id"], name: "index_internet_service_preferences_on_service_preference_id", using: :btree
+
+  create_table "leads", force: :cascade do |t|
+    t.text     "lead_type",             limit: 65535
+    t.integer  "service_category_id",   limit: 4
+    t.integer  "deal_id",               limit: 4
+    t.text     "lead_name",             limit: 65535
+    t.text     "lead_description",      limit: 65535
+    t.text     "lead_email",            limit: 65535
+    t.text     "lead_contact_number",   limit: 65535
+    t.text     "lead_location",         limit: 65535
+    t.text     "lead_address",          limit: 65535
+    t.text     "lead_spoc_name",        limit: 65535
+    t.text     "lead_spoc_email",       limit: 65535
+    t.text     "lead_spoc_number",      limit: 65535
+    t.text     "lead_spoc_designation", limit: 65535
+    t.text     "lead_response",         limit: 65535
+    t.text     "user_id",               limit: 65535
+    t.text     "status",                limit: 65535
+    t.datetime "demo_time"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
+  end
 
   create_table "login_details", force: :cascade do |t|
     t.string   "partnerable_type", limit: 255

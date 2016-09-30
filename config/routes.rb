@@ -84,6 +84,10 @@ Myapp::Application.routes.draw do
     resources :access
     resources :branches
     # resources :deals
+    resources :leads do
+      get :show_lead_details
+   
+    end
     resources :deals do
       collection do
         get 'create_deal'

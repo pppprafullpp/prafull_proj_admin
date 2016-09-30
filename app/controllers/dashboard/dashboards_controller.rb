@@ -3,6 +3,7 @@ class Dashboard::DashboardsController < ApplicationController
     redirect_to login_admin_admins_path and return unless session[:id].present?
     @user_count=AppUser.count
     @order_count=Order.count
+    @lead_count = Lead.count
   end
 
 
@@ -12,8 +13,8 @@ class Dashboard::DashboardsController < ApplicationController
 
   def list_orders_ajaxified
     @order_requests = Order.where(:status => "New Order").order("ID DESC")
-    @pending_orders = Order.where(:status => "In-progress").order("ID DESC")
-    @completed_orders = Order.where(:status => "completed").order("ID DESC")
+    @pending_orders = Order.where(:status => "In-progress").order("ID DESC").order("ID DESC")
+    @completed_orders = Order.where(:status => "completed").order("ID DESC").order("ID DESC")
 
     respond_to do |format|
       format.js
@@ -23,6 +24,7 @@ class Dashboard::DashboardsController < ApplicationController
 
   def list_signups_ajaxified
     @orders = Order.all.order("Id DESC")
+    @order =@order.paginate(:page => params[:page], :per_page => PER_PAGE) if @order.present?
     @user_registered = AppUser.order("created_at desc").limit(50)
     respond_to do |format|
       format.js

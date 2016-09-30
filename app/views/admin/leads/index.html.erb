@@ -1,0 +1,236 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Leads</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+<div class="animated fadeInUp">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Search Leads</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+          </div>
+        </div>
+
+        <div class="ibox-content m-b-sm border-bottom">
+          <div class="row">
+            <%= form_for @search, :as => 'search', :url => admin_leads_path, :html => {:method => :get} do |f| %>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_leads_path, :filter => [:lead_spoc_name,:lead_spoc_email,:lead_name]}%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="ibox ibox-title float-e-margins">
+  <div class="ibox-tools">
+    <%=button_to "Create Lead","javascript:void(0)", :onclick=>"show_create_lead_form()", :class=>"btn btn-w-m btn-primary"%>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Leads(<%=@leads.count%>)</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content">
+  <%#= will_paginate @leads, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
+        <table class="table table-hover no-margins table-responsive">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Lead type</th>
+            <th>Category</th>
+            <th>lead name</th>
+            <th>Spoc Name</th>
+            <th>Spoc Email</th>
+            <th>Spoc Number</th>
+            <th>Lead Response</th>
+            <th>Spoc Designation</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+
+          <%@leads.each do |lead|%>
+          <tr>
+            <td><span class="label label-warning"><%= link_to lead.id,admin_lead_show_lead_details_path(lead.id)%></span></td>
+            <td><%=link_to lead.lead_type%></td>
+            <td><%=lead.service_category_id%></td>
+            <td><%=lead.lead_name%></td>
+            <td><%=lead.lead_spoc_name%></td>
+            <td><%=lead.lead_spoc_email%></td>
+            <td><%=lead.lead_spoc_number%></td>
+            <td><%=lead.lead_response%></td>
+            <td><%=lead.lead_spoc_designation%></td>
+            <td><%=lead.status%></td>
+            <td>
+              <table>
+                <tr>
+                  <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="#"><i class="fa fa-edit"></i></a></td>
+                  <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="#"><i class="fa fa-remove"></i></a></td>
+                  <td>
+                    <%#=link_to deal_attributes_admin_deals_path(:deal_id=>deal.id,:category=>deal.service_category.name),:class => "btn btn-outline btn-success",:method => "get" do%>
+                    <!-- <i class="fa fa-tag"></i> -->
+                    <%#end%>
+                  </td>
+                  <td><%#=button_to "X", admin_deal_path(deal), :class => "btn btn-outline btn-danger", method: :delete %></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <%end%>
+          </thead>
+        </table>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+<div class="modal inmodal in" id="createleadModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+<div class="modal-dialog">
+<div class="modal-content animated swing">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+      <i class="fa fa-line-chart modal-icon"></i>
+      <h4 id="modal-title" class="modal-title">Add New Lead</h4>
+   </div>
+  <div class="modal-body">
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox">
+          <div class="ibox-title hidden">
+            <div class="ibox-tools <%= 'hidden' if params[:action] == 'edit_deal_attribute'%>">
+              <%#= button_to 'View All Deal Attributes',view_all_deal_attributes_admin_deals_path(deal_id:@deal.id,category:@category_name),:method =>"post", :class => "btn btn-w-m btn-primary"%>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+
+        <%= form_tag  admin_leads_path,:class=>"form-horizontal",:id=>"lead_creation_form", method: "post" do %>
+        <%=hidden_field_tag :user_id,current_user.id,:name=>"lead[user_id]"%>
+        <div class="form-group">
+          <div class="col-md-12">  <%= select_tag :type,options_for_select([["Residence","residence"],["Business","business"]]),:name => 'lead[lead_type]', :class => "form-control", :prompt => "-Select Type-" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">   <%= select_tag :service_category_id,options_for_select([["Internet",1],["Telephone",2],["Cable",3],["Cellphone",4],["Bundle",5]]),:name => 'lead[service_category_id]', :class => "form-control", :prompt => "-Select Category-" %></div>
+        </div>
+
+
+        <div class="form-group">
+          <div class="col-md-12">   <%= select_tag :deal_id,options_for_select(Deal.pluck(:title,:id)),:name => 'lead[deal_id]', :class => "form-control chosen-select", :prompt => "-Select Deal-" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_area_tag :lead_description,"",:placeholder => 'Description',:name => 'lead[lead_description]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_name,"",:placeholder => 'Lead name',:name => 'lead[lead_name]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= email_field_tag :lead_email,"",:placeholder => 'Lead Email',:name => 'lead[lead_email]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= number_field_tag :lead_contact_number,"",:placeholder => 'lead_contact_number',:name => 'lead[lead_contact_number]', :class => "form-control",:maxlength => "10" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= select_tag :lead_location,options_for_select(Statelist.pluck(:state)),:name => 'lead[lead_location]', :class => "form-control", :prompt => "-Select state-"  %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_address,"",:placeholder => 'lead_address',:name => 'lead[lead_address]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_spoc_name,"",:placeholder => 'lead_spoc_name',:name => 'lead[lead_spoc_name]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= email_field_tag :lead_spoc_email,"",:placeholder => 'lead_spoc_email',:name => 'lead[lead_spoc_email]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= number_field_tag :lead_spoc_number,"",:placeholder => 'lead_spoc_number',:name => 'lead[lead_spoc_number]', :class => "form-control", :maxlength => "10" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_spoc_designation,"",:placeholder => 'lead_spoc_designation',:name => 'lead[lead_spoc_designation]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_area_tag :lead_response,"",:placeholder => 'lead_response',:name => 'lead[lead_response]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]}),:name => 'lead[status]',:prompt =>"-Select Status-", :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :demo_time,DateTime.now,:placeholder => 'demo_time',:name => 'lead[demo_time]', :class => "form-control" %></div>
+        </div>
+
+        <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary" %>
+        <p class="alert alert-danger hidden" id="error-msg"></p>
+        <% end %>
+      </div>
+    </div>
+
+    <script>
+    function show_create_lead_form(){
+      $("#deal_id").chosen();
+      $("#createleadModal").modal("show");
+      $("#deal_id_chosen").css("width","100%");
+      $("#lead_location").chosen();
+    }
+    // function check_validations(){
+    //   event.preventDefault();
+    //   if($("#lead_spoc_email").val()!="" && !isEmail($("#lead_spoc_email").val()))
+    //   {
+    //     $("#error-msg").text("Please enter Spoc Email in correct format");
+    //   }
+    //   else {
+    //     $("#lead_creation_form").submit();
+    //   }
+    // }
+    function isEmail(email) {
+      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+      return regex.test(email);
+    }
+    </script>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+  </div>
+</div>
+</div>
+</div>

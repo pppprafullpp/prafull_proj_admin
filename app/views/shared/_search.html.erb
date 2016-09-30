@@ -28,6 +28,33 @@
       </div>
     </div>
 <%end%>
+<%if filter.include?(:lead_spoc_name)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Spoc name</label>
+        <%=f.text_field :lead_spoc_name, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:lead_spoc_name)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Spoc email</label>
+        <%=f.text_field :lead_spoc_email, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:lead_name)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Lead Name</label>
+        <%=f.text_field :lead_name, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
 
 <%if filter.include?(:order_id)%>
     <div class="col-sm-4 w-220">

@@ -29,14 +29,9 @@
               </tr>
               </thead>
               <tbody>
-            <!-- 1 error conditions
-                1) record for order.app_user_id does not exits
-                2) deal price,effective price is null in order table
-                3) decode
-                   i) first name and last name both decoded
-                   ii) only first name decoded
-                   iii) only last name decoded
-              -->
+
+              <%#= will_paginate @order_requests ,:class=>"pagination pull-right" %>
+
               <% @order_requests.each_with_index do |order_request,index| %>
                   <tr>
                     <td><%=index%></td>
