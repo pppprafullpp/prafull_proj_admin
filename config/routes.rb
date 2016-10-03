@@ -77,6 +77,7 @@ Myapp::Application.routes.draw do
     end
   end
   get "/get_service_providers" => "dashboard/dashboards#get_service_providers"
+  match "/update_lead_data" => "admin/leads#update_lead_data", :via => :post
 
   namespace :admin do
     # Directs /admin/products/* to Admin::ProductsController
@@ -86,7 +87,8 @@ Myapp::Application.routes.draw do
     # resources :deals
     resources :leads do
       get :show_lead_details
-   
+      post :update_lead_data
+
     end
     resources :deals do
       collection do

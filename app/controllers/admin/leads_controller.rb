@@ -13,10 +13,18 @@ class Admin::LeadsController < ApplicationController
     redirect_to :back
   end
 
+  def update_lead_data
+    Lead.find(params[:lead][:id]).update_attributes(:status => params[:lead][:status], :lead_response => params[:lead][:lead_response])
+    flash[:success] = "Updated"
+    redirect_to :back
+  end
+
   def show_lead_details
     @lead_data = Lead.find(params[:lead_id])
     @breadcrumb = {'Home' => home_url, 'Leads' => admin_leads_path, 'Lead Detail' => ' ' }
   end
+
+
 
 private
 

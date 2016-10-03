@@ -44,6 +44,7 @@
         </div>
         <div class="ibox-content">
           <%= render :partial => "shared/dpl_notifier"%>
+          <%=will_paginate @users, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
           <% if @users.present? %>
               <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                 <thead>

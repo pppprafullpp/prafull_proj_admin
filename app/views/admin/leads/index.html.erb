@@ -31,13 +31,13 @@
   </div>
 </div>
 
-<div class="ibox ibox-title float-e-margins">
+<div class="animated fadeInUp ibox ibox-title float-e-margins">
   <div class="ibox-tools">
     <%=button_to "Create Lead","javascript:void(0)", :onclick=>"show_create_lead_form()", :class=>"btn btn-w-m btn-primary"%>
   </div>
 </div>
 
-<div class="row">
+<div class="animated fadeInUp row">
   <div class="col-lg-12">
     <div class="ibox float-e-margins">
       <div class="ibox-title">
@@ -72,19 +72,19 @@
           <%@leads.each do |lead|%>
           <tr>
             <td><span class="label label-warning"><%= link_to lead.id,admin_lead_show_lead_details_path(lead.id)%></span></td>
-            <td><%=link_to lead.lead_type%></td>
-            <td><%=lead.service_category_id%></td>
-            <td><%=lead.lead_name%></td>
-            <td><%=lead.lead_spoc_name%></td>
-            <td><%=lead.lead_spoc_email%></td>
-            <td><%=lead.lead_spoc_number%></td>
-            <td><%=lead.lead_response%></td>
-            <td><%=lead.lead_spoc_designation%></td>
-            <td><%=lead.status%></td>
+            <td id="<%=lead.id%>_type"><%=lead.lead_type.camelcase%></td>
+            <td id="<%=lead.id%>_sc"><%=lead.service_category_id%></td>
+            <td id="<%=lead.id%>_name"><%=lead.lead_name.present? ? lead.lead_name : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_name"><%=lead.lead_spoc_name.present? ? lead.lead_spoc_name : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_email"><%=lead.lead_spoc_email.present? ? lead.lead_spoc_email :  "NP" %></td>
+            <td id="<%=lead.id%>_spoc_number"><%=lead.lead_spoc_number.present? ? lead.lead_spoc_number : "NP"  %></td>
+            <td id="<%=lead.id%>_spoc_response"><%=lead.lead_response.present? ? lead.lead_response : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_designation"><%=lead.lead_spoc_designation.present? ? lead.lead_spoc_designation : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_status"><span class="label label-success"><%=get_lead_status(lead.status.to_i)%></span></td>
             <td>
               <table>
                 <tr>
-                  <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="#"><i class="fa fa-edit"></i></a></td>
+                  <td><a class="btn btn-outline btn-success" onclick="edit_lead_popup('<%=lead.id%>')" data-toggle="tooltip" title="Update Status" href="#"><i class="fa fa-edit"></i></a></td>
                   <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="#"><i class="fa fa-remove"></i></a></td>
                   <td>
                     <%#=link_to deal_attributes_admin_deals_path(:deal_id=>deal.id,:category=>deal.service_category.name),:class => "btn btn-outline btn-success",:method => "get" do%>
@@ -117,22 +117,11 @@
    </div>
   <div class="modal-body">
 
-    <div class="row">
-      <div class="col-lg-12">
-        <div class="ibox">
-          <div class="ibox-title hidden">
-            <div class="ibox-tools <%= 'hidden' if params[:action] == 'edit_deal_attribute'%>">
-              <%#= button_to 'View All Deal Attributes',view_all_deal_attributes_admin_deals_path(deal_id:@deal.id,category:@category_name),:method =>"post", :class => "btn btn-w-m btn-primary"%>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <div class="ibox float-e-margins">
       <div class="ibox-content">
 
         <%= form_tag  admin_leads_path,:class=>"form-horizontal",:id=>"lead_creation_form", method: "post" do %>
+        <%=hidden_field_tag :id,"",:name=>"lead[id]"%>
         <%=hidden_field_tag :user_id,current_user.id,:name=>"lead[user_id]"%>
         <div class="form-group">
           <div class="col-md-12">  <%= select_tag :type,options_for_select([["Residence","residence"],["Business","business"]]),:name => 'lead[lead_type]', :class => "form-control", :prompt => "-Select Type-" %></div>
@@ -160,7 +149,7 @@
         </div>
 
         <div class="form-group">
-          <div class="col-md-12">  <%= number_field_tag :lead_contact_number,"",:placeholder => 'lead_contact_number',:name => 'lead[lead_contact_number]', :class => "form-control",:maxlength => "10" %></div>
+          <div class="col-md-12">  <%= number_field_tag :lead_contact_number,"",:placeholder => 'lead contact number',:name => 'lead[lead_contact_number]', :class => "form-control",:maxlength => "10" %></div>
         </div>
 
         <div class="form-group">
@@ -168,27 +157,27 @@
         </div>
 
         <div class="form-group">
-          <div class="col-md-12">  <%= text_field_tag :lead_address,"",:placeholder => 'lead_address',:name => 'lead[lead_address]', :class => "form-control" %></div>
+          <div class="col-md-12">  <%= text_field_tag :lead_address,"",:placeholder => 'lead address',:name => 'lead[lead_address]', :class => "form-control" %></div>
         </div>
 
         <div class="form-group">
-          <div class="col-md-12">  <%= text_field_tag :lead_spoc_name,"",:placeholder => 'lead_spoc_name',:name => 'lead[lead_spoc_name]', :class => "form-control" %></div>
+          <div class="col-md-12">  <%= text_field_tag :lead_spoc_name,"",:placeholder => 'lead spoc name',:name => 'lead[lead_spoc_name]', :class => "form-control" %></div>
         </div>
 
         <div class="form-group">
-          <div class="col-md-12">  <%= email_field_tag :lead_spoc_email,"",:placeholder => 'lead_spoc_email',:name => 'lead[lead_spoc_email]', :class => "form-control" %></div>
+          <div class="col-md-12">  <%= email_field_tag :lead_spoc_email,"",:placeholder => 'lead spoc email',:name => 'lead[lead_spoc_email]', :class => "form-control" %></div>
         </div>
 
         <div class="form-group">
-          <div class="col-md-12">  <%= number_field_tag :lead_spoc_number,"",:placeholder => 'lead_spoc_number',:name => 'lead[lead_spoc_number]', :class => "form-control", :maxlength => "10" %></div>
+          <div class="col-md-12">  <%= number_field_tag :lead_spoc_number,"",:placeholder => 'lead spoc number',:name => 'lead[lead_spoc_number]', :class => "form-control", :maxlength => "10" %></div>
         </div>
 
         <div class="form-group">
-          <div class="col-md-12">  <%= text_field_tag :lead_spoc_designation,"",:placeholder => 'lead_spoc_designation',:name => 'lead[lead_spoc_designation]', :class => "form-control" %></div>
+          <div class="col-md-12">  <%= text_field_tag :lead_spoc_designation,"",:placeholder => 'lead spoc designation',:name => 'lead[lead_spoc_designation]', :class => "form-control" %></div>
         </div>
 
         <div class="form-group">
-          <div class="col-md-12">  <%= text_area_tag :lead_response,"",:placeholder => 'lead_response',:name => 'lead[lead_response]', :class => "form-control" %></div>
+          <div class="col-md-12">  <%= text_area_tag :lead_response,"",:placeholder => 'lead response',:name => 'lead[lead_response]', :class => "form-control" %></div>
         </div>
 
         <div class="form-group">
@@ -212,19 +201,28 @@
       $("#deal_id_chosen").css("width","100%");
       $("#lead_location").chosen();
     }
-    // function check_validations(){
-    //   event.preventDefault();
-    //   if($("#lead_spoc_email").val()!="" && !isEmail($("#lead_spoc_email").val()))
-    //   {
-    //     $("#error-msg").text("Please enter Spoc Email in correct format");
-    //   }
-    //   else {
-    //     $("#lead_creation_form").submit();
-    //   }
-    // }
-    function isEmail(email) {
-      var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-      return regex.test(email);
+    function edit_lead_popup(id){
+      $("#deal_id_chosen").css("width","100%");
+      response = $("#"+id+"_spoc_response").text();
+      status = $("#"+id+"_spoc_status").text();
+      $("#edit_lead_id").val(id);
+      switch(status) {
+        case "INFO GATHERED": value =10 ;break;
+        case "APPROCHED": value = 20 ;break;
+        case "MEETING FIXED": value =30 ;break;
+        case "DEMO COMPLETED": value =40 ;break;
+        case "IN PIPELINE": value = 50 ;break;
+        case "SIGNUP DONE": value = 60 ;break;
+        case "DATA RECIEVED": value = 70 ;break;
+        case "NOT INTERESTED": value = 80;break;
+        case "USING ANOTHER SYSTEM": value = 90 ;break;
+        case "SUCCESSFULLY COMPLETED": value = 100;break;
+      }
+
+      $("#edit_response").val(response);
+      $("#edit_status option[value="+value+"]").prop("selected","selected");
+      console.log(response);
+      $("#updateleadModal").modal("show");
     }
     </script>
   </div>
@@ -233,4 +231,32 @@
   </div>
 </div>
 </div>
+</div>
+
+<div class="modal inmodal in" id="updateleadModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+  <div class="modal-dialog">
+    <div class="modal-content animated swing">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+          <i class="fa fa-line-chart modal-icon"></i>
+          <h4 id="modal-title" class="modal-title">Update Lead Status</h4>
+       </div>
+      <div class="modal-body">
+          <%=form_tag "/update_lead_data",:class=>"form-horizontal",:id=>"lead_creation_form", method: "post" do %>
+          <%=hidden_field_tag :edit_lead_id,"",:name=>"lead[id]"%>
+          <%=hidden_field_tag :edit_lead_user_id,current_user.id,:name=>"lead[user_id]"%>
+
+          <div class="form-group">
+            <div class="col-md-12">  <%= text_area_tag :edit_response,"",:name => 'lead[lead_response]',:prompt =>"-Select Status-", :class => "form-control" %></div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-12">  <%= select_tag :edit_status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]}),:name => 'lead[status]',:prompt =>"-Select Status-", :class => "form-control" %></div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-12">  <%= submit_tag("Update", class:"btn btn-outline btn-success") %></div>
+          </div>
+        <%end%>
+      </div>
+    </div>
+  </div>
 </div>
