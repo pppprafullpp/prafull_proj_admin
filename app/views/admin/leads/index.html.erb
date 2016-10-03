@@ -22,7 +22,7 @@
         <div class="ibox-content m-b-sm border-bottom">
           <div class="row">
             <%= form_for @search, :as => 'search', :url => admin_leads_path, :html => {:method => :get} do |f| %>
-                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_leads_path, :filter => [:lead_spoc_name,:lead_spoc_email,:lead_name]}%>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_leads_path, :filter => [:lead_spoc_name,:lead_spoc_email,:lead_name,:business_name]}%>
             <% end %>
           </div>
         </div>
@@ -33,7 +33,7 @@
 
 <div class="animated fadeInUp ibox ibox-title float-e-margins">
   <div class="ibox-tools">
-    <%=button_to "Create Lead","javascript:void(0)", :onclick=>"show_create_lead_form()", :class=>"btn btn-w-m btn-primary"%>
+    <%=link_to "Create Lead", new_admin_lead_path, :class=>"btn btn-w-m btn-primary"%>
   </div>
 </div>
 
@@ -80,18 +80,12 @@
             <td id="<%=lead.id%>_spoc_number"><%=lead.lead_spoc_number.present? ? lead.lead_spoc_number : "NP"  %></td>
             <td id="<%=lead.id%>_spoc_response"><%=lead.lead_response.present? ? lead.lead_response : "NP" %></td>
             <td id="<%=lead.id%>_spoc_designation"><%=lead.lead_spoc_designation.present? ? lead.lead_spoc_designation : "NP" %></td>
-            <td id="<%=lead.id%>_spoc_status"><span class="label label-success"><%=get_lead_status(lead.status.to_i)%></span></td>
+            <td id="<%=lead.id%>_spoc_status"> <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]},lead.status),:id=>"#{lead.id}_status",:class => "form-control", :onchange => "show_update_btn(#{lead.id})" %></td>
             <td>
               <table>
                 <tr>
-                  <td><a class="btn btn-outline btn-success" onclick="edit_lead_popup('<%=lead.id%>')" data-toggle="tooltip" title="Update Status" href="#"><i class="fa fa-edit"></i></a></td>
-                  <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="#"><i class="fa fa-remove"></i></a></td>
-                  <td>
-                    <%#=link_to deal_attributes_admin_deals_path(:deal_id=>deal.id,:category=>deal.service_category.name),:class => "btn btn-outline btn-success",:method => "get" do%>
-                    <!-- <i class="fa fa-tag"></i> -->
-                    <%#end%>
-                  </td>
-                  <td><%#=button_to "X", admin_deal_path(deal), :class => "btn btn-outline btn-danger", method: :delete %></td>
+                  <td><a class="btn btn-outline btn-success" href="<%=edit_admin_lead_path(id:lead.id)%>"><i class="fa fa-edit"></i></a></td>
+                  <td class="hidden" id="check_<%=lead.id%>"><a class="btn btn-outline btn-success" href="javascript:void(0)" onclick="update_status(<%=lead.id%>)" href="#"><i class="fa fa-check"></i></a></td>
                 </tr>
               </table>
             </td>
@@ -100,7 +94,29 @@
           <%end%>
           </thead>
         </table>
-
+            <script>
+            function show_update_btn(id){
+              $("#check_"+id).removeClass("hidden");
+            }
+            function update_status(id){
+              console.log("Row="+id);
+              console.log("Status="+$("#"+id+"_status option:selected").prop("value"));
+              $.ajax({
+                url: "/update_lead_status",
+                type: "get",
+                data: {
+                  id:id,
+                  status:$("#"+id+"_status option:selected").prop("value")
+                },
+                success: function(response){
+                  if(response["updated"] == true){
+                    toastr["success"]("Successfully Updated!")
+                    location.reload();
+                  }
+                }
+              })
+            }
+            </script>
       </div>
 
     </div>

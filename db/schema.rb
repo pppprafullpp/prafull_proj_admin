@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160930065015) do
+ActiveRecord::Schema.define(version: 20161003162812) do
 
   create_table "account_referral_amounts", force: :cascade do |t|
     t.integer  "account_referral_id",     limit: 4
@@ -608,6 +608,7 @@ ActiveRecord::Schema.define(version: 20160930065015) do
     t.datetime "demo_time"
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
+    t.text     "business_name",         limit: 65535
   end
 
   create_table "login_details", force: :cascade do |t|

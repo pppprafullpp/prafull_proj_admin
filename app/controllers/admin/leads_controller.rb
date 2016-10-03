@@ -7,14 +7,24 @@ class Admin::LeadsController < ApplicationController
     @leads = @leads.paginate(:page => params[:page], :per_page => PER_PAGE) if @leads.present?
   end
 
+    def new
+      @lead = Lead.new
+      @breadcrumb = {'Home' => home_url, 'Leads' => admin_leads_path,'Create Lead' => ''}
+    end
   def create
     # raise params.to_yaml
     Lead.create!(lead_params)
-    redirect_to :back
+    redirect_to  admin_leads_path
   end
 
-  def update_lead_data
-    Lead.find(params[:lead][:id]).update_attributes(:status => params[:lead][:status], :lead_response => params[:lead][:lead_response])
+  def edit
+    @breadcrumb = {'Home' => home_url, 'Leads' => admin_leads_path,'Create Lead' => ''}
+    @lead= Lead.find(params[:id])
+  end
+
+  def update
+    # raise params.to_yaml
+    Lead.find(params[:lead][:id]).update_attributes(lead_params)
     flash[:success] = "Updated"
     redirect_to :back
   end
@@ -24,6 +34,12 @@ class Admin::LeadsController < ApplicationController
     @breadcrumb = {'Home' => home_url, 'Leads' => admin_leads_path, 'Lead Detail' => ' ' }
   end
 
+  def update_lead_status
+    Lead.find(params[:id]).update_attributes(:status => params[:status])
+    render :json => {
+      "updated":true
+    }
+  end
 
 
 private

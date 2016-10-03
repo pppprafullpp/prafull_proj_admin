@@ -61,7 +61,6 @@ Myapp::Application.routes.draw do
       get :auto_complete
     end
   end
-
   namespace :dashboard do
     resources :dashboards do
       collection do
@@ -77,8 +76,7 @@ Myapp::Application.routes.draw do
     end
   end
   get "/get_service_providers" => "dashboard/dashboards#get_service_providers"
-  match "/update_lead_data" => "admin/leads#update_lead_data", :via => :post
-
+  get "/update_lead_status" => "admin/leads#update_lead_status"
   namespace :admin do
     # Directs /admin/products/* to Admin::ProductsController
     # (app/controllers/admin/products_controller.rb)
@@ -88,7 +86,6 @@ Myapp::Application.routes.draw do
     resources :leads do
       get :show_lead_details
       post :update_lead_data
-
     end
     resources :deals do
       collection do

@@ -13,6 +13,7 @@ MEETING_STATUSES_IDS = [10,20,30,40,50,60,70,80,90,100]
     conditions << "lead_spoc_name like '%#{params[:lead_spoc_name]}%'" if params[:lead_spoc_name].present?
     conditions << "lead_spoc_email like '%#{params[:lead_spoc_email]}%'" if params[:lead_spoc_email].present?
     conditions << "lead_name like '%#{params[:lead_name]}%'" if params[:lead_name].present?
+    conditions << "business_name like '%#{params[:business_name]}%'" if params[:business_name].present?
     # conditions << "deal_type = '#{params[:deal_type]}'" if params[:deal_type].present?
     # conditions << "service_category_id = '#{params[:service_category_id]}'" if params[:service_category_id].present?
     # conditions << "service_provider_id = '#{params[:service_provider_id]}'" if params[:service_provider_id].present?
