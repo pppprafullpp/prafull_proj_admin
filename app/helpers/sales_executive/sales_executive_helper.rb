@@ -1,0 +1,2 @@
+module SalesExecutive::SalesExecutiveHelper
+end

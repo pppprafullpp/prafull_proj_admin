@@ -1,7 +1,7 @@
 class Admin::AdminsController < Admin::AdminApplicationController
-  
+
   layout "empty"
-  
+
   def login
      if request.method.eql? 'POST'
         admin_info = Admin.authenticate(params[:email], params[:password]).first
@@ -18,13 +18,14 @@ class Admin::AdminsController < Admin::AdminApplicationController
           end
         else
           flash['error'] = 'Incorrect Username or Password!'
-          redirect_to login_admin_admins_url and return 
+          redirect_to login_admin_admins_url and return
         end
-     end     
+     end
   end
-  
+
   def logout
     reset_session
     redirect_to root_url and return
   end
+
 end

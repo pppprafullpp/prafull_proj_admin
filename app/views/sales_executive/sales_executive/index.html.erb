@@ -1,0 +1,112 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Sales Executive</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+<div class="animated fadeInUp">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Sales Executive</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+          </div>
+        </div>
+
+        <div class="ibox-content m-b-sm border-bottom">
+          <div class="row">
+            <%= form_for @search, :as => 'search', :url => sales_executive_sales_executive_index_path, :html => {:method => :get} do |f| %>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => sales_executive_sales_executive_index_path, :filter => [:sales_executive_name,:sales_executive_email,:enabled]}%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="animated fadeInUp ibox ibox-title float-e-margins">
+  <div class="ibox-tools">
+    <%=link_to "Create New Sales Executive Profile",  new_sales_executive_sales_executive_path, :class=>"btn btn-w-m btn-primary"%>
+  </div>
+</div>
+
+<div class="animated fadeInUp row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Sales Executive(<%=@sales_excecutives.count%>)</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content">
+        <table class="table table-hover no-margins table-responsive">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Enabled</th>
+            <th>Actions</th>
+          </tr>
+
+          <%@sales_excecutives.each do |se|%>
+          <tr>
+            <td><span class="label label-warning"><%= link_to se.id,"/"%></span></td>
+            <td id="<%=se.id%>_name"><%=se.name%></td>
+            <td id="<%=se.id%>_email"><%=se.email%></td>
+            <td id="<%=se.id%>_enbaled"><%= select_tag :enabled, options_for_select([["YES",true],["NO",false]],se.enabled), :class =>"form-control",:id=>"#{se.id}_enabled", :onchange =>"show_change_btn(#{se.id})"%></td>
+            <td>
+              <table>
+                <tr>
+                  <td><a class="btn btn-outline btn-success" href="#"><i class="fa fa-edit"></i></a></td>
+                  <td class="hidden" id="check_<%=se.id%>"><a class="btn btn-outline btn-success" onclick="update_enabled_status(<%=se.id%>)" href="#"><i class="fa fa-check"></i></a></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <%end%>
+          </thead>
+        </table>
+            <script>
+            function show_change_btn(id){
+              $("#check_"+id).removeClass("hidden");
+            }
+            function update_enabled_status(id){
+              console.log("Row="+id);
+              console.log("Status="+$("#"+id+"_enabled option:selected").prop("value"));
+              $.ajax({
+                url: "<%=update_enabled_status_sales_executive_sales_executive_index_path%>",
+                type: "get",
+                data: {
+                  id:id,
+                  status:$("#"+id+"_enabled option:selected").prop("value")
+                },
+                success: function(response){
+                  if(response["updated"] == true){
+                    toastr["success"]("Successfully Updated!")
+                    location.reload();
+                  }
+                }
+              })
+            }
+            </script>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>

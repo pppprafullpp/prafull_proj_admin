@@ -28,6 +28,35 @@
       </div>
     </div>
 <%end%>
+
+<%if filter.include?(:sales_executive_name)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Executive Name</label>
+        <%=f.text_field :name, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+<%if filter.include?(:sales_executive_email)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Executive Email</label>
+        <%=f.text_field :email, {:class => 'form-control'}%>
+      </div>
+    </div>
+<%end%>
+
+
+<%if filter.include?(:enabled)%>
+    <div class="col-sm-4 w-220">
+      <div class="form-group">
+        <label class="control-label">Enabled</label>
+        <%=f.select(:enabled, options_for_select([["Yes",true],["No",false]]), { :include_blank => "-Select-"},{:class => 'form-control'})%>
+      </div>
+    </div>
+<%end%>
+
 <%if filter.include?(:business_name)%>
     <div class="col-sm-4 w-220">
       <div class="form-group">

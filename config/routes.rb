@@ -17,6 +17,17 @@ Myapp::Application.routes.draw do
     resources :user_comments
   end
 
+  namespace :sales_executive do
+    resources :sales_executive do
+      collection do
+        get 'login'
+        post 'login'
+        get 'register'
+        get 'update_enabled_status'
+      end
+    end
+  end
+
 
   get "home/index"
   get "home/lab_profile"

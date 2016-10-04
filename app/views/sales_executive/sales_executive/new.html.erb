@@ -1,0 +1,71 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Create Sales Executive Profile</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+<div class="animated fadeInUp row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Create new Sales Executive</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <!-- SalesExecutive(id: integer, name: string, email: string, role: string, encrypted_password: string,
+      reset_password_token: string, remember_created_at: datetime, sign_in_count: integer, current_sign_in_at: datetime,
+      last_sign_in_at: datetime, current_sign_in_ip: string, last_sign_in_ip: string, enabled: boolean, failed_count: integer,
+      password_updated_at: datetime, created_at: datetime, updated_at: datetime)  -->
+
+      <div class="ibox-content">
+        <%=form_for @new_sales_executive, :url => sales_executive_sales_executive_index_path, method: "post", :class => "form" do |f| %>
+          <div class="row">
+            <table class="table table-hover no-margins">
+              <tr>
+                <td>
+                  <div class="col-md-12">  <%= f.text_field :name,:placeholder => 'Name',:class => "form-control" %></div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="col-md-12">  <%= f.text_field :email,:placeholder => 'Email', :class => "form-control"%></div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="col-md-12">  <%= f.select :enabled,options_for_select([["Yes",true],["No",false]]),{:prompt => "- Select Enabled -"},:class => "form-control"%></div>
+                </td>
+              </tr>
+            </table>
+        </div>
+
+        <%= submit_tag 'Submit', :class => "btn btn-block btn-outline btn-primary", onclick:"validate()" %>
+        <p class="alert alert-danger hidden" id="error-msg"></p>
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+function validate(){
+  event.preventDefault();
+  if ($("#sales_executive_name").val()!="" && $("#sales_executive_email").val()!="") {
+    $("#new_sales_executive").submit();
+  }
+  else {
+    $("#error-msg").removeClass("hidden").text("Please fill in Both fields");
+  }
+}
+</script>

@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    session[:id].present? ?  eval(session[:role]).find(session[:id]) : []
+      session[:id].present? ?  eval(session[:role]).find(session[:id]) : []
   end
 
   def is_admin?
@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def is_sales_executive?
-    session[:id].present? && session[:role].eql?(SALES_EXECUTIVE)
+    session[:id].present? && session[:role].eql?("SalesExecutive")
   end
 
   def auth_display_name
@@ -48,14 +48,14 @@ class ApplicationController < ActionController::Base
     case role
       when ADMIN
         redirect_url = login_admin_admins_path
-      when SALES_EXECUTIVE
-        redirect_url = login_admin_admins_path
+      when "SalesExecutive"
+        redirect_url = login_sales_executive_sales_executive_index_path
       else
         redirect_url = login_admin_admins_path
     end
 
     reset_session
-    flash[:notice] = 'You have been log out successfully.'
+    # flash[:notice] = 'You have been log out successfully.'
     redirect_to redirect_url and return
   end
 
