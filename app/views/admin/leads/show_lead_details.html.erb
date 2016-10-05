@@ -26,7 +26,7 @@
                   <div class="row">
                       <div class="col-lg-5">
                       <dl class="dl-horizontal">
-                          <dt>Created by:</dt> <dd><%=User.exists?(@lead_data.user_id) ? User.find(@lead_data).name : "Admin" %></dd>
+                          <dt>Created by:</dt> <dd><%=SalesExecutive.exists?(@lead_data.user_id) ? SalesExecutive.find(@lead_data.user_id).name : "Admin" %></dd>
                           <dt>Category:</dt> <dd><b><%=(ServiceCategory.get_category_name_by_id @lead_data.service_category_id).titleize%></b></dd>
                           <dt>Lead Name:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_name%></a> </dd>
                           <dt>Lead Email:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_email%></a> </dd>

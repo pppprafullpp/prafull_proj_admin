@@ -1,6 +1,15 @@
 class SalesExecutive::SalesExecutiveController < ApplicationController
 
   layout "empty", :only => [:login]
+  before_action :check_login, :except => [:login]
+
+  def check_login
+    # raise "check"
+    if !current_user.present?
+      flash[:danger] = "You need to login first"
+      redirect_to login_sales_executive_sales_executive_index_path
+    end
+  end
 
   def login
      if request.method.eql? 'POST'
@@ -8,8 +17,6 @@ class SalesExecutive::SalesExecutiveController < ApplicationController
           flash[:danger] = "Your Profile has been Deactivated"
           session[:referer_url] = request.referer
           if sales_executive_info.present?
-            session[:id] = sales_executive_info.id
-            session[:role] = sales_executive_info.role
             # raise "chk"
             # if sales_executive_info.enabled
               LoginDetail.track_login(sales_executive_info)
@@ -61,20 +68,39 @@ class SalesExecutive::SalesExecutiveController < ApplicationController
     sales_executive.role = SalesExecutive::SALES_EXECUTIVE
     sales_executive.enabled = enabled
     sales_executive.save
+    Admin::AdminMailer.create_sales_executive_profile(sales_executive.id,"123456")
     flash[:success] = "Created , password mailed to #{name}"
     redirect_to sales_executive_sales_executive_index_path
   end
 
   def update_enabled_status
-    SalesExecutive.find(params[:id]).update_attributes(:enabled => params[:status])
+    sales_executtive = SalesExecutive.find(params[:id]).update_attributes(:enabled => params[:status])
     render :json => {
       "updated":true
     }
   end
 
+  def reset_password
+    sales_executive = SalesExecutive.find(params[:id])
+    sales_executive.encrypted_password = SalesExecutive.encrypt("111111")
+    sales_executive.save
+    Admin::AdminMailer.reset_sales_executive_password(sales_executive.id,"111111")
+    render :json => {
+      "updated":true
+    }
+  end
+
+  def show_personal_details
+    @details = SalesExecutive.find(session[:id])
+    @breadcrumb = {'Home' => home_url, 'Profile' => ''}
+  end
+
+  def update
+    sales_executive = SalesExecutive.find(params[:id]).update_attributes(:name =>params[:sales_executive][:name], :email => params[:sales_executive][:email])
+    flash[:success] = "updated"
+    redirect_to :back
+  end
 end
-
-
 
 private
 

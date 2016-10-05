@@ -24,6 +24,8 @@ Myapp::Application.routes.draw do
         post 'login'
         get 'register'
         get 'update_enabled_status'
+        get 'reset_password'
+        get 'show_personal_details'
       end
     end
   end
