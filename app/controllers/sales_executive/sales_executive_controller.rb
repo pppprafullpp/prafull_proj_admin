@@ -39,6 +39,7 @@ class SalesExecutive::SalesExecutiveController <  SalesExecutive::SalesExecutive
     render :json => {
       "updated":true
     }
+    notify(sales_executive ,SalesExecutive,"reset_sales_executive_password",true,{:email => true,:password => sales_executive.encrypted_password})   # showing error
   end
 
   def show_personal_details
