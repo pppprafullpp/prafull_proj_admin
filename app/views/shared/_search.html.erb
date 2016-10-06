@@ -52,7 +52,7 @@
     <div class="col-sm-4 w-220">
       <div class="form-group">
         <label class="control-label">Enabled</label>
-        <%=f.select(:enabled, options_for_select([["Yes",true],["No",false]]), { :include_blank => "-Select-"},{:class => 'form-control'})%>
+        <%=f.select(:enabled, options_for_select([["Enabled",true],["Disabled",false]]), { :include_blank => "-Profile Status-"},{:class => 'form-control'})%>
       </div>
     </div>
 <%end%>

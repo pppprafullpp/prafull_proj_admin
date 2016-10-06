@@ -1,6 +1,5 @@
 class SalesExecutive < ActiveRecord::Base
   has_attached_file :upload, :styles => { :medium => "200x200>", :thumb => "100x100>" }
-
   SALES_EXECUTIVE = "sales_executive"
 
   def self.encrypt(password)
@@ -22,4 +21,20 @@ class SalesExecutive < ActiveRecord::Base
     self.where(condition)
   end
 
-end
+  def self.generate_random_password
+    ('a'..'z').to_a.shuffle.first(8).join
+  end
+
+  def self.create_profile(params)
+    sales_executive = self.find_or_initialize_by(:name => params[:name], :email => params[:email])
+    if sales_executive.new_record?
+        sales_executive.enabled = params[:enabled]
+        password = encrypt(generate_random_password)
+        sales_executive.encrypted_password = password
+        sales_executive.role = "sales_executive"
+        sales_executive.save
+    end
+      sales_executive
+  end
+
+  end

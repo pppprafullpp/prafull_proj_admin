@@ -31,6 +31,7 @@
         <div class="row">
           <div class="col-md-6">
             <h4>Add Client Details</h4>
+            
             <div class="form-group">
               <div class="col-md-12">  <%= text_field_tag :lead_name,"",:placeholder => 'Lead name',:name => 'lead[lead_name]', :class => "form-control" %></div>
             </div>
@@ -40,35 +41,45 @@
             </div>
 
             <div class="form-group">
-              <div class="col-md-12">  <%= number_field_tag :lead_contact_number,"",:placeholder => 'lead contact number',:name => 'lead[lead_contact_number]', :class => "form-control",:maxlength => "10" %></div>
+              <div class="col-md-12">  <%= text_field_tag :business_name,"",:placeholder => 'Business Name',:name => 'lead[business_name]', :class => "form-control hidden" %></div>
             </div>
 
+            <div class="form-group">
+              <div class="col-md-12">  <%= select_tag :lead_location,options_for_select(Statelist.pluck(:state)),:name => 'lead[lead_location]', :class => "form-control", :prompt => "-Select state-"  %></div>
+            </div>
+
+            <div class="form-group">
+              <div class="col-md-12">  <%= number_field_tag :lead_contact_number,"",:placeholder => 'lead contact number',:name => 'lead[lead_contact_number]', :class => "form-control",:maxlength => "10" %></div>
+            </div>
 
             <div class="form-group">
               <div class="col-md-12">  <%= email_field_tag :lead_email,"",:placeholder => 'Lead Email',:name => 'lead[lead_email]', :class => "form-control" %></div>
             </div>
 
           <div class="form-group">
-            <div class="col-md-12">  <%= select_tag :lead_location,options_for_select(Statelist.pluck(:state)),:name => 'lead[lead_location]', :class => "form-control", :prompt => "-Select state-"  %></div>
-          </div>
-
-
-          <div class="form-group">
-          <div class="col-md-12">  <%= text_field_tag :lead_address,"",:placeholder => 'lead address',:name => 'lead[lead_address]', :class => "form-control" %></div>
+            <div class="col-md-12">  <%= text_field_tag :lead_address,"",:placeholder => 'lead address',:name => 'lead[lead_address]', :class => "form-control" %></div>
           </div>
 
           <div class="form-group">
-          <div class="col-md-12">  <%= text_area_tag :lead_response,"",:placeholder => 'lead response',:name => 'lead[lead_response]', :class => "form-control" %></div>
-          </div>
-
-
-          <div class="form-group">
-          <div class="col-md-12">  <%= text_field_tag :business_name,"",:placeholder => 'Business Name',:name => 'lead[business_name]', :class => "form-control hidden" %></div>
+            <div class="col-md-12">  <%= text_area_tag :lead_response,"",:placeholder => 'lead response',:name => 'lead[lead_response]', :class => "form-control" %></div>
           </div>
 
           </div>
           <div class="col-md-6">
-            <h4>Add Client Spoc Details</h4>
+          <h4>Add Client Spoc Details</h4>
+
+          <div class="form-group">
+            <div class="col-md-12">  <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]}),:name => 'lead[status]',:prompt =>"-Select Status-", :class => "form-control" %></div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-12">   <%= select_tag :deal_id,options_for_select(Deal.pluck(:title,:id)),:name => 'lead[deal_id]', :class => "form-control chosen-select", :prompt => "-Select Deal-" %></div>
+          </div>
+
+          <div class="form-group">
+            <div class="col-md-12">   <%= select_tag :service_category_id,options_for_select([["Internet",1],["Telephone",2],["Cable",3],["Cellphone",4],["Bundle",5]]),:name => 'lead[service_category_id]', :class => "form-control", :prompt => "-Select Category-" %></div>
+          </div>
+
           <div class="form-group">
             <div class="col-md-12">  <%= text_field_tag :lead_spoc_name,"",:placeholder => 'lead spoc name',:name => 'lead[lead_spoc_name]', :class => "form-control" %></div>
           </div>
@@ -85,22 +96,8 @@
           <div class="col-md-12">  <%= text_field_tag :lead_spoc_designation,"",:placeholder => 'lead spoc designation',:name => 'lead[lead_spoc_designation]', :class => "form-control" %></div>
           </div>
 
-
-          <div class="form-group">
-            <div class="col-md-12">  <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]}),:name => 'lead[status]',:prompt =>"-Select Status-", :class => "form-control" %></div>
-          </div>
-
           <div class="form-group">
             <div class="col-md-12">  <%= text_field_tag :demo_time,DateTime.now,:placeholder => 'demo_time',:name => 'lead[demo_time]', :class => "form-control" %></div>
-          </div>
-
-          <div class="form-group">
-            <div class="col-md-12">   <%= select_tag :service_category_id,options_for_select([["Internet",1],["Telephone",2],["Cable",3],["Cellphone",4],["Bundle",5]]),:name => 'lead[service_category_id]', :class => "form-control", :prompt => "-Select Category-" %></div>
-          </div>
-
-
-          <div class="form-group">
-            <div class="col-md-12">   <%= select_tag :deal_id,options_for_select(Deal.pluck(:title,:id)),:name => 'lead[deal_id]', :class => "form-control chosen-select", :prompt => "-Select Deal-" %></div>
           </div>
 
           <div class="form-group">
