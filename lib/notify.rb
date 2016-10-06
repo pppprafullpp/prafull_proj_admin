@@ -31,7 +31,6 @@ module Notify
     end
 
     def self.send_sales_executive_reset_password_email(object,class_name,notification_name,password)
-      byebug
       eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
     end
   end

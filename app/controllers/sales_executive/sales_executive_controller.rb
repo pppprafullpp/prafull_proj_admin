@@ -34,7 +34,7 @@ class SalesExecutive::SalesExecutiveController <  SalesExecutive::SalesExecutive
     new_password = SalesExecutive.encrypt(SalesExecutive.generate_random_password)
     sales_executive.encrypted_password = new_password
     sales_executive.save
-    # notify(sales_executive ,"SalesExecutive","reset_sales_executive_password",false,{:email => true,:password => new_password, :reset_password => true}) # showing error
+    notify(sales_executive ,"SalesExecutive","reset_sales_executive_password",false,{:email => true,:password => new_password, :reset_password => true}) and return # showing error
     render :json => {
       "updated":true
     }
