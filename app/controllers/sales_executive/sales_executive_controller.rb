@@ -12,11 +12,12 @@ class SalesExecutive::SalesExecutiveController <  SalesExecutive::SalesExecutive
 
 
   def create
+    # raise params.to_yaml
     if params[:sales_executive][:id].present?
       SalesExecutive.find(params[:sales_executive][:id]).update_attributes(:name=>params[:sales_executive][:name],:email => params[:sales_executive][:email])
     else
       new_profile = SalesExecutive.create_profile(params[:sales_executive])
-      notify(new_profile ,SalesExecutive,WELCOME_NOTIFICATION,true,{:email => true,:password => new_profile.encrypted_password})   # showing error
+      # notify(new_profile ,SalesExecutive,WELCOME_NOTIFICATION,true,{:email => true,:password => new_profile.encrypted_password})   # showing error
     end
 
     redirect_to sales_executive_sales_executive_index_path

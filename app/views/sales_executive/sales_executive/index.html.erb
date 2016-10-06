@@ -33,7 +33,7 @@
 
 <div class="animated fadeInUp ibox ibox-title float-e-margins">
   <div class="ibox-tools">
-    <%=link_to "Create New Sales Executive Profile",  new_sales_executive_sales_executive_path, :class=>"btn btn-w-m btn-primary"%>
+    <%=link_to "Create New Sales Executive Profile","#", :class=>"btn btn-w-m btn-primary", :onclick =>"add_new_sales_executive_form()"%>
   </div>
 </div>
 
@@ -52,6 +52,7 @@
         </div>
       </div>
       <div class="ibox-content">
+        <%= will_paginate @sales_excecutives, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
         <table class="table table-hover no-margins table-responsive">
           <thead>
           <tr>
@@ -67,12 +68,13 @@
             <td><span class="label label-warning"><%= link_to se.id,"/"%></span></td>
             <td id="<%=se.id%>_name"><%=se.name%></td>
             <td id="<%=se.id%>_email"><%=se.email%></td>
-            <td id="<%=se.id%>_enbaled"><%= select_tag :enabled, options_for_select([["YES",true],["NO",false]],se.enabled), :class =>"form-control",:id=>"#{se.id}_enabled", :onchange =>"show_change_btn(#{se.id})"%></td>
+            <td id="<%=se.id%>_enabled"><%= select_tag :enabled, options_for_select([["Enabled",true],["Disabled",false]],se.enabled), :class =>"form-control",:id=>"#{se.id}_enabled", :onchange =>"show_change_btn(#{se.id})"%></td>
             <td>
               <table>
                 <tr>
                   <td><a class="btn btn-outline btn-success" href="#" onclick="reset_password(<%=se.id%>)"><i class="fa fa-refresh"></i></a></td>
                   <td class="hidden" id="check_<%=se.id%>"><a class="btn btn-outline btn-success" onclick="update_enabled_status(<%=se.id%>)" href="#"><i class="fa fa-check"></i></a></td>
+                  <td><a class="btn btn-outline btn-success" onclick="edit_sales_executive_profile(<%=se.id%>)" href="#"><i class="fa fa-edit"></i></a></td>
                 </tr>
               </table>
             </td>
@@ -81,7 +83,21 @@
           <%end%>
           </thead>
         </table>
-            <script>
+      <script>
+            function edit_sales_executive_profile(id) {
+              console.log(id);
+              $("#sales_executive_id").val(id);
+              $("#sales_executive_name").val($("#"+id+"_name").text());
+              $("#sales_executive_email").val($("#"+id+"_email").text());
+              $("#sales_executive_enabled").hide();
+              $("#myModal2").modal("show");
+            }
+            function add_new_sales_executive_form() {
+              $("#sales_executive_name").val("");
+              $("#sales_executive_email").val("");
+              $("#sales_executive_enabled").show();
+              $("#myModal2").modal("show");
+            }
             function show_change_btn(id){
               $("#check_"+id).removeClass("hidden");
             }
@@ -118,10 +134,61 @@
                 }
               });
             }
+            function validate(){
+              event.preventDefault();
+              if ($("#sales_executive_name").val()=="" || $("#sales_executive_email").val()=="") {
+                $("#error-msg").removeClass("hidden").text("Please fill in Both fields");
+              }
+              else if($("#sales_executive_enabled").is(":visible") == true && $("#sales_executive_enabled option:selected").val() == ""){
+                $("#error-msg").removeClass("hidden").text("Please Select Status");
+              }
+              else {
+                $("#new_sales_executive").submit();
+              }
+            }
             </script>
       </div>
 
     </div>
   </div>
 </div>
+<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content animated flipInY">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Create Sales executive profile</h4>
+        <small class="font-bold">Password will be auto generated and mailed to the executive's profile</small>
+      </div>
+
+      <div class="ibox-content">
+        <%=form_for @new_sales_executive, :url => sales_executive_sales_executive_index_path, method: "post", :class => "form" do |f| %>
+          <div class="row">
+            <table class="table table-hover no-margins">
+              <tr>
+                <td>
+                  <div class="col-md-12">  <%= f.text_field :name,:placeholder => 'Name',:class => "form-control" %></div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="col-md-12">  <%= f.text_field :email,:placeholder => 'Email', :class => "form-control"%></div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="col-md-12">  <%= f.select :enabled,options_for_select([["Enabled",true],["Disabled",false]]),{:prompt => "- Select Enabled -"},:class => "form-control"%></div>
+                </td>
+              </tr>
+            </table>
+        </div>
+
+        <%= submit_tag 'Submit', :class => "btn btn-block btn-outline btn-primary", onclick:"validate()" %>
+        <p class="alert alert-danger hidden" id="error-msg"></p>
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
 </div>
