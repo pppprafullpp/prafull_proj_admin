@@ -1,18 +1,23 @@
 class Admin::LeadsController < ApplicationController
+
   def index
     params[:search] = {} unless params[:search].present?
     @search = Lead.new
     @breadcrumb = {'Home' => home_url, 'Leads' => ''}
-    @leads = Lead.search(params[:search])
-    @leads = @leads.paginate(:page => params[:page], :per_page => PER_PAGE) if @leads.present?
+    if is_sales_executive?
+      @leads = Lead.where(:user_id => session[:id])
+    elsif is_admin?
+      @leads = Lead.search(params[:search])
+    end
+    @leads = @leads.paginate(:page => params[:page], :per_page => PER_PAGE)
   end
 
-    def new
-      @lead = Lead.new
-      @breadcrumb = {'Home' => home_url, 'Leads' => admin_leads_path,'Create Lead' => ''}
-    end
+  def new
+    @lead = Lead.new
+    @breadcrumb = {'Home' => home_url, 'Leads' => admin_leads_path,'Create Lead' => ''}
+  end
+
   def create
-    # raise params.to_yaml
     Lead.create!(lead_params)
     redirect_to  admin_leads_path
   end
@@ -23,7 +28,6 @@ class Admin::LeadsController < ApplicationController
   end
 
   def update
-    # raise params.to_yaml
     Lead.find(params[:lead][:id]).update_attributes(lead_params)
     flash[:success] = "Updated"
     redirect_to :back
@@ -41,10 +45,10 @@ class Admin::LeadsController < ApplicationController
     }
   end
 
-
 private
 
   def lead_params
     params.require(:lead).permit!
   end
+
 end

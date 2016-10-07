@@ -8,7 +8,7 @@ development:
     #:apikey: "gkeE6HqPpAGqa2pyeDqvvwxjMXrR7qKxtvFGEvuz5r4LdphqkhA"
   :from: "servicedeals@gmail.com"
   :solr_server: ""
-  
+
 test:
   :main_url: "http://www.servicedeals.com"
   :contact_email: "servicedeals@gmail.com"

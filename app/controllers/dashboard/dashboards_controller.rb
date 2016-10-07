@@ -4,6 +4,7 @@ class Dashboard::DashboardsController < ApplicationController
     @user_count=AppUser.count
     @order_count=Order.count
     @lead_count = Lead.count
+    @success_percent = (((Lead.where(:status => 10).count)*100)/(Lead.count))/10
     # raise "ff"
   end
 

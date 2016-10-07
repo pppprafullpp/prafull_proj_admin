@@ -46,6 +46,7 @@
                               <dt>Last Updated:</dt><dd><%=@lead_data.updated_at%></dd>
                               <dt>Created:</dt> <dd><%=@lead_data.created_at%></dd>
                               <dt>Deal of interest:</dt> <dd><span class="label label-warning"><b><%=  @lead_data.present? ? Deal.find(@lead_data.deal_id).title : "NA"%></b></span></dd>
+                              <dt>Deal link:</dt> <dd><b><%=  @lead_data.present? and @lead_data.deal_id.present? ? "<a target = '_blank' href='http://103.243.5.242:2123/website/home/more_deal_details?deal_id=#{@lead_data.deal_id}'>Click here</a>".html_safe  : "NA"%></b></dd>
                           </dl>
                       </div>
                   </div>

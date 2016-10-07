@@ -10,8 +10,8 @@ module Notify
     if options[:email]
       if options[:password].present? and notification_name!="reset_sales_executive_password"
         Email.send_welcome_email(object,class_name,notification_name,options[:password])
-      elsif class_name.to_s == "SalesExecutive" and notification_name == "reset_sales_executive_password"
-        Email.send_sales_executive_reset_password_email(object,class_name,notification_name,options[:password])
+      # elsif class_name.to_s == "SalesExecutive" and notification_name == "reset_sales_executive_password"
+      #   Email.send_sales_executive_reset_password_email(object,class_name,notification_name,options[:password])
       else
         Email.send_email(object,class_name,notification_name)
       end
@@ -22,7 +22,7 @@ module Notify
   class Email
     ## generic function to route all emails ##
     def self.send_welcome_email(object,class_name,notification_name,password)
-        byebug
+        # byebug
       eval(class_name.name + '::' +class_name.name + 'Mailer').send(notification_name + '_email',object,password).deliver
     end
 
@@ -30,9 +30,9 @@ module Notify
       eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
     end
 
-    def self.send_sales_executive_reset_password_email(object,class_name,notification_name,password)
-      eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
-    end
+    # def self.send_sales_executive_reset_password_email(object,class_name,notification_name,password)
+    #   eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
+    # end
   end
 
   class Sms

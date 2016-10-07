@@ -4,12 +4,10 @@ class SalesExecutive::SalesExecutiveController <  SalesExecutive::SalesExecutive
       params[:search] = {} unless params[:search].present?
       @search = SalesExecutive.new
       @breadcrumb = {'Home' => home_url, 'Sales Executive' => ''}
-      @sales_excecutives = SalesExecutive.search(params[:search])
+      @sales_excecutives = SalesExecutive.search(params[:search]).order("id DESC")
       @sales_excecutives =  @sales_excecutives.paginate(:page => params[:page], :per_page => PER_PAGE)
       @new_sales_executive = SalesExecutive.new
   end
-
-
 
   def create
     # raise params.to_yaml
@@ -52,6 +50,7 @@ class SalesExecutive::SalesExecutiveController <  SalesExecutive::SalesExecutive
     flash[:success] = "updated"
     redirect_to :back
   end
+
 end
 
 private

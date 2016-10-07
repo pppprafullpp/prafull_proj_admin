@@ -70,7 +70,7 @@
                       </td>
 
                       <td>
-                        <%= decode_api_data(user.mobile) %>
+                        <%= try(decode_api_data(user.mobile)) %>
                       </td>
                       <td>
                         <%= user.email %>

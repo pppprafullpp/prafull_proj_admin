@@ -3,6 +3,7 @@ class SalesExecutive < ActiveRecord::Base
   SALES_EXECUTIVE = "sales_executive"
 
   def self.encrypt(password)
+    puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+password
     Digest::SHA1.hexdigest("#{password}")
   end
 

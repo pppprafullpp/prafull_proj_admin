@@ -13,27 +13,11 @@
     <div class="sidebar-collapse" style="overflow: hidden; width: auto; height: 100%;">
       <ul class="nav metismenu" id="side-menu">
 
-        <!--<li class="nav-header">
-          <div class="dropdown profile-element">
-           <span>
-             <%#= image_tag auth_display_pic('thumb'),:class => 'img-circle',:alt => 'Service Deals' %>
-           </span>
-
-            <a data-toggle="dropdown" class="dropdown-toggle" href="#" aria-expanded="false">
-	        <span class="clear">
-	           <span class="block m-t-xs">
-	           	  </span> <span class="text-muted text-xs block"><%#= auth_display_name %></span>
-	           </span>
-              </span>
-            </a>
-        </li>-->
-
         <li class="<%= 'active' if current_controller.eql? 'dashboard/dashboards' %>">
           <%= link_to dashboard_dashboards_path do %>
               <i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard</span>
           <% end %>
         </li>
-
 
         <% if is_admin? %>
             <li class="">
@@ -54,15 +38,13 @@
             <li class="">
               <a href="#"><i class="fa fa-user"></i> <span class="nav-label">Sales Executive</span><span class="fa arrow"></span></a>
               <ul class="nav nav-second-level collapse" id="user_menu" style="height: 0px;">
+                <li class="<%= 'active' if current_controller.eql? 'admin/lead' %>"><a href="<%=  admin_leads_path %>">Create Leads</a></li>
                 <li class="<%= 'active' if ['user/users'].include? current_controller%>"><a href="<%= show_personal_details_sales_executive_sales_executive_index_path %>">Personal Information</a></li>
                 <li class="<%= 'active' if ['home'].include? current_controller%>"><a href="<%= change_password_home_index_path %>">Change Password</a></li>
               </ul>
             </li>
         <% end %>
-
-
       </ul>
-
     </div>
   </div>
 </nav>

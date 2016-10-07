@@ -24,90 +24,94 @@
         </div>
       </div>
       <div class="ibox-content">
-        <%=form_for @lead, :url => admin_lead_path,:class=>"form-horizontal",:id=>"lead_creation_form", method: "patch" do |f| %>
+        <%=form_for @lead, :url => admin_lead_path,:class=>"form",:id=>"lead_creation_form", method: "patch" do |f| %>
         <%=f.hidden_field :user_id%>
         <%=f.hidden_field :id%>
         <div class="row">
           <div class="col-md-6">
-            <h4>Add Client Details</h4>
-            <div class="form-group">
-              <div class="col-md-12">  <%= f.text_field :lead_name,:placeholder => 'Lead name', :class => "form-control" %></div>
-            </div>
-            <div class="form-group">
-            <%if @lead.lead_type == "residence"%>
-                <div class="col-md-12">  <%= f.select :lead_type,options_for_select([["Residence","residence"],["Business","business"]]) %></div>
-              <%else%>
-              <div class="col-md-12">  <%= f.select :lead_type,options_for_select([["Business","business"],["Residence","residence"]]) %></div>
-            <%end%>
-            </div>
-            <div class="form-group">
-            <div class="col-md-12">  <%= f.text_field :business_name,:placeholder => 'Business Name', :class => "form-control hidden" %></div>
-            </div>
+            <div class="form-group row">  <h4>Add Client Details</h4></div>
 
-            <div class="form-group">
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_field :lead_name,:placeholder => 'Lead name', :class => "form-control" %></div>
+              </div>
+
+              <div class="form-group row">
+              <%if @lead.lead_type == "residence"%>
+                  <div class="col-md-12">  <%= f.select :lead_type,options_for_select([["Residence","residence"],["Business","business"]]) %></div>
+                <%else%>
+                <div class="col-md-12">  <%= f.select :lead_type,options_for_select([["Business","business"],["Residence","residence"]]) %></div>
+              <%end%>
+              </div>
+
+              <div class="form-group row">
+                <%if @lead.lead_type == "residence"%>
+                 <div class="col-md-12">  <%= f.text_field :business_name,:placeholder => 'Business Name', :class => "form-control hidden"%></div>
+                 <%else%>
+                  <div class="col-md-12">  <%= f.text_field :business_name,:placeholder => 'Business Name', :class => "form-control" %></div>
+               <%end%>
+              </div>
+
+            <div class="form-group row">
               <div class="col-md-12">  <%= f.number_field :lead_contact_number,:placeholder => 'lead contact number', :class => "form-control",:maxlength => "10" %></div>
             </div>
 
-
-            <div class="form-group">
+            <div class="form-group row">
               <div class="col-md-12">  <%= f.email_field :lead_email,:placeholder => 'Lead Email' , :class => "form-control" %></div>
             </div>
 
-          <div class="form-group">
-            <div class="col-md-12">  <%= f.select :lead_location,options_for_select(Statelist.pluck(:state)) , :class => "form-control", :prompt => "-Select state-"  %></div>
-          </div>
+            <div class="form-group row">
+              <div class="col-md-12">  <%= f.select :lead_location,options_for_select(Statelist.pluck(:state)) , :class => "form-control", :prompt => "-Select state-"  %></div>
+            </div>
 
+            <div class="form-group row">
+            <div class="col-md-12">  <%= f.text_field :lead_address,:placeholder => 'lead address', :class => "form-control" %></div>
+            </div>
 
-          <div class="form-group">
-          <div class="col-md-12">  <%= f.text_field :lead_address,:placeholder => 'lead address', :class => "form-control" %></div>
-          </div>
-
-          <div class="form-group">
-          <div class="col-md-12">  <%= f.text_area :lead_response,:placeholder => 'lead response', :class => "form-control" %></div>
-          </div>
-
-
+            <div class="form-group row">
+            <div class="col-md-12">  <%= f.text_area :lead_response,:placeholder => 'lead response', :class => "form-control" %></div>
+            </div>
 
           </div>
+
           <div class="col-md-6">
-            <h4>Add Client Spoc Details</h4>
-          <div class="form-group">
-            <div class="col-md-12">  <%= f.text_field :lead_spoc_name,:placeholder => 'lead spoc name', :class => "form-control" %></div>
-          </div>
+            <div class="form-group row"><h4>Add Client Spoc Details</h4></div>
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_field :lead_spoc_name,:placeholder => 'lead spoc name', :class => "form-control" %></div>
+              </div>
 
-          <div class="form-group">
-            <div class="col-md-12">  <%= f.email_field :lead_spoc_email,:placeholder => 'lead spoc email',:class => "form-control" %></div>
-          </div>
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.email_field :lead_spoc_email,:placeholder => 'lead spoc email',:class => "form-control" %></div>
+              </div>
 
-          <div class="col-md-12">  <%= f.number_field :lead_spoc_number,:placeholder => 'lead spoc number', :class => "form-control", :maxlength => "10" %></div>
-          <div class="form-group">
-          </div>
+              <div class="form-group row">
+                  <div class="col-md-12">  <%= f.number_field :lead_spoc_number,:placeholder => 'lead spoc number', :class => "form-control", :maxlength => "10" %></div>
+              </div>
 
-          <div class="form-group">
-          <div class="col-md-12">  <%= f.text_field :lead_spoc_designation,:placeholder => 'lead spoc designation', :class => "form-control" %></div>
-          </div>
-
-
-          <div class="form-group">
-            <div class="col-md-12">  <%= f.select :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]},@lead.status),:prompt =>"-Select Status-", :class => "form-control" %></div>
-          </div>
-
-          <div class="form-group">
-            <div class="col-md-12">  <%= f.text_field :demo_time,:placeholder => 'demo_time',:class => "form-control" %></div>
-          </div>
-
-          <div class="form-group">
-            <div class="col-md-12">   <%= f.select :service_category_id,options_for_select([["Internet",1],["Telephone",2],["Cable",3],["Cellphone",4],["Bundle",5]]), :class => "form-control", :prompt => "-Select Category-" %></div>
-          </div>
+              <div class="form-group row">
+                  <div class="col-md-12">  <%= f.text_field :lead_spoc_designation,:placeholder => 'lead spoc designation', :class => "form-control" %></div>
+              </div>
 
 
-          <div class="form-group">
-            <div class="col-md-12">   <%= f.select :deal_id,options_for_select(Deal.pluck(:title,:id)),:class => "form-control chosen-select", :prompt => "-Select Deal-" %></div>
-          </div>
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.select :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]},@lead.status),:prompt =>"-Select Status-", :class => "form-control" %></div>
+              </div>
 
-          <div class="form-group">
-            <div class="col-md-12">  <%= f.text_area :lead_description,:placeholder => 'Description', :class => "form-control" %></div>
-          </div>
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_field :demo_time,:placeholder => 'demo_time',:class => "form-control" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">   <%= f.select :service_category_id,options_for_select([["Internet",1],["Telephone",2],["Cable",3],["Cellphone",4],["Bundle",5]]), :class => "form-control", :prompt => "-Select Category-" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">   <%= f.select :deal_id,options_for_select(Deal.pluck(:title,:id)),:class => "form-control chosen-select", :prompt => "-Select Deal-" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_area :lead_description,:placeholder => 'Description', :class => "form-control" %></div>
+              </div>
+
           </div>
         </div>
 
@@ -121,8 +125,6 @@
     </div>
   </div>
 </div>
-
-
 
     <script>
     function show_create_lead_form(){

@@ -21,7 +21,7 @@
         </div>
         <div class="ibox-content">
           <h1 class="no-margins"><%= @lead_count.present? ? @lead_count : 0 %></h1>
-          <div class="stat-percent font-bold text-info">20% <i class="fa fa-level-up"></i></div>
+          <div class="stat-percent font-bold text-info"><%=@success_percent%>%<i class="fa fa-level-up"></i></div>
           <small>Total Leads</small>
         </div>
       </div>

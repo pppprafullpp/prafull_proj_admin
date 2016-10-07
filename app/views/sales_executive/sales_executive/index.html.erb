@@ -134,17 +134,23 @@
                 }
               });
             }
+
             function validate(){
-              event.preventDefault();
               if ($("#sales_executive_name").val()=="" || $("#sales_executive_email").val()=="") {
-                $("#error-msg").removeClass("hidden").text("Please fill in Both fields");
+                  $("#error-msg").removeClass("hidden").text("Please fill in Both fields");
+                  event.stopPropagation();
               }
               else if($("#sales_executive_enabled").is(":visible") == true && $("#sales_executive_enabled option:selected").val() == ""){
-                $("#error-msg").removeClass("hidden").text("Please Select Status");
+                  $("#error-msg").removeClass("hidden").text("Please Select Status");
+                  event.stopPropagation();
               }
               else {
                 $("#new_sales_executive").submit();
               }
+              event.stopPropagation();
+            }
+            document.onbeforeunload = function(){
+              console.log("ddd");
             }
             </script>
       </div>

@@ -43,7 +43,7 @@
         </div>
         <div class="ibox-content">
           <%#= render :partial => "shared/dpl_notifier"%>
-          <%= will_paginate @orders, :class=>"pagination pull-right" %>
+          <%= will_paginate @orders, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right"%>
 
           <% if @orders.present? %>
               <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
@@ -88,8 +88,9 @@
                         <div class="btn-group">
                           <table>
                             <tr>
+                              <%@w="<i class='fa fa-cross'></i>"%>
                               <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="<%= edit_user_order_path(order)%>"><i class="fa fa-edit"></i></a></td>
-                              <td><%=button_to "C", "/user/orders/#{order.id}",:class => "btn btn-outline btn-danger", method: :delete, :title =>"Cancel" %></td>
+                              <td><%=button_to "X", "/user/orders/#{order.id}",:class => "btn btn-outline btn-danger", method: :delete, :title =>"Cancel" %></td>
                             </tr>
                         </table>
                         </div>
@@ -108,7 +109,6 @@
           <% else %>
               <div class="alert alert-danger" style="text-align: center;"> Not found</div>
           <% end %>
-
         </div>
       </div>
     </div>
