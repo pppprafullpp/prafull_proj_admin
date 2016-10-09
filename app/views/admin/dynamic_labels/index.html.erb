@@ -1,0 +1,171 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Dynamic Labels</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+<div class="animated fadeInUp">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Dynamic Labels</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+          </div>
+        </div>
+
+        <div class="ibox-content m-b-sm border-bottom">
+          <div class="row">
+            <%= form_for @search, :as => 'search', :url => admin_dynamic_labels_path, :html => {:method => :get} do |f| %>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_dynamic_labels_path, :filter => [:service_provider_id]}%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="animated fadeInUp ibox ibox-title float-e-margins">
+  <div class="ibox-tools">
+    <%=link_to "Create New Dynamic Label","#", :class=>"btn btn-w-m btn-primary", :onclick =>"add_new_sales_dynamic_label_form()"%>
+  </div>
+</div>
+
+<div class="animated fadeInUp row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Dynamic Label</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content">
+        <%= will_paginate @dynamic_labels, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
+        <table class="table table-hover no-margins table-responsive">
+          <thead>
+          <tr>
+            <th>S No.</th>
+            <th>Service Provider</th>
+            <th>Label Key</th>
+            <th>Label Value</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+          <%
+             service_providers = get_service_providers
+             statuses = get_statuses
+          %>
+          <%@dynamic_labels.each_with_index do |dynamic_label,index|%>
+              <tr>
+                <td><span class="label label-warning"><%=  index + 1 %></span></td>
+                <td><%= service_providers.key(dynamic_label.service_provider_id) %></td>
+                <td><%= dynamic_label.label_key %></td>
+                <td><%= dynamic_label.label_value %></td>
+                <td><%= statuses.key(dynamic_label.status) %></td>
+
+                <td>
+                  <table>
+                    <tr>
+                      <td>EDIT</td>
+                    </tr>
+                  </table>
+                </td>
+              </tr>
+
+          <%end%>
+          </thead>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  <div class="modal-dialog">
+    <div class="modal-content animated flipInY">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        <h4 class="modal-title">Create Dynamic Label</h4>
+        <small class="font-bold">End user will see this label value at the form.</small>
+      </div>
+
+      <div class="ibox-content">
+        <%=form_for @dynamic_label, :url => admin_dynamic_labels_path, method: "post", :class => "form", :id => 'create_dynamic_label' do |f| %>
+            <div class="row">
+              <table class="table table-hover no-margins">
+                <tr>
+                  <td>
+                    <div class="col-md-12">  <%= f.select :service_provider_id,options_for_select(service_providers,@dynamic_label.service_provider_id),{},:class => "form-control"%></div>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>
+                    <div class="col-md-12">  <%= f.text_field :label_key,:placeholder => 'Label Key',:class => "form-control" %></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="col-md-12">  <%= f.text_field :label_value,:placeholder => 'Label Value', :class => "form-control"%></div>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="col-md-12">  <%= f.select :status,options_for_select(statuses,@dynamic_label.status),{},:class => "form-control"%></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+
+            <%= submit_tag 'Submit', :class => "btn btn-block btn-outline btn-primary", :id => 'create_dynamic_label_button' %>
+            <p class="alert alert-danger hidden" id="error-msg"></p>
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+    function add_new_sales_dynamic_label_form() {
+        $("#dynamic_label_label_key").val("");
+        $("#dynamic_label_label_value").val("");
+        $("#myModal2").modal("show");
+    }
+
+    $("#create_dynamic_label_button").on('click', function (e) {
+        //e.preventDefault();
+        var is_valid = true;
+        if ($("#dynamic_label_label_key").val() == "" || $("#dynamic_label_label_key").val() == null) {
+            // alert('111111111111');
+            is_valid = false;
+            $("#dynamic_label_label_key").addClass('error');
+        }
+        if ($("#dynamic_label_label_value").val() == "" || $("#dynamic_label_label_value").val() == null) {
+            //alert('22222222222222222222');
+            is_valid = false;
+            $("#dynamic_label_label_value").addClass('error');
+        }
+        if(is_valid){
+            //alert('33333333333333');
+            $('#create_dynamic_label').submit();
+        }else{
+            return false;
+        }
+    });
+</script>

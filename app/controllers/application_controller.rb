@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def is_sales_executive?
-    session[:id].present? && session[:role].eql?("SalesExecutive")
+    session[:id].present? && session[:role].eql?(SALES_EXECUTIVE)
   end
 
   def auth_display_name
@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
     case role
       when ADMIN
         redirect_url = login_admin_admins_path
-      when "SalesExecutive"
+      when SALES_EXECUTIVE
         redirect_url = login_sales_executive_sales_executive_index_path
       else
         redirect_url = login_admin_admins_path

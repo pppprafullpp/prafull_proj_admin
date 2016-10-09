@@ -6,7 +6,7 @@
 			<div class="ibox-content">
 				 <div><h3>Service Deals Sales Executive Login</h3> </div>
     <div class="hr-line-dashed"></div>
-				<%= form_tag login_sales_executive_sales_executive_index_path do %>
+				<%= form_tag login_sales_executive_sales_executives_path do %>
 				<div class="form-group">
 					<input type="email" class="form-control" placeholder="Email" required="true" name="email">
 				</div>
@@ -18,7 +18,7 @@
 				</button>
 
 				<a href="#" onclick="alert('Under implementation!')"> <small>Forgot password?</small> </a>
-					<a href="/admin/admins/login"> <small>Admin Login</small> </a>
+                  <a class="btn btn-sm btn-white btn-block" href="<%= login_admin_admins_path %>">Admin Login</a>
 
 				<p class="text-muted text-center"></p>
 

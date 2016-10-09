@@ -10,8 +10,8 @@ FEMALE = 888
 ## Constants for different Role in Service Deals ##
 ADMIN = 'Admin'
 USER = 'User'
-SALES_EXECUTIVE = 'Sales Executive'
-CUSTOMER_EXECUTIVE = 'Customer Executive'
+SALES_EXECUTIVE = 'SalesExecutive'
+CUSTOMER_EXECUTIVE = 'CustomerExecutive'
 
 ## Constants for Discount Type ##
 FLAT_DISCOUNT = 0

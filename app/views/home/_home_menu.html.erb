@@ -24,10 +24,8 @@
 
         <li class="login" ><%= link_to("Welcome #{session[:user_name]}", dashboard_dashboards_path) %></li>
         <li class="login"><%= link_to "Sign out", signout_path, id: "sign_out" %></li>
-    <% elsif%>
-        <li class="login"><a href="<%= login_sales_executive_sales_executive_index_path %>"><i></i>Login/Sign Up</a></li>
     <% else %>
-        <li class="login"><a href="<%= register_admin_admins_path %>"><i></i>Login/Sign Up</a></li>
+        <li class="login"><a href="<%= login_admin_admins_path %>"><i></i>Login/Sign Up</a></li>
     <% end %>
 
   </ul>
