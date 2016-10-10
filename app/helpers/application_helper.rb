@@ -32,7 +32,7 @@ module ApplicationHelper
   end
 
   def get_statuses
-    {'Enable' => ACTIVE_STATUS,'Disabled' => DEACTIVE_STATUS}
+    {'Enable' => ACTIVE_STATUS,'Disabled' => DEACTIVE_STATUS,'Pending' => PENDING_STATUS}
   end
 
   def get_public_status
@@ -68,6 +68,15 @@ module ApplicationHelper
         url = edit_admin_pending_action_path(key)
         return message,url
     end
+  end
+
+  def get_service_providers
+    provider_hash = {}
+    providers = ServiceProvider.all
+    providers.each do |provider|
+      provider_hash[provider.name] = provider.id
+    end
+    provider_hash
   end
 
   def get_cities(response_type = 'array')

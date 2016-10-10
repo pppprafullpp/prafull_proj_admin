@@ -1,6 +1,5 @@
 class SalesExecutive < ActiveRecord::Base
   has_attached_file :upload, :styles => { :medium => "200x200>", :thumb => "100x100>" }
-  SALES_EXECUTIVE = "sales_executive"
 
   def self.encrypt(password)
     puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+password
@@ -32,7 +31,7 @@ class SalesExecutive < ActiveRecord::Base
         sales_executive.enabled = params[:enabled]
         password = encrypt(generate_random_password)
         sales_executive.encrypted_password = password
-        sales_executive.role = "sales_executive"
+        sales_executive.role = SALES_EXECUTIVE
         sales_executive.save
     end
       sales_executive

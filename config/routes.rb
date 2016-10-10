@@ -18,7 +18,7 @@ Myapp::Application.routes.draw do
   end
 
   namespace :sales_executive do
-    resources :sales_executive do
+    resources :sales_executives do
       collection do
         get 'login'
         post 'login'
@@ -134,6 +134,8 @@ Myapp::Application.routes.draw do
         get 'get_location_details'
       end
     end
+
+    resources :dynamic_labels
   end
 
   namespace :user do
