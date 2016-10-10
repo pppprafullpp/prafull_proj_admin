@@ -1,6 +1,8 @@
 class SalesExecutive < ActiveRecord::Base
   has_attached_file :upload, :styles => { :medium => "200x200>", :thumb => "100x100>" }
 
+  PROFILE_STATUS = {"DEACTIVE" => 0, "ACTIVE"=> 1, "PENDING" => 2}
+
   def self.encrypt(password)
     puts ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"+password
     Digest::SHA1.hexdigest("#{password}")
@@ -16,7 +18,7 @@ class SalesExecutive < ActiveRecord::Base
     conditions = []
     conditions << "name like '%#{params[:name]}%'" if params[:name].present?
     conditions << "email like '%#{params[:email]}%'" if params[:email].present?
-    conditions << "enabled = '#{params[:enabled]}'" if params[:enabled].present?
+    conditions << "status = '#{params[:status]}'" if params[:status].present?
     condition = conditions.join(' and ')
     self.where(condition)
   end

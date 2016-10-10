@@ -22,7 +22,7 @@
         <div class="ibox-content m-b-sm border-bottom">
           <div class="row">
             <%= form_for @search, :as => 'search', :url => admin_leads_path, :html => {:method => :get} do |f| %>
-                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_leads_path, :filter => [:lead_spoc_name,:lead_spoc_email,:lead_name,:business_name]}%>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_leads_path, :filter => [:lead_spoc_name,:lead_spoc_email,:lead_name,:business_name, :lead_status]}%>
             <% end %>
           </div>
         </div>
@@ -63,9 +63,9 @@
           <thead>
           <tr>
             <th>ID</th>
+            <th>lead name</th>
             <th>Lead type</th>
             <th>Category</th>
-            <th>lead name</th>
             <th>Spoc Name</th>
             <th>Spoc Email</th>
             <th>Spoc Number</th>
@@ -77,21 +77,21 @@
 
           <%@leads.each do |lead|%>
           <tr>
-            <td><span class="label label-warning"><%= link_to lead.id,admin_lead_show_lead_details_path(lead.id)%></span></td>
+            <td><%= lead.id%></td>
+            <td id="<%=lead.id%>_name"><span class="label label-warning"><%= link_to lead.lead_name.present? ? lead.lead_name : "NP",admin_lead_show_lead_details_path(lead.id), :title=>"show description" %></span></td>
             <td id="<%=lead.id%>_type"><%=lead.lead_type.camelcase%></td>
             <td id="<%=lead.id%>_sc"><%=lead.service_category_id.present? ? ServiceCategory.get_category_name_by_id(lead.service_category_id).titleize : "NP"%></td>
-            <td id="<%=lead.id%>_name"><%=lead.lead_name.present? ? lead.lead_name : "NP" %></td>
             <td id="<%=lead.id%>_spoc_name"><%=lead.lead_spoc_name.present? ? lead.lead_spoc_name : "NP" %></td>
             <td id="<%=lead.id%>_spoc_email"><%=lead.lead_spoc_email.present? ? lead.lead_spoc_email :  "NP" %></td>
             <td id="<%=lead.id%>_spoc_number"><%=lead.lead_spoc_number.present? ? lead.lead_spoc_number : "NP"  %></td>
             <td id="<%=lead.id%>_spoc_response"><%=lead.lead_response.present? ? lead.lead_response : "NP" %></td>
             <td id="<%=lead.id%>_spoc_designation"><%=lead.lead_spoc_designation.present? ? lead.lead_spoc_designation : "NP" %></td>
-            <td id="<%=lead.id%>_spoc_status"> <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]},lead.status),:id=>"#{lead.id}_status",:class => "form-control", :onchange => "show_update_btn(#{lead.id})" %></td>
+            <td id="<%=lead.id%>_spoc_status"> <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES,lead.status),:id=>"#{lead.id}_status",:class => "form-control", :onchange => "show_update_btn(#{lead.id})" %></td>
             <td>
               <table>
                 <tr>
-                  <td><a class="btn btn-outline btn-success" href="<%=edit_admin_lead_path(id:lead.id)%>"><i class="fa fa-edit"></i></a></td>
-                  <td class="hidden" id="check_<%=lead.id%>"><a class="btn btn-outline btn-success" href="javascript:void(0)" onclick="update_status(<%=lead.id%>)" href="#"><i class="fa fa-check"></i></a></td>
+                  <td><a class="btn btn-outline btn-success" title="Edit" href="<%=edit_admin_lead_path(id:lead.id)%>"><i class="fa fa-edit"></i></a></td>
+                  <td class="hidden" id="check_<%=lead.id%>"><a class="btn btn-outline btn-success" title="Update" href="javascript:void(0)" onclick="update_status(<%=lead.id%>)" href="#"><i class="fa fa-check"></i></a></td>
                 </tr>
               </table>
             </td>

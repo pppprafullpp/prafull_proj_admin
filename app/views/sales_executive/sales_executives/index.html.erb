@@ -1,4 +1,4 @@
-<div class="row wrapper border-bottom white-bg page-heading">
+title="" <div class="row wrapper border-bottom white-bg page-heading">
   <div class="col-lg-10">
     <h2>Sales Executive</h2>
     <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
@@ -22,7 +22,7 @@
         <div class="ibox-content m-b-sm border-bottom">
           <div class="row">
             <%= form_for @search, :as => 'search', :url => sales_executive_sales_executives_path, :html => {:method => :get} do |f| %>
-                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => sales_executive_sales_executives_path, :filter => [:name,:email,:enabled]}%>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => sales_executive_sales_executives_path, :filter => [:name,:email,:sales_executive_status]}%>
             <% end %>
           </div>
         </div>
@@ -59,22 +59,22 @@
             <th>ID</th>
             <th>Name</th>
             <th>Email</th>
-            <th>Enabled</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
 
           <%@sales_excecutives.each do |se|%>
               <tr>
-                <td><span class="label label-warning"><%= link_to se.id,"/"%></span></td>
+                <td><%= se.id%></td>
                 <td id="<%=se.id%>_name"><%=se.name%></td>
                 <td id="<%=se.id%>_email"><%=se.email%></td>
-                <td id="<%=se.id%>_enabled"><%= select_tag :enabled, options_for_select([["Enabled",true],["Disabled",false]],se.enabled), :class =>"form-control",:id=>"#{se.id}_enabled", :onchange =>"show_change_btn(#{se.id})"%></td>
+                <td id="<%=se.id%>_enabled"><%= select_tag :status, options_for_select(SalesExecutive::PROFILE_STATUS,se.status), :class =>"form-control",:id=>"#{se.id}_enabled", :onchange =>"show_change_btn(#{se.id})"%></td>
                 <td>
                   <table>
                     <tr>
-                      <td><a class="btn btn-outline btn-success" href="#" onclick="reset_password(<%=se.id%>)"><i class="fa fa-refresh"></i></a></td>
-                      <td class="hidden" id="check_<%=se.id%>"><a class="btn btn-outline btn-success" onclick="update_enabled_status(<%=se.id%>)" href="#"><i class="fa fa-check"></i></a></td>
-                      <td><a class="btn btn-outline btn-success" onclick="edit_sales_executive_profile(<%=se.id%>)" href="#"><i class="fa fa-edit"></i></a></td>
+                      <td><p class="btn btn-outline btn-success" title="reset password" onclick="reset_password(<%=se.id%>)"><i class="fa fa-refresh"></i></p></td>
+                      <td class="hidden" id="check_<%=se.id%>"><p title="update status" class="btn btn-outline btn-success" onclick="update_enabled_status(<%=se.id%>)"><i class="fa fa-check"></i></p></td>
+                      <td><p class="btn btn-outline btn-success" title="edit" onclick="edit_sales_executive_profile(<%=se.id%>)"><i class="fa fa-edit"></i></p></td>
                     </tr>
                   </table>
                 </td>
@@ -114,7 +114,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <div class="col-md-12">  <%= f.select :enabled,options_for_select([["Enabled",true],["Disabled",false]],true),{},:class => "form-control"%></div>
+                    <div class="col-md-12">  <%= f.select :status,options_for_select(SalesExecutive::PROFILE_STATUS,1),{},:class => "form-control"%></div>
                   </td>
                 </tr>
               </table>

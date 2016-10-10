@@ -93,7 +93,7 @@
 
 
               <div class="form-group row">
-                <div class="col-md-12">  <%= f.select :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]},@lead.status),:prompt =>"-Select Status-", :class => "form-control" %></div>
+                <div class="col-md-12">  <%= f.select :status,options_for_select(Lead::MEETING_STATUSES,@lead.status),:prompt =>"-Select Status-", :class => "form-control" %></div>
               </div>
 
               <div class="form-group row">

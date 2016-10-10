@@ -1,6 +1,6 @@
 class Dashboard::DashboardsController < ApplicationController
   def index
-    redirect_to login_sales_executive_sales_executive_index_path and return unless session[:id].present?
+    redirect_to login_sales_executive_sales_executives_path and return unless session[:id].present?
     @user_count=AppUser.count
     @order_count=Order.count
     @lead_count = Lead.count

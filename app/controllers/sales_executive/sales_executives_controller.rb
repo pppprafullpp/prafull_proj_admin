@@ -22,7 +22,7 @@ class SalesExecutive::SalesExecutivesController <  SalesExecutive::SalesExecutiv
   end
 
   def update_enabled_status
-    sales_executive = SalesExecutive.find(params[:id]).update_attributes(:enabled => params[:status])
+    sales_executive = SalesExecutive.find(params[:id]).update_attributes(:status => params[:status])
     render :json => {
                "updated":true
            }

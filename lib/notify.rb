@@ -8,10 +8,8 @@ module Notify
 
   def notify(object,class_name,notification_name,sms = false,options)
     if options[:email]
-      if options[:password].present? and notification_name!="reset_sales_executive_password"
+      if options[:password].present?
         Email.send_welcome_email(object,class_name,notification_name,options[:password])
-      # elsif class_name.to_s == "SalesExecutive" and notification_name == "reset_sales_executive_password"
-      #   Email.send_sales_executive_reset_password_email(object,class_name,notification_name,options[:password])
       else
         Email.send_email(object,class_name,notification_name)
       end
@@ -30,9 +28,6 @@ module Notify
       eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
     end
 
-    # def self.send_sales_executive_reset_password_email(object,class_name,notification_name,password)
-    #   eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
-    # end
   end
 
   class Sms
