@@ -8,10 +8,10 @@ class HomeController < ApplicationController
   end
 
   def minor
-  
+
   end
 
-  
+
   def contact
     if request.method.eql? 'POST'
       Admin::AdminMailer.delay.contact_us(params[:name],params[:email], params[:phone], params[:message])
@@ -35,7 +35,8 @@ class HomeController < ApplicationController
   end
 
   def change_password
-    if session[:role].present? and [ADMIN,SALES_EXECUTIVE].include?(session[:role].capitalize)
+    if session[:role].present? and [ADMIN,SalesExecutive::SALES_EXECUTIVE].include?(session[:role].upcase)
+
     else
       redirect_to root_url
     end
@@ -76,15 +77,15 @@ class HomeController < ApplicationController
   end
 
   def set_layout
-    
+
     if([ 'contact','team','download_report','privacy_policy','faq','about_us', 'checkout'].include?(params[:action]))
-       self.class.layout 'empty'   
+       self.class.layout 'empty'
     elsif(['change_password', 'update_password'].include?(params[:action]))
       self.class.layout 'application'
     else
       self.class.layout 'home'
-    end      
-      
+    end
+
 
     flash[:notice] = nil
     flash[:warning] = nil

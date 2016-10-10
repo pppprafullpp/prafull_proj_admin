@@ -1,0 +1,66 @@
+<!-- <div class="form-group <%#= f.dpl_err_cls :address_name %> " id="deal_detail"> -->
+
+<%deal_attributes = @deal['deal_attributes']%>
+<%deal_equipments = @deal['deal_equipments']%>
+<h4>Deals Detail</h4>
+
+
+<div class="col-md-12">
+<strong>Category:</strong> <%=@deal['service_category_name']%>
+</div>
+<div class="col-md-12">
+<strong>Provider:</strong> <%=@deal['service_provider_name']%>
+</div>
+<div class="col-md-12">
+<strong>Name:</strong> <%=@deal['title']%>
+</div>
+<div class="col-md-12">
+<strong>Price:</strong> $<%=@deal['deal_price']%>
+</div>
+
+
+
+<div class="col-md-12">
+<strong>Effective Price:</strong><span id="update_effective_price">$<%=@deal['effective_price']%></span>
+</div>
+<%= hidden_field_tag :deal_price,@deal['deal_price'],{:name=> 'order_items[deal_price]'}%>
+ <%= hidden_field_tag :effective_price,@deal['effective_price'],{:name=> 'order_items[effective_price]'}%>
+<div class="col-md-12">
+<strong>Contract:</strong><%=@deal['contract_period'] %> months
+</div>
+<div class="col-md-12">
+<strong>Short Description:</strong> <%=@deal['short_description'].to_s.gsub(/\n/,"<br> ").html_safe%>
+</div>
+<div class="col-md-12">
+<strong>Detail Description:</strong> <%=@deal['detail_description'].to_s.gsub(/\n/,"<br>").html_safe%>
+</div>
+
+
+<% if deal_equipments.present? && @deal['is_customisable'] != true %>
+  <%= render :partial => "#{@deal['service_category_name'].downcase}_equipment_form", :locals => { :deal_equipments => deal_equipments } %>
+<% end %>
+
+<% if deal_attributes.present? && @deal['is_customisable'] != true %>
+  <%= render :partial => "#{@deal['service_category_name'].downcase}_attribute_form", :locals => { :deal_attributes => deal_attributes } %>
+<% end %>
+
+<% if @deal['is_customisable'] == true %>
+  <%= render :partial => "#{@deal['service_category_name'].downcase}_customize_form", :locals => { :deals => @deal } %>
+<% end %>
+
+
+
+
+
+
+
+
+
+<script>
+$('#deal_equipments').onclick(function(){
+	$('#deal_equipment_detail').show();
+});
+
+
+</script>
+

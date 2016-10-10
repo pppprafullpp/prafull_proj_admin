@@ -17,6 +17,19 @@ Myapp::Application.routes.draw do
     resources :user_comments
   end
 
+  namespace :sales_executive do
+    resources :sales_executives do
+      collection do
+        get 'login'
+        post 'login'
+        get 'register'
+        get 'update_enabled_status'
+        get 'reset_password'
+        get 'show_personal_details'
+      end
+    end
+  end
+
 
   get "home/index"
   get "home/lab_profile"
@@ -61,23 +74,44 @@ Myapp::Application.routes.draw do
       get :auto_complete
     end
   end
-
   namespace :dashboard do
     resources :dashboards do
       collection do
         get :populate_graph_ajaxified
         get :list_orders_ajaxified
         get :list_signups_ajaxified
+        get :deals_data
+        get :create_deal
+        get :create_new_deal
+        get :delete_deal
+        get :edit_deal
       end
     end
   end
-
-
+  get "/get_service_providers" => "dashboard/dashboards#get_service_providers"
+  get "/update_lead_status" => "admin/leads#update_lead_status"
   namespace :admin do
     # Directs /admin/products/* to Admin::ProductsController
     # (app/controllers/admin/products_controller.rb)
     resources :access
     resources :branches
+    # resources :deals
+    resources :leads do
+      get :show_lead_details
+      post :update_lead_data
+    end
+    resources :deals do
+      collection do
+        get 'create_deal'
+        get 'edit_deal'
+        get 'create_new_deal'
+        get 'delete_deal'
+        get 'deal_attributes'
+        get 'show_deal_equipments'
+        post 'update_deal_attributes'
+        post :update_deal_equipments
+      end
+    end
     resources :admins do
       collection do
         get 'login'
@@ -100,6 +134,8 @@ Myapp::Application.routes.draw do
         get 'get_location_details'
       end
     end
+
+    resources :dynamic_labels
   end
 
   namespace :user do
@@ -110,6 +146,12 @@ Myapp::Application.routes.draw do
         get 'login'
         get 'forgot_password'
         post 'forgot_password'
+        get 'user_detail'
+        get 'app_user_type'
+        get 'app_user_deals'
+        get 'business_information'
+        get 'addresses'
+        get 'personal_details'
       end
 
       member do
@@ -128,7 +170,11 @@ Myapp::Application.routes.draw do
       collection do
       end
     end
-    resources :orders
+    resources :orders do
+      collection do
+      get 'deal_details'
+    end
+    end
   end
 
   namespace :api do
@@ -144,7 +190,7 @@ Myapp::Application.routes.draw do
     end
   end
 
-  
+
   post "/news_letters" => 'news_letters#add_news_letters', as: 'news_letters_add' , :defaults => { :format => 'js' }
 
   get '/members/login', :to => "user/users#login", :as => :user_login

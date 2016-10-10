@@ -1,0 +1,798 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>New Order</h2>
+    <ol class="breadcrumb">
+      <li>
+        <a href="<%= user_users_path %>">Home</a>
+      </li>
+      <li class="active">
+        <strong>Create Order</strong>
+      </li>
+    </ol>
+  </div>
+  <div class="col-lg-2">
+  </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+  <ul class="nav nav-tabs">
+    <li><a href="#a" data-toggle="tab">Deal Information</a></li>
+    <li><a href="#b" id="personal_information" data-toggle="tab">Personal Information</a></li>
+     <li><a class="hidden" id="business_information" href="#d" data-toggle="tab">Business Information</a></li>
+    <li><a href="#c" id="address_information" data-toggle="tab">Address Information</a></li>
+
+  </ul>
+  <!-- @order, :url => user_orders_path -->
+
+  <%= form_for(@order, :url => user_orders_path ,:html => {:id => 'submit_user'} ) do |f| %>
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <div class="ibox-tools">
+          <a class="collapse-link">
+          <i class="fa fa-chevron-up"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content" style="display: block;">
+        <div class="row">
+          <div class="tab-content">
+            <div class="col-sm-6 b-r tab-pane active" id="a" >
+              <h3 class="m-t-none m-b"></h3>
+              <p></p>
+              <div class="form-group <%= f.dpl_err_cls :user_type %>">
+                <label>User Type*</label>
+                <%= select_tag(:user_type,options_for_select([["User Type",0],[AppUser::USER_TYPES.first.titleize, AppUser::USER_TYPES.first], [AppUser::USER_TYPES.last.titleize, AppUser::USER_TYPES.last]],''),:class => 'form-control', :name=> 'app_user[user_type]') %>
+                <%= f.dpl_err_msg :user_type, "User Type" %>
+              </div>
+              <div class="form-group <%= f.dpl_err_cls :user_type %>">
+                <label>User Name*</label>
+                <%= select_tag :app_user_id, [],:class=>'form-control',:name=>"order[app_user_id]"%>
+                <%= f.dpl_err_msg :user_type, "User Type" %>
+              </div>
+              <div class="form-group ">
+                <label>Deal*</label>
+                <%= select_tag :deal_id, [],:class=>'form-control', name: 'order_items[deal_id]'%>
+                <%= hidden_field_tag :status,'new_order',{:name=> 'order_items[status]'}%>
+              </div>
+                <%=button_tag("Next ", :id => "personal_details_btn",:class=>"btn btn-block btn-outline btn-primary", :onclick => "show_personal_details()")%>
+                <button onclick="reset_deal_frame()" class="btn btn-block btn-outline btn-danger" type="submit" id="reset_user_button">Reset</button>
+            </div>
+
+
+              <%#= hidden_field_tag :deal_id,,{:name=> 'order_items[deal_id]'}%>
+              <%#= hidden_field_tag :status,'new_order',{:name=> 'order_items[status]'}%>
+              <%#= hidden_field_tag :deal_price,20,{:name=> 'order_items[deal_price]'}%>
+              <%#= hidden_field_tag :effective_price,40,{:name=> 'order_items[effective_price]'}%>
+
+            <%= render :partial=>"personal_information_form", locals: {f: f}%>
+            <%= render :partial=>"business_information_form"%>
+            <%= render :partial=>"address_information_form", locals: {f: f}%>
+
+
+          </div>
+          <div class="col-sm-6">
+            <h3 class="m-t-none m-b"></h3>
+            <p></p>
+            <div class="form-group" id="deal_detail">
+            </div>
+          </div>
+        </div>
+        <div>
+          <button onclick="check_for_options()" class="btn btn-block btn-outline btn-primary hidden" type="submit" id="submit_user_button">Save Changes</button>
+
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<script>
+function reset_deal_frame(){
+  event.preventDefault();
+  $("#deal_id").find("option").remove();
+  $("#user_type option[value = 0]").prop("selected","selected");
+  $("#app_user_id").val('').trigger("chosen:updated");
+  }
+function show_personal_details() {
+  event.preventDefault();
+  if ($("#user_type").prop("value")!="" &&  $("#app_user_id option:selected").prop("value")!=undefined && $("#deal_id option:selected").prop("value")!=undefined){
+    $("#personal_information").tab("show");
+  }
+  else {
+    $('#user_type').addClass('custom-input-error')
+    $('#app_user_id').addClass('custom-input-error')
+    $('#deal_id').addClass('custom-input-error')
+  }
+}
+
+function check_for_options(){
+   deal_attributes=[];
+    $("input[name='deal_attributes']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj3 ={};
+    jsonObj3["ref_id"]=value.split("_")[0];
+    jsonObj3["ref_type"]=value.split("_")[1];
+    deal_attributes.push(jsonObj3)
+    });
+    $("input[name='deal_channel_packages']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj4 ={};
+    jsonObj4["equipment_id"]=value.split("_")[0];
+    jsonObj3["ref_type"]=value.split("_")[1];
+    deal_attributes.push(jsonObj3)
+    });
+
+    cable_deal_equipments=[];
+    $("input[name='cable_deal_equipments']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj3 ={};
+    jsonObj3["equipment_id"]=value.split("_")[0];
+    // jsonObj3["ref_type"]=value.split("_")[1];
+    cable_deal_equipments.push(jsonObj3)
+    });
+
+    deal_extra_services=[];
+    $("input[name='deal_extra_services']:checked").each(function(){
+    value=$(this).attr("val");
+    jsonObj2 ={};
+    jsonObj2["deal_extra_service_id"]=value.split("_")[0];
+    deal_extra_services.push(jsonObj2)
+    });
+
+
+    localStorage["deal_attributes"] = JSON.stringify(deal_attributes);
+    localStorage["deal_extra_services"] = JSON.stringify(deal_extra_services);
+    // localStorage["deal_equipments"] = JSON.stringify(deal_equipments);
+    localStorage["cable_deal_equipments"] = JSON.stringify(cable_deal_equipments);
+
+
+    deal_equipments=[];
+    $("input[name='deal_equipments']:checked").each(function(){
+    value=$(this).attr("val");
+    var id = value.split("_")[0];
+
+        console.log(id);
+
+        $("input[type='radio']:checked").each(function(){
+            value=this.id;
+            console.log("value");
+            if(value!="option1" && this.id.split("_")[1] == id ) {
+               console.log("color id="+this.id.split("_")[2])
+            }
+          });
+
+    jsonObj3 ={};
+    // jsonObj3["ref_id"]=value.split("_")[0];
+    // jsonObj3["ref_type"]=value.split("_")[1];
+    deal_equipments.push(jsonObj3)
+    });
+
+
+
+}
+
+  $("#user_type").change(function(){
+      if (  $("#user_type option:selected").val() == "business") {
+        $("#business_information").removeClass("hidden");
+        $("#d").removeClass("hidden");
+
+        $("#business_name_div").removeClass("hidden");
+        $(".height_popup").css("height", "700px")
+      }
+      else {
+        $("#business_name_div").addClass("hidden");
+        $("#business_information").addClass("hidden");
+      }
+    });
+  $('#shipping_address').click(function(){
+     $('#service_address_body').hide();
+     $('#billing_address_body').hide();
+     $('#shipping_address_body').show();
+
+   });
+   $('#billing_address').click(function(){
+     $('#shipping_address_body').hide();
+     $('#service_address_body').hide();
+     $('#billing_address_body').show();
+
+   });
+   $('#service_address').click(function(){
+     $('#shipping_address_body').hide();
+     $('#billing_address_body').hide();
+      $('#service_address_body').show();
+
+   });
+
+   $("#user_type").click(function(){
+      $('#app_user_id').empty();
+       extra_service_id = $("#user_type").val();
+     if(extra_service_id != ""){
+       $.ajax({
+         url:"<%= app_user_type_user_users_path %>",
+         type:"get",
+         data: {
+           user_type : extra_service_id ,
+         },
+         success: function(d){
+           // console.log(d["status"]);
+           deals = d["status"]
+           for (var i=0;i<deals.length;i++){
+             $('<option/>').val(deals[i]['id']).html((Base64.decode(deals[i]['first_name']))).appendTo('#app_user_id');
+           }
+           $("#app_user_id").trigger("chosen:updated").chosen({
+             disable_search_threshold: 1,
+             no_results_text: "Oops, nothing found!",
+             width: "95%",
+             search:true
+           });
+         }
+       });
+     }
+   });
+
+   $("#app_user_id").on("change",function(){
+      // $('#deal_id').empty();
+       user_type =$("#user_type").val();
+       extra_service_id = $("#app_user_id option:selected").prop("value");
+     if(extra_service_id != ""){
+       $.ajax({
+         url:"<%= app_user_deals_user_users_path %>",
+         type:"get",
+         data: {
+           id : extra_service_id ,
+           user_type: user_type
+         },
+         success: function(d){
+           // console.log(d["status"].length);
+           $("#deal_id").find("option").remove();
+           deals = d["status"]
+           for (var i=0;i<deals.length;i++){
+             $('<option/>').val(deals[i]['id']).html(deals[i]['title']).appendTo('#deal_id');
+           }
+           $("#deal_id").focus();
+         }
+       });
+     }
+   });
+
+    $("#deal_id").on("click",function(){
+    user_type =$("#deal_id").val();
+    extra_service_id = $("#deal_id").val();
+    if(extra_service_id != ""){
+    $.ajax({
+    url:"<%= deal_details_user_orders_path %>",
+    type:"get",
+    data: {
+    deal_id : extra_service_id
+    },
+    });
+    }
+    });
+
+    $("#deal_id").on("focus",function(){
+    // $('#deal_detail').empty();
+
+    user_type =$("#deal_id").val();
+    extra_service_id = $("#deal_id").val();
+    if(extra_service_id != ""){
+    $.ajax({
+    url:"<%= deal_details_user_orders_path %>",
+    type:"get",
+    data: {
+    deal_id : extra_service_id
+    },
+    });
+    }
+    });
+
+   $('#business_type').change(function(){
+    if ($("#business_type option:selected").val() == 0){
+        $('#federal_number_div').hide();
+        $('#ssn_div').show();
+      }
+      else{
+        $('#ssn_div').hide();
+        $('#federal_number_div').show();
+
+      }
+   });
+
+
+   $("#business_information").click(function(){
+    console.log()
+      // $('#deal_detail').empty();
+     user_id = $('#app_user_id').val();
+     if(user_id != ""){
+       $.ajax({
+         url:"<%=  business_information_user_users_path %>",
+         type:"get",
+         data: {
+          id : user_id
+         },
+         success: function(d){
+           console.log(d);
+           business = d["status"]
+           console.log(business);
+             $('#business_name').val(Base64.decode(business['business_name']));
+             $('#business_manager_name').val(business['manager_name']);
+             $('#business_manager_contact').val(business['manager_contact']);
+             if(business['business_type'] = 1){
+              $('#ssn_div').hide();
+              $('#business_type').prop('selectedIndex', 2);
+              $('#federal_number').val(Base64.decode(business['federal_number']));
+            }
+            else{
+             $('#ssn').val(Base64.decode(business['federal_number']));
+             $('#business_type').prop('selectedIndex', 1);
+              $('#federal_number_div').hide();
+            }
+         }
+       });
+     }
+   });
+  $('#address_information').click(function(){
+    user_id = $('#app_user_id').val();
+    if(user_id != ""){
+    $.ajax({
+    url:"<%= addresses_user_users_path %>",
+    type: "GET",
+    data:{ id: user_id},
+    success:function(data){
+      console.log(data);
+      billing_address=data.status[0];
+      service_address=data.status[2];
+      shipping_address=data.status[1];
+      if(billing_address != ''){
+        $("#billing_address_1").val(billing_address["address1"]);
+        $("#billing_address_2").val(billing_address["address2"]);
+        $("#billing_zip").val(billing_address["zip"]);
+        $("#billing_address_name").val(billing_address["address_name"]);
+        $("#billing_city").val(billing_address["city"]);
+        value = billing_address["state"]
+        $('#billing_state option[value="' + value + '"]').prop('selected', true);
+      }
+      if(shipping_address != ''){
+        $("#shipping_address_1").val(shipping_address["address1"]);
+        $("#shipping_address_2").val(shipping_address["address2"]);
+        $("#shipping_zip").val(shipping_address["zip"]);
+        $("#shipping_address_name").val(shipping_address["address_name"]);
+        $("#shipping_city").val(shipping_address["city"]);
+        value = shipping_address["state"]
+        $('#shipping_state option[value="' + value + '"]').prop('selected', true);
+      }
+      if(service_address != ''){
+        $("#service_address_1").val(service_address["address1"]);
+        $("#service_address_2").val(service_address["address2"]);
+        $("#service_zip").val(service_address["zip"]);
+        $("#service_address_name").val(service_address["address_name"]);
+        $("#service_city").val(service_address["city"]);
+        value = service_address["state"]
+        $('#service_state option[value="' + value + '"]').prop('selected', true);
+      }
+    }
+  });
+   }
+
+  });
+
+
+     $("#business_information,#personal_information,#address_information").click(function(){
+        var check = true
+        var a = $('#user_type').val();
+        if (a == null || a == "") {
+            $('#user_type').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#user_type').removeClass('custom-input-error')
+        }
+
+        var a = $('#app_user_id').val();
+        if (a == null || a == "") {
+            $('#app_user_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#app_user_id').removeClass('custom-input-error')
+        }
+
+        var a = $('#deal_id').val();
+        if (a == null || a == "" ) {
+            $('#deal_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#deal_id').removeClass('custom-input-error')
+        }
+
+        if (check){
+          // $(this).tab('show');
+            // $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }else{
+            return false
+        }
+      });
+
+
+     $("#address_information").click(function(){
+        var check = true
+        var a = $('#order_first_name').val();
+        if (a == null || a == "") {
+            $('#order_first_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_first_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_last_name').val();
+        if (a == null || a == "") {
+            $('#order_last_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_last_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_email').val();
+        if (a == null || a == "" ) {
+            $('#order_email').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_email').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_mobile').val();
+        if (a == null || a == "" ) {
+            $('#order_mobile').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_mobile').removeClass('custom-input-error')
+        }
+
+
+        var a = $('#order_primary_id').val();
+        if (a == null || a == "" ) {
+            $('#order_primary_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_primary_id').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_secondary_id').val();
+        if (a == null || a == "" ) {
+            $('#order_secondary_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_secondary_id').removeClass('custom-input-error')
+        }
+
+
+        if($('#user_type').val() == 'business'){
+        var a = $('#business_manager_name').val();
+        if (a == null || a == "") {
+            $('#business_manager_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#business_manager_name').removeClass('custom-input-error')
+        }
+        var a = $('#business_manager_contact').val();
+        if (a == null || a == "") {
+            $('#business_manager_contact').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#business_manager_contact').removeClass('custom-input-error')
+        }
+        var a = $('#business_type').val();
+        if (a == null || a == "") {
+            $('#business_type').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#business_type').removeClass('custom-input-error')
+        }
+      }
+
+
+        if (check){
+          // $(this).tab('show');
+            // $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }else{
+            return false
+        }
+      });
+
+
+$("#business_information").click(function(){
+       var check = true
+        var a = $('#order_first_name').val();
+        if (a == null || a == "") {
+            $('#order_first_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_first_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_last_name').val();
+        if (a == null || a == "") {
+            $('#order_last_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_last_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_email').val();
+        if (a == null || a == "" ) {
+            $('#order_email').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_email').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_mobile').val();
+        if (a == null || a == "" ) {
+            $('#order_mobile').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_mobile').removeClass('custom-input-error')
+        }
+
+
+        var a = $('#order_primary_id').val();
+        if (a == null || a == "" ) {
+            $('#order_primary_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_primary_id').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_secondary_id').val();
+        if (a == null || a == "" ) {
+            $('#order_secondary_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_secondary_id').removeClass('custom-input-error')
+        }
+
+
+
+
+        if (check){
+          // $(this).tab('show');
+            // $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }else{
+            return false
+        }
+      });
+
+
+
+
+$("#submit_user_button").click(function(){
+        var check = true
+        var a = $('#user_type').val();
+        if (a == null || a == "") {
+            $('#user_type').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#user_type').removeClass('custom-input-error')
+        }
+
+        var a = $('#app_user_id').val();
+        if (a == null || a == "") {
+            $('#app_user_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#app_user_id').removeClass('custom-input-error')
+        }
+
+        var a = $('#deal_id').val();
+        if (a == null || a == "" ) {
+            $('#deal_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#deal_id').removeClass('custom-input-error')
+        }
+        var a = $('#order_first_name').val();
+        if (a == null || a == "") {
+            $('#order_first_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_first_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_last_name').val();
+        if (a == null || a == "") {
+            $('#order_last_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_last_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_email').val();
+        if (a == null || a == "" ) {
+            $('#order_email').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_email').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_mobile').val();
+        if (a == null || a == "" ) {
+            $('#order_mobile').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_mobile').removeClass('custom-input-error')
+        }
+
+
+        var a = $('#order_primary_id').val();
+        if (a == null || a == "" ) {
+            $('#order_primary_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_primary_id').removeClass('custom-input-error')
+        }
+
+        var a = $('#order_secondary_id').val();
+        if (a == null || a == "" ) {
+            $('#order_secondary_id').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#order_secondary_id').removeClass('custom-input-error')
+        }
+
+        var a = $('#billing_address_name').val();
+        if (a == null || a == "" ) {
+            $('#billing_address_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#billing_address_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#billing_address_1').val();
+        if (a == null || a == "" ) {
+            $('#billing_address_1').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#billing_address_1').removeClass('custom-input-error')
+        }
+
+        var a = $('#billing_city').val();
+        if (a == null || a == "" ) {
+            $('#billing_city').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#billing_city').removeClass('custom-input-error')
+        }
+
+        var a = $('#billing_state').val();
+        if (a == null || a == "" ) {
+            $('#billing_state').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#billing_state').removeClass('custom-input-error')
+        }
+
+        var a = $('#billing_zip').val();
+        if (a == null || a == "" ) {
+            $('#billing_zip').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#billing_zip').removeClass('custom-input-error')
+        }
+
+
+        var a = $('#shipping_address_name').val();
+        if (a == null || a == "" ) {
+            $('#shipping_address_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#shipping_address_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#shipping_address_1').val();
+        if (a == null || a == "" ) {
+            $('#shipping_address_1').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#shipping_address_1').removeClass('custom-input-error')
+        }
+
+        var a = $('#shipping_city').val();
+        if (a == null || a == "" ) {
+            $('#shipping_city').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#shipping_city').removeClass('custom-input-error')
+        }
+
+        var a = $('#shipping_state').val();
+        if (a == null || a == "" ) {
+            $('#shipping_state').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#shipping_state').removeClass('custom-input-error')
+        }
+
+        var a = $('#shipping_zip').val();
+        if (a == null || a == "" ) {
+            $('#shipping_zip').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#shipping_zip').removeClass('custom-input-error')
+        }
+
+
+        var a = $('#service_address_name').val();
+        if (a == null || a == "" ) {
+            $('#service_address_name').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#service_address_name').removeClass('custom-input-error')
+        }
+
+        var a = $('#service_address_1').val();
+        if (a == null || a == "" ) {
+            $('#service_address_1').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#service_address_1').removeClass('custom-input-error')
+        }
+
+        var a = $('#service_city').val();
+        if (a == null || a == "" ) {
+            $('#service_city').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#service_city').removeClass('custom-input-error')
+        }
+
+        var a = $('#service_state').val();
+        if (a == null || a == "" ) {
+            $('#service_state').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#service_state').removeClass('custom-input-error')
+        }
+
+        var a = $('#service_zip').val();
+        if (a == null || a == "" ) {
+            $('#service_zip').addClass('custom-input-error')
+            check = false
+        }else{
+            $('#service_zip').removeClass('custom-input-error')
+        }
+
+        if (check){
+          // $(this).tab('show');
+            // $('.nav-tabs > .active').next('li').find('a').trigger('click');
+        }else{
+            return false
+        }
+      });
+
+
+
+$('#personal_information').click(function(){
+
+    user_id = $('#app_user_id').val();
+    if(user_id != ""){
+    $.ajax({
+    url:"<%= personal_details_user_users_path %>",
+    type: "GET",
+    data:{ id: user_id},
+    success:function(data){
+      app_user = data['status']
+      $("#order_first_name").val(Base64.decode(app_user['first_name']));
+      $("#order_last_name").val(Base64.decode(app_user['last_name']));
+      $("#order_email").val(app_user['email']);
+      $("#order_mobile").val(Base64.decode(app_user['mobile']));
+      $("#order_primary_id").val(app_user['primary_id']);
+      $("#order_primary_id_number").val(app_user['primary_id_number']);
+      $("#order_secondary_id").val(app_user['secondary_id']);
+      $("#order_secondary_id_number").val(app_user['secondary_id_number']);
+
+    }
+  });
+   }
+
+  });
+
+
+
+
+
+</script>

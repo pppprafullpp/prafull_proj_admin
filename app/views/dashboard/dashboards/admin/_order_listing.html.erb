@@ -19,33 +19,38 @@
             <table class="table table-hover no-margins">
               <thead>
               <tr>
-                <th>Request#</th>
+                <th>Sr. no</th>
                 <th>Date</th>
-                <th>Lab</th>
-                <th>Lab Contact</th>
-                <th>User</th>
-                <th>User Contact</th>
+                <th>Order ID#</th>
+                <th>User Name</th>
+                <th>User email</th>
+                <th>User mobile#</th>
+                <th>Deal Name</th>
               </tr>
               </thead>
               <tbody>
-              <% @order_requests.each do |order_request| %>
+
+              <%#= will_paginate @order_requests ,:class=>"pagination pull-right" %>
+
+              <% @order_requests.each_with_index do |order_request,index| %>
                   <tr>
-                    <td><span class="label label-warning"><%= link_to order_request.request_number,"#{view_order_request_lab_lab_orders_path}?id=#{order_request.id}" %></span></td>
+                    <td><%=index%></td>
                     <td><i class="fa fa-clock-o"></i> <%= order_request.created_at.strftime('%d/%m/%Y %I:%M%p') %></td>
-                    <%
-                       lab_title = "#{order_request.street_address} / #{order_request.landmark}"
-                    %>
-                    <td title="<%= lab_title %>"><%= order_request.lab_name %></td>
-                    <td title="<%= order_request.lab_email %>"><%= order_request.contact_name %>/<%= order_request.lab_mobile %></td>
-                    <%
-                       first_name = order_request.first_name.present? ? order_request.first_name : ''
-                       last_name = order_request.last_name.present? ? order_request.last_name : ''
-                    %>
-                    <td><%= first_name + ' ' + last_name %></td>
-                    <td title="<%= order_request.user_email %>"><%= order_request.user_mobile %></td>
+                    <td><span class="label label-warning"><%= link_to "#{order_request.order_id}",edit_user_order_path(order_request.id) %></span></td>
+                    <td>
+                      <%user_details=AppUser.find(order_request.app_user_id) if AppUser.exists?(order_request.app_user_id)%>
+                        <% if user_details.first_name.present? and user_details.last_name.present?%>
+                        <%name= (user_details.first_name.strip+ " "+  user_details.last_name.strip).truncate(10) %>
+                        <%else%>
+                        <%name="NA"%>
+                        <%end%>
+                        <%=name%>
+                      </td>
+                    <td><%=user_details.email%></td>
+                    <td><%=user_details.mobile%></td>
+                    <td><%=order_request.deal_id.present? ? Deal.find(order_request.deal_id) : "NILL" %></td>
                   </tr>
               <% end %>
-
               </tbody>
             </table>
           </div>
@@ -58,7 +63,7 @@
       <div class="col-lg-6">
         <div class="ibox float-e-margins">
           <div class="ibox-title">
-            <h5>Pending Orders</h5>
+            <h5>Pending Orders(<%=@pending_orders.count%>)</h5>
             <div class="ibox-tools">
               <a class="collapse-link">
                 <i class="fa fa-chevron-up"></i>
@@ -71,30 +76,20 @@
           <div class="ibox-content">
             <table class="table table-hover no-margins">
               <thead>
-              <tr>
-                <th>Order#</th>
-                <th>Date</th>
-                <th>Lab Name</th>
-                <th>User Name</th>
-                <th>Price</th>
-              </tr>
+                <tr>
+                  <th>Date</th>
+                  <th>Order ID#</th>
+                  <th>User email</th>
+                </tr>
               </thead>
               <tbody>
-
-              <% @pending_orders.each do |pending_order| %>
-                  <tr>
-                    <td><span class="label label-warning"><%= link_to pending_order.order_number,edit_lab_lab_order_path(pending_order.id),:style => "color: white;" %></span></td>
-                    <td><i class="fa fa-clock-o"></i> <%= pending_order.created_at.strftime('%d/%m/%Y %I:%M%p') %></td>
-                    <td title="<%= pending_order.street_address %> / <%= pending_order.lab_mobile %>"><%= pending_order.lab_name.present? ? truncate(pending_order.lab_name,length: 15) : ''  %></td>
-                    <%
-                       first_name = pending_order.first_name.present? ? pending_order.first_name : ''
-                       last_name = pending_order.last_name.present? ? pending_order.last_name : ''
-                    %>
-                    <td class="text-navy" title="<%= pending_order.user_mobile %>"><%= first_name + ' ' + last_name %> </td>
-                    <td class="text-navy"><%= pending_order.order_price %> </td>
-
-
-                  </tr>
+              <% @pending_orders.each_with_index do |pending_order,index| %>
+              <tr>
+                <td><i class="fa fa-clock-o"></i> <%= pending_order.created_at.strftime('%d/%m/%Y %I:%M%p') %></td>
+                <td><span class="label label-warning"><%= link_to "#{pending_order.order_id}","/order_status?id=#{pending_order.order_id}" %></span></td>
+                <%user_details=AppUser.find(pending_order.app_user_id) if AppUser.exists?(pending_order.app_user_id)%>
+                <td><%=user_details.email%></td>
+              </tr>
               <% end %>
 
               </tbody>
@@ -106,7 +101,7 @@
       <div class="col-lg-6">
         <div class="ibox float-e-margins">
           <div class="ibox-title">
-            <h5>Completed Orders</h5>
+            <h5>Completed Orders(<%=@completed_orders.count%>)</h5>
             <div class="ibox-tools">
               <a class="collapse-link">
                 <i class="fa fa-chevron-up"></i>
@@ -119,28 +114,20 @@
           <div class="ibox-content">
             <table class="table table-hover no-margins">
               <thead>
-              <tr>
-                <th>Order#</th>
-                <th>Date</th>
-                <th>Lab Name</th>
-                <th>User Name</th>
-                <th>Price</th>
-              </tr>
+                <tr>
+                  <th>Date</th>
+                  <th>Order ID#</th>
+                  <th>User email</th>
+                </tr>
               </thead>
               <tbody>
-
-              <% @completed_orders.each do |completed_order| %>
-                  <tr>
-                    <td><span class="label label-primary"><%= link_to completed_order.order_number,lab_lab_order_path(completed_order.id),:style => "color: white;" %></span></td>
-                    <td><i class="fa fa-clock-o"></i> <%= completed_order.created_at.strftime('%d/%m/%Y %I:%M%p') %></td>
-                    <td title="<%= completed_order.street_address %> / <%= completed_order.lab_mobile %>"><%= completed_order.lab_name.present? ? truncate(completed_order.lab_name,length: 15) : ''  %></td>
-                    <%
-                       first_name = completed_order.first_name.present? ? completed_order.first_name : ''
-                       last_name = completed_order.last_name.present? ? completed_order.last_name : ''
-                    %>
-                    <td class="text-navy" title="<%= completed_order.user_mobile %>"><%= first_name + ' ' + last_name %> </td>
-                    <td class="text-navy"><%= completed_order.order_price %> </td>
-                  </tr>
+              <% @completed_orders.each_with_index do |completed_orders,index| %>
+              <tr>
+                <td><i class="fa fa-clock-o"></i> <%= completed_orders.created_at.strftime('%d/%m/%Y %I:%M%p') %></td>
+                <td><span class="label label-warning"><%= link_to "#{completed_orders.order_id}","/order_status?id=#{completed_orders.order_id}" %></span></td>
+                <%user_details=AppUser.find(completed_orders.app_user_id) if AppUser.exists?(completed_orders.app_user_id)%>
+                <td><%=user_details.email%></td>
+              </tr>
               <% end %>
 
               </tbody>

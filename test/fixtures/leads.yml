@@ -1,0 +1,39 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  lead_type: MyText
+  service_category_id: 1
+  deal_id: 1
+  lead_name: MyText
+  lead_description: MyText
+  lead_email: MyText
+  lead_contact_number: MyText
+  lead_location: MyText
+  lead_address: MyText
+  lead_spoc_name: MyText
+  lead_spoc_email: MyText
+  lead_spoc_number: MyText
+  lead_spoc_designation: MyText
+  lead_response: MyText
+  user_id: MyText
+  status: MyText
+  demo_time: 2016-09-30 12:20:15
+
+two:
+  lead_type: MyText
+  service_category_id: 1
+  deal_id: 1
+  lead_name: MyText
+  lead_description: MyText
+  lead_email: MyText
+  lead_contact_number: MyText
+  lead_location: MyText
+  lead_address: MyText
+  lead_spoc_name: MyText
+  lead_spoc_email: MyText
+  lead_spoc_number: MyText
+  lead_spoc_designation: MyText
+  lead_response: MyText
+  user_id: MyText
+  status: MyText
+  demo_time: 2016-09-30 12:20:15

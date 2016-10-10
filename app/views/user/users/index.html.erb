@@ -44,6 +44,7 @@
         </div>
         <div class="ibox-content">
           <%= render :partial => "shared/dpl_notifier"%>
+          <%=will_paginate @users, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
           <% if @users.present? %>
               <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="15">
                 <thead>
@@ -69,7 +70,7 @@
                       </td>
 
                       <td>
-                        <%= decode_api_data(user.mobile) %>
+                        <%= try(decode_api_data(user.mobile)) %>
                       </td>
                       <td>
                         <%= user.email %>
@@ -118,11 +119,11 @@
 
       <%= form_tag user_users_path do %>
           <div class="modal-body">
-            First Name : <input type="text" name="first_name" value="" required class="form-control">
-            Last Name : <input type="text" name="last_name" value="" required class="form-control">
-            Email : <input type="text" name="email" value="" required class="form-control">
-            User Type : <%= select_tag(:user_type, options_for_select(AppUser::USER_TYPES), { :include_blank => "-Select-",:class => 'form-control'})%>
-
+            First Name : <input type="text" name="app_user[first_name]" value="" required class="form-control">
+            Last Name : <input type="text" name="app_user[last_name]" value="" required class="form-control">
+            Email : <input type="email" name="app_user[email]" value="" required class="form-control">
+            User Type : <%= select_tag(:user_type, options_for_select(AppUser::USER_TYPES), { :include_blank => "-Select-",:class => 'form-control', :name=> "app_user[user_type]" , required: true})%>
+            Mobile : <input type="text" name="app_user[mobile]" value="" required class="form-control">
           </div>
 
           <div class="modal-footer">

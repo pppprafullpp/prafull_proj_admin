@@ -1,0 +1,78 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Leads</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+  <div class="row">
+  <div class="col-lg-9">
+      <div class="wrapper wrapper-content animated fadeInUp">
+          <div class="ibox">
+              <div class="ibox-content">
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <div class="m-b-md">
+                              <!-- <a href="#" class="btn btn-white btn-xs pull-right">Edit project</a> -->
+                              <h2>Lead Details With <%=@lead_data.lead_spoc_name.present? ? @lead_data.lead_spoc_name : "NA"%></h2>
+                          </div>
+                          <dl class="dl-horizontal">
+                              <dt>Status:</dt> <dd><span class="label label-primary"><%=@lead_data.status.present? ? get_lead_status(@lead_data.status.to_i) : "NA" %></span></dd>
+                          </dl>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-lg-5">
+                      <dl class="dl-horizontal">
+                          <dt>Created by:</dt> <dd><%=SalesExecutive.exists?(@lead_data.user_id) ? SalesExecutive.find(@lead_data.user_id).name : "Admin" %></dd>
+                          <dt>Category:</dt> <dd><b><%=(ServiceCategory.get_category_name_by_id @lead_data.service_category_id).titleize%></b></dd>
+                          <dt>Lead Name:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_name%></a> </dd>
+                          <dt>Lead Email:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_email%></a> </dd>
+                          <dt>Lead Contact:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_contact_number%></a> </dd>
+                          <dt>Lead Location:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_location%></a> </dd>
+                          <dt>Lead Address:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_address%></a> </dd>
+                          <dt>Lead response:</dt> <dd><a href="#" class="text-navy label label-warning"> <%=@lead_data.lead_response%></a> </dd>
+                          <dt>Spoc Name:</dt> <dd><a href="#" class="text-navy label label-warning "> <%=@lead_data.lead_spoc_name%></a> </dd>
+                          <dt>Spoc Email:</dt> <dd><a href="#" class="text-navy label label-warning "> <%=@lead_data.lead_spoc_email%></a> </dd>
+                          <dt>Spoc Number:</dt> <dd><a href="#" class="text-navy label label-warning "> <%=@lead_data.lead_spoc_number%></a> </dd>
+                          <dt>Spoc Designation:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.lead_spoc_designation%></a> </dd>
+                          <dt>Demo Time:</dt> <dd><a href="#" class="text-navy"> <%=@lead_data.demo_time%></a> </dd>
+                      </dl>
+                      </div>
+                      <div class="col-lg-7" id="cluster_info">
+                          <dl class="dl-horizontal">
+                              <dt>Last Updated:</dt><dd><%=@lead_data.updated_at%></dd>
+                              <dt>Created:</dt> <dd><%=@lead_data.created_at%></dd>
+                              <dt>Deal of interest:</dt> <dd><span class="label label-warning"><b><%=  @lead_data.present? ? Deal.find(@lead_data.deal_id).title : "NA"%></b></span></dd>
+                              <dt>Deal link:</dt> <dd><b><%=  @lead_data.present? and @lead_data.deal_id.present? ? "<a target = '_blank' href='http://103.243.5.242:2123/website/home/more_deal_details?deal_id=#{@lead_data.deal_id}'>Click here</a>".html_safe  : "NA"%></b></dd>
+                          </dl>
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-lg-12">
+                          <dl class="dl-horizontal">
+                              <dt>Completed:</dt>
+                              <dd>
+                                  <div class="progress progress-striped active m-b-sm">
+                                      <div style="width: <%=@lead_data.status%>%;" class="progress-bar"><%=@lead_data.status%></div>
+                                  </div>
+                              </dd>
+                          </dl>
+                      </div>
+                  </div>
+
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-lg-3">
+      <div class="wrapper wrapper-content project-manager">
+          <h4>Lead description</h4>
+          <p class="small">
+            <%=@lead_data.lead_description%>
+          </p>
+      </div>
+  </div>
+  </div>

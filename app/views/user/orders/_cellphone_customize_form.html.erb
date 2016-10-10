@@ -1,0 +1,135 @@
+<% deal_attributes =  deals['deal_attributes'] 
+	deal_equipments = deals['deal_equipments'] 
+	deal_extra_services = deals['deal_extra_services'] 
+%>
+
+<section>
+	<div class='equipments-details col-md-12'>	
+		<h5>Deals Attributes</h5>
+		<div id="deal_attributes" class="owl-carousel">
+			<% deal_attributes.each do |deal_attribute| %>
+				<div class="text-center">
+					<div class="sd-deal-sty">
+						<h6><%= deal_attribute["description"]%></h6>	
+						<p>Data Plan Price: $<%=deal_attribute["data_plan_price"]%></p>	
+						<p>Domestic minutes <%= deal_attribute["domestic_call_minutes"]%></p>	
+						<p>International minutes <%= deal_attribute["international_call_minutes"]%></p>	
+						<div class="text-left">
+							<div class="checkbox checkbox-info">
+		        		<input type="checkbox" id="deal_attribute_<%=deal_attribute['id']%>" name="deal_attributes" 
+								val="<%=deal_attribute['id']%>_<%=deal_attribute['data_plan_price'].to_f%>_<%=deals["service_category_name"]%>" />
+		        		<label for="deal_attribute_<%=deal_attribute['id']%>" >Select</label>
+		        	</div>
+			    	</div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+	<div class='equipments-details col-md-12'>	
+		<h5>Equipments</h5>
+		<div id="deal_equipments" class="owl-carousel">
+			<% deal_equipments.each do |deal_equipment| %>
+				<div class="text-center">
+					<div class="sd-deal-sty">
+						<h6><%=deal_equipment["brand"]%></h6>
+						<p id="description_<%=deal_equipment['id']%>" class="hidden"><%=deal_equipment["brand"]%></p>
+						<h4>iPhone® 6s</h4>
+						<%deal_equipment["available_color"].each_with_index do |av,index|%>
+							<div class="color-wrapper text-center">
+								<input type="radio" checked="checked" name="deviceColors_<%=deal_equipment['id']%>" id="color_<%=deal_equipment['id']%>_<%=av['id']%>" class="colorSelector" />
+								<label for="color_<%=deal_equipment['id']%>_<%=av['id']%>" title="<%=index%>" class="colorSelector_label colorSelector_checkShadow" style="background-color: #FFFFFF" />
+							</div>
+						<%end%>
+						<div class="equip-price"> <span>$<%=deal_equipment["price"]%> </span> </div>
+						<div class="text-left">
+							<div class="checkbox checkbox-info">
+	        			<input type="checkbox" id="deal_equipment_<%=deal_equipment['id']%>" name="deal_equipments" 
+								val="<%=deal_equipment['id']%>_<%=deal_equipment['price']%>" />
+	          		<label for="deal_equipment_<%=deal_equipment['id']%>" >Select</label>
+	        		</div>
+		    		</div>
+					</div>
+				</div>
+			<%end%>
+		</div>
+	</div>
+
+	<div class='equipments-details col-md-12'>	
+		<h5>Deals Extra Services</h5>
+		<div id="deal_extra_services" class="owl-carousel">
+			<% deal_extra_services.each do |deal_extra_service| %>
+				<div class="text-center">
+					<div class="sd-deal-sty">
+						<h6><%=deal_extra_service["service_name"]%></h6>
+						<p style="line-height:20px; height:100px; overflow-y:auto;"> <%=deal_extra_service["service_description"]%></p>
+						<div class="equip-price"> <span>$ <%="%.2f" % deal_extra_service["price"]%></span> </div>
+						<div class="text-left">
+							<div class="checkbox checkbox-info">
+								<input name="deal_extra_services" type="checkbox" id="deal_extra_service_<%=deal_extra_service['id']%>" 
+								val="<%=deal_extra_service['id']%>_<%=deal_extra_service['price']%>" />
+								<label for="deal_extra_service_<%=deal_extra_service['id']%>" >Select</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			<% end %>
+		</div>
+	</div>
+
+	<div class="modal inmodal" id="myModal2" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+  	<div class="modal-dialog">
+    	<div class="modal-content animated flipInY">
+      	<div class="modal-header">
+        	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+        	<h4 class="modal-title">Helo</h4>
+        	<small class="font-bold description"></small>
+      	</div>
+    	</div>
+ 		</div>
+	</div>
+	
+</section>
+
+
+
+<script>
+ $('#deal_equipments,#deal_attributes,#deal_extra_services').owlCarousel({
+    loop:true,
+    margin:10,
+    responsiveClass:true,
+   items:3,
+  });
+
+	function pass_data(brand) {
+		$('.modal-title').text(brand['brand']);
+		$('.description').text(brand['description']);
+	}
+
+$(document).ready(function() {
+  var effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+  var chkId = 0;
+  $('input[type=checkbox]').on('change', function() {
+    $(this).each ( function() {
+      effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+      if($(this).prop('checked') == true){
+        effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+        chkId =$(this).attr("val").split("_")[1];
+        effective_value = effective_price + parseFloat(chkId); 
+        $('#update_effective_price').text("$" + effective_value);
+      }
+      else{
+        effective_price = parseFloat($('#update_effective_price').text().split('$')[1]);
+        chkId =$(this).attr("val").split("_")[1];
+        effective_value = effective_price - parseFloat(chkId);
+        $('#update_effective_price').text("$" + effective_value );
+      }
+      localStorage["effective_price"] = JSON.stringify(effective_value);
+    });
+  });
+});
+
+
+</script>
+	

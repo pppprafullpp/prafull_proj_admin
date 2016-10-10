@@ -1,6 +1,6 @@
 class User::UsersController < User::UserApplicationController
 
-  before_filter :set_layout,:set_search
+  before_filter :set_layout,:set_search,:encode_search_filter_data
 
   def index
     params[:search] = {} unless params[:search].present?
@@ -19,43 +19,91 @@ class User::UsersController < User::UserApplicationController
   end
 
   def new
-    @user = User.new
+    @user = AppUser.new
   end
 
   def create
-    @user = User.new(user_param)
-    name = params[:user][:first_name].split(' ')
-    first_name = name[0]
-    last_name = name[1..4].join(' ')
-    prefix = params[:user][:prefix].present? ? params[:user][:prefix] : User::MR
-    @user.first_name = first_name ; @user.last_name = last_name ; @user.prefix = prefix
-    if @user.save
-      @user.password = params[:user][:password]
-      notify(@user,USER,WELCOME_NOTIFICATION,true,{:email => true,:password => params[:user][:password]})
-      flash[:notice] = 'User details have been created successfully.'
-      if session[:cart].present?
-        redirect_to checkout_path and return
-      else
-        redirect_to user_login_path
-      end
-    else
-      render :new
-    end
+    app_user = encoding_data(params)
+    user_hash = {:app_user => [app_user]}
+    @user = AppUser.create_new_user(user_hash)
+    @user.first.zip = Base64.encode64("75209")
+    @user.first.save
+      # notify(@user,USER,WELCOME_NOTIFICATION,true,{:email => true,:password => params[:user][:password]})
+    flash[:notice] = 'User details have been created successfully.'
+    redirect_to user_users_path
   end
 
   def edit
-    @user = User.find(params[:id])
+    @user = AppUser.find(params[:id])
+    @business = Business.select('businesses.*').joins(:business_app_users).where("business_app_users.app_user_id = ?",@user.id).last
+
   end
 
   def update
-    @user = User.find(params[:id])
-     
-    if @user.update_attributes(user_param)
-      flash[:notice] = 'User details have been updated successfully.'
-      redirect_to user_users_path
+    app_user = encoding_data(params)
+    user_hash = {:app_user => app_user}
+    @user = AppUser.update_app_user(user_hash,params[:user][:id],order=nil)
+    # @user = AppUser.create_new_user(user_hash)
+    if @user.user_type == AppUser::BUSINESS
+      params[:business][:federal_number]=encode_api_data(params[:business][:federal_number]) if params[:business][:federal_number].present?
+      params[:business][:ssn]=encode_api_data(params[:business][:ssn]) if params[:business][:ssn].present?
+      params[:business][:business_name]=encode_api_data(params[:business][:business_name]) if params[:business][:business_name].present?
+      @business = Business.create_business(params)
+      if @business.present?
+        address_hash = {:business_addresses => [params[:addresses]]}
+        business_user = BusinessAppUser.create_business_app_user(@business.id,@user.id)
+        business_addresses = BusinessAddress.create_business_addresses(address_hash,@business.id)
+      end
     else
-      render 'user/users/edit'
+        address_hash = {:app_user_addresses => [params[:addresses]]}
+        app_user_addresses = AppUserAddress.create_app_user_addresses(address_hash,@user.id)
     end
+    redirect_to user_users_path
+  end
+
+
+  def app_user_type
+    # users = AppUser.select('id,first_name').where(user_type: params[:user_type]).limit(10)
+    users = AppUser.select('id,first_name').where(user_type: params[:user_type]).order("created_at DESC")
+    render :json=>{
+        :status=>users
+      }
+  end
+
+  def app_user_deals
+    zipcode = decode_api_data(AppUser.find_by_id(params[:id]).zip)
+    deals = Deal.joins(:deals_zipcodes).joins(:zipcodes).select("deals.id,deals.title").where("zipcodes.code= ? AND deal_type =? AND is_active = ? ",zipcode,params[:user_type],true)
+    render :json=>{
+        :status=>deals
+      }
+  end
+
+  def business_information
+    if params[:id].present?
+      app_user = AppUser.find_by_id(params[:id])
+      business = app_user.business_app_users.last.business
+      render :json=>{
+        :status=>business
+      }
+    end
+  end
+
+
+  def addresses
+    if params[:id].present?
+      @addresses = AppUser.get_addresses(params)
+      render :json=>{
+        :status=>"business_user_first_order",
+        :status=>@addresses
+      }
+    end
+  end
+
+  def personal_details
+    app_user = AppUser.find(params[:id])
+     render :json=>{
+        :status=>app_user
+      }
   end
 
   def fetch_user_details
@@ -81,7 +129,7 @@ class User::UsersController < User::UserApplicationController
           if session[:cart].present?
             redirect_to checkout_path and return
           elsif session[:doctor_appointment].present?
-            redirect_to book_appointment_appointments_path and return  
+            redirect_to book_appointment_appointments_path and return
           elsif params[:referer].present?
             redirect_to session[:referer_url] and return
           else
@@ -158,13 +206,20 @@ class User::UsersController < User::UserApplicationController
     end
   end
 
+  def create_deals
+
+  end
+
   private
+
+
   # Using a private method to encapsulate the permissible parameters is
   # just a good pattern since you'll be able to reuse the same permit
   # list between create and update. Also, you can specialize this method
   # with per-user checking of permissible attributes.
   def user_param
-    params.require(:user).permit(:password, :confirm_password, :first_name, :last_name,:age,:prefix,:email,:mobile,:landline,:emergency_contact_number,:upload, :upload_file_name, :upload_content_type, :upload_file_size)
+    params.require(:user).permit!
+  #   params.require(:user).permit(:password, :confirm_password, :first_name, :last_name,:age,:prefix,:email,:mobile,:landline,:emergency_contact_number,:upload, :upload_file_name, :upload_content_type, :upload_file_size)
   end
 
   def set_layout

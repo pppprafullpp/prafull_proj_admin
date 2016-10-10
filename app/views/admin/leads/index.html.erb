@@ -1,0 +1,284 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Leads</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+<div class="animated fadeInUp">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Search Leads</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+          </div>
+        </div>
+
+        <div class="ibox-content m-b-sm border-bottom">
+          <div class="row">
+            <%= form_for @search, :as => 'search', :url => admin_leads_path, :html => {:method => :get} do |f| %>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_leads_path, :filter => [:lead_spoc_name,:lead_spoc_email,:lead_name,:business_name]}%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="animated fadeInUp ibox ibox-title float-e-margins">
+  <div class="ibox-tools">
+    <%=link_to "Create Lead", new_admin_lead_path, :class=>"btn btn-w-m btn-primary"%>
+  </div>
+</div>
+
+<div class="animated fadeInUp row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <%if is_sales_executive?%>
+        <h5>Lead Created By You(<%=@leads.count%>)</h5>
+        <%else%>
+          <h5>Leads(<%=@leads.count%>)</h5>
+        <%end%>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="ibox-content">
+        <%= will_paginate @leads, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
+
+        <table class="table table-hover no-margins table-responsive">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>Lead type</th>
+            <th>Category</th>
+            <th>lead name</th>
+            <th>Spoc Name</th>
+            <th>Spoc Email</th>
+            <th>Spoc Number</th>
+            <th>Lead Response</th>
+            <th>Spoc Designation</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+
+          <%@leads.each do |lead|%>
+          <tr>
+            <td><span class="label label-warning"><%= link_to lead.id,admin_lead_show_lead_details_path(lead.id)%></span></td>
+            <td id="<%=lead.id%>_type"><%=lead.lead_type.camelcase%></td>
+            <td id="<%=lead.id%>_sc"><%=lead.service_category_id.present? ? ServiceCategory.get_category_name_by_id(lead.service_category_id).titleize : "NP"%></td>
+            <td id="<%=lead.id%>_name"><%=lead.lead_name.present? ? lead.lead_name : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_name"><%=lead.lead_spoc_name.present? ? lead.lead_spoc_name : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_email"><%=lead.lead_spoc_email.present? ? lead.lead_spoc_email :  "NP" %></td>
+            <td id="<%=lead.id%>_spoc_number"><%=lead.lead_spoc_number.present? ? lead.lead_spoc_number : "NP"  %></td>
+            <td id="<%=lead.id%>_spoc_response"><%=lead.lead_response.present? ? lead.lead_response : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_designation"><%=lead.lead_spoc_designation.present? ? lead.lead_spoc_designation : "NP" %></td>
+            <td id="<%=lead.id%>_spoc_status"> <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]},lead.status),:id=>"#{lead.id}_status",:class => "form-control", :onchange => "show_update_btn(#{lead.id})" %></td>
+            <td>
+              <table>
+                <tr>
+                  <td><a class="btn btn-outline btn-success" href="<%=edit_admin_lead_path(id:lead.id)%>"><i class="fa fa-edit"></i></a></td>
+                  <td class="hidden" id="check_<%=lead.id%>"><a class="btn btn-outline btn-success" href="javascript:void(0)" onclick="update_status(<%=lead.id%>)" href="#"><i class="fa fa-check"></i></a></td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <%end%>
+          </thead>
+        </table>
+            <script>
+            function show_update_btn(id){
+              $("#check_"+id).removeClass("hidden");
+            }
+            function update_status(id){
+              console.log("Row="+id);
+              console.log("Status="+$("#"+id+"_status option:selected").prop("value"));
+              $.ajax({
+                url: "/update_lead_status",
+                type: "get",
+                data: {
+                  id:id,
+                  status:$("#"+id+"_status option:selected").prop("value")
+                },
+                success: function(response){
+                  if(response["updated"] == true){
+                    toastr["success"]("Successfully Updated!")
+                    location.reload();
+                  }
+                }
+              })
+            }
+            </script>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+<div class="modal inmodal in" id="createleadModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+<div class="modal-dialog">
+<div class="modal-content animated swing">
+  <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+      <i class="fa fa-line-chart modal-icon"></i>
+      <h4 id="modal-title" class="modal-title">Add New Lead</h4>
+   </div>
+  <div class="modal-body">
+
+    <div class="ibox float-e-margins">
+      <div class="ibox-content">
+
+        <%= form_tag  admin_leads_path,:class=>"form-horizontal",:id=>"lead_creation_form", method: "post" do %>
+        <%=hidden_field_tag :id,"",:name=>"lead[id]"%>
+        <%=hidden_field_tag :user_id,current_user.id,:name=>"lead[user_id]"%>
+        <div class="form-group">
+          <div class="col-md-12">  <%= select_tag :type,options_for_select([["Residence","residence"],["Business","business"]]),:name => 'lead[lead_type]', :class => "form-control", :prompt => "-Select Type-" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">   <%= select_tag :service_category_id,options_for_select([["Internet",1],["Telephone",2],["Cable",3],["Cellphone",4],["Bundle",5]]),:name => 'lead[service_category_id]', :class => "form-control", :prompt => "-Select Category-" %></div>
+        </div>
+
+
+        <div class="form-group">
+          <div class="col-md-12">   <%= select_tag :deal_id,options_for_select(Deal.pluck(:title,:id)),:name => 'lead[deal_id]', :class => "form-control chosen-select", :prompt => "-Select Deal-" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_area_tag :lead_description,"",:placeholder => 'Description',:name => 'lead[lead_description]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_name,"",:placeholder => 'Lead name',:name => 'lead[lead_name]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= email_field_tag :lead_email,"",:placeholder => 'Lead Email',:name => 'lead[lead_email]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= number_field_tag :lead_contact_number,"",:placeholder => 'lead contact number',:name => 'lead[lead_contact_number]', :class => "form-control",:maxlength => "10" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= select_tag :lead_location,options_for_select(Statelist.pluck(:state)),:name => 'lead[lead_location]', :class => "form-control", :prompt => "-Select state-"  %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_address,"",:placeholder => 'lead address',:name => 'lead[lead_address]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_spoc_name,"",:placeholder => 'lead spoc name',:name => 'lead[lead_spoc_name]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= email_field_tag :lead_spoc_email,"",:placeholder => 'lead spoc email',:name => 'lead[lead_spoc_email]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= number_field_tag :lead_spoc_number,"",:placeholder => 'lead spoc number',:name => 'lead[lead_spoc_number]', :class => "form-control", :maxlength => "10" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :lead_spoc_designation,"",:placeholder => 'lead spoc designation',:name => 'lead[lead_spoc_designation]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_area_tag :lead_response,"",:placeholder => 'lead response',:name => 'lead[lead_response]', :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= select_tag :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]}),:name => 'lead[status]',:prompt =>"-Select Status-", :class => "form-control" %></div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-md-12">  <%= text_field_tag :demo_time,DateTime.now,:placeholder => 'demo_time',:name => 'lead[demo_time]', :class => "form-control" %></div>
+        </div>
+
+        <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary" %>
+        <p class="alert alert-danger hidden" id="error-msg"></p>
+        <% end %>
+      </div>
+    </div>
+
+    <script>
+    function show_create_lead_form(){
+      $("#deal_id").chosen();
+      $("#createleadModal").modal("show");
+      $("#deal_id_chosen").css("width","100%");
+      $("#lead_location").chosen();
+    }
+    function edit_lead_popup(id){
+      $("#deal_id_chosen").css("width","100%");
+      response = $("#"+id+"_spoc_response").text();
+      status = $("#"+id+"_spoc_status").text();
+      $("#edit_lead_id").val(id);
+      switch(status) {
+        case "INFO GATHERED": value =10 ;break;
+        case "APPROCHED": value = 20 ;break;
+        case "MEETING FIXED": value =30 ;break;
+        case "DEMO COMPLETED": value =40 ;break;
+        case "IN PIPELINE": value = 50 ;break;
+        case "SIGNUP DONE": value = 60 ;break;
+        case "DATA RECIEVED": value = 70 ;break;
+        case "NOT INTERESTED": value = 80;break;
+        case "USING ANOTHER SYSTEM": value = 90 ;break;
+        case "SUCCESSFULLY COMPLETED": value = 100;break;
+      }
+
+      $("#edit_response").val(response);
+      $("#edit_status option[value="+value+"]").prop("selected","selected");
+      console.log(response);
+      $("#updateleadModal").modal("show");
+    }
+    </script>
+  </div>
+  <div class="modal-footer">
+      <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal inmodal in" id="updateleadModal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none">
+  <div class="modal-dialog">
+    <div class="modal-content animated swing">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+          <i class="fa fa-line-chart modal-icon"></i>
+          <h4 id="modal-title" class="modal-title">Update Lead Status</h4>
+       </div>
+      <div class="modal-body">
+          <%=form_tag "/update_lead_data",:class=>"form-horizontal",:id=>"lead_creation_form", method: "post" do %>
+          <%=hidden_field_tag :edit_lead_id,"",:name=>"lead[id]"%>
+          <%=hidden_field_tag :edit_lead_user_id,current_user.id,:name=>"lead[user_id]"%>
+
+          <div class="form-group">
+            <div class="col-md-12">  <%= text_area_tag :edit_response,"",:name => 'lead[lead_response]',:prompt =>"-Select Status-", :class => "form-control" %></div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-12">  <%= select_tag :edit_status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]}),:name => 'lead[status]',:prompt =>"-Select Status-", :class => "form-control" %></div>
+          </div>
+          <div class="form-group">
+            <div class="col-md-12">  <%= submit_tag("Update", class:"btn btn-outline btn-success") %></div>
+          </div>
+        <%end%>
+      </div>
+    </div>
+  </div>
+</div>

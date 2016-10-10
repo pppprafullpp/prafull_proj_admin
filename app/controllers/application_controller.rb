@@ -2,12 +2,12 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  
-  helper_method :is_admin?, :is_sales_executive?,:current_user, :auth_display_name, :auth_display_pic,:current_controller, :sort_direction,:decode_api_data
-  
+
+  helper_method :is_admin?, :is_sales_executive?,:current_user, :auth_display_name, :auth_display_pic,:current_controller, :sort_direction,:decode_api_data, :get_zipcodes, :get_lead_status
+
   ## modules ##
   include Notify
-   
+
 
   def init_servicedeals_session(auth_details)
     session[:id] = auth_details.id
@@ -16,7 +16,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    session[:id].present? ?  eval(session[:role]).find(session[:id]) : []
+      session[:id].present? ?  eval(session[:role]).find(session[:id]) : []
   end
 
   def is_admin?
@@ -49,13 +49,13 @@ class ApplicationController < ActionController::Base
       when ADMIN
         redirect_url = login_admin_admins_path
       when SALES_EXECUTIVE
-        redirect_url = login_admin_admins_path
+        redirect_url = login_sales_executive_sales_executive_index_path
       else
         redirect_url = login_admin_admins_path
     end
 
     reset_session
-    flash[:notice] = 'You have been log out successfully.'
+    # flash[:notice] = 'You have been log out successfully.'
     redirect_to redirect_url and return
   end
 
@@ -91,6 +91,43 @@ class ApplicationController < ActionController::Base
     return Base64.encode64(data)
   end
 
+  def encoding_data(params)
+    if params[:app_user].present?
+      record = {}
+      params[:app_user].each do |key,value|
+        if(key == 'first_name' || key == 'last_name' || key == 'mobile')
+          record[key] = encode_api_data(value)
+        else
+          record[key] = value
+        end
+      end
+      record
+    end
+  end
+
+  def encoding_business_data(params)
+    if params[:business].present?
+      record = {}
+      params[:business].each do |key,value|
+        if(key == 'business_name' || key == 'ssn' || key == 'federal_number')
+          record[key] = encode_api_data(value)
+        else
+          record[key] = value
+        end
+      end
+      record
+    end
+  end
+
+  def encode_search_filter_data
+    if params[:search].present?
+      params[:search][:first_name] = encode_api_data(params[:search][:first_name]) if params[:search][:first_name].present?
+      params[:search][:last_name] = encode_api_data(params[:search][:last_name]) if params[:search][:last_name].present?
+      #params[:search][:email] = encode_api_data(params[:search][:email]) if params[:search][:email].present?
+    end
+    params
+  end
+
   private
   #Set headers for cross-domain request
   def set_access_control_headers
@@ -116,4 +153,25 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+
+    def get_zipcodes
+      zipcodes = Rails.cache.fetch(:expire_in => 24.hours) do
+        Zipcode.all.map { |r| [r.code+' - '+r.city, r.id] }
+      end
+      return zipcodes
+    end
+
+    def get_lead_status(id)
+    return "INFO GATHERED" if id == 10
+    return "APPROCHED" if id == 20
+    return "MEETING FIXED" if id == 30
+    return "DEMO COMPLETED" if id == 40
+    return "IN PIPELINE" if id == 50
+    return "SIGNUP DONE" if id == 60
+    return "DATA RECIEVED" if id == 70
+    return "NOT INTERESTED" if id == 80
+    return "USING ANOTHER SYSTEM" if id == 90
+    return "SUCCESSFULLY COMPLETED" if id == 100
+    end
+
 end

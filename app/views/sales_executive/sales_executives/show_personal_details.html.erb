@@ -1,0 +1,94 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Profile Details</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+
+<div class="animated fadeInUp row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Profile Details</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content">
+        <%=form_for @details, :url => sales_executive_sales_executive_path(id:@details.id),:class=>"form", method: "patch" do |f| %>
+        <div class="row">
+           <table class="table table-hover no-margins">
+            <tr>
+              <td>
+               <div class="col-md-12">  <%= f.text_field :name,:placeholder => 'Lead name',:class => "form-control" %></div>
+              </td>
+           </tr>
+
+            <tr>
+              <td>
+              <div class="col-md-12">  <%= f.text_field :email,:placeholder => 'Lead name',:class => "form-control" %></div>
+            </td>
+            </tr>
+          </table>
+        <%= submit_tag 'Submit', :class => "btn btn-block btn-outline btn-primary" %>
+        <p class="alert alert-danger hidden" id="error-msg"></p>
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
+
+
+    <script>
+    function show_create_lead_form(){
+      $("#deal_id").chosen();
+      $("#createleadModal").modal("show");
+      $("#deal_id_chosen").css("width","100%");
+      $("#lead_location").chosen();
+    }
+    function edit_lead_popup(id){
+      $("#deal_id_chosen").css("width","100%");
+      response = $("#"+id+"_spoc_response").text();
+      status = $("#"+id+"_spoc_status").text();
+      $("#edit_lead_id").val(id);
+      switch(status) {
+        case "INFO GATHERED": value =10 ;break;
+        case "APPROCHED": value = 20 ;break;
+        case "MEETING FIXED": value =30 ;break;
+        case "DEMO COMPLETED": value =40 ;break;
+        case "IN PIPELINE": value = 50 ;break;
+        case "SIGNUP DONE": value = 60 ;break;
+        case "DATA RECIEVED": value = 70 ;break;
+        case "NOT INTERESTED": value = 80;break;
+        case "USING ANOTHER SYSTEM": value = 90 ;break;
+        case "SUCCESSFULLY COMPLETED": value = 100;break;
+      }
+
+      $("#edit_response").val(response);
+      $("#edit_status option[value="+value+"]").prop("selected","selected");
+      console.log(response);
+      $("#updateleadModal").modal("show");
+    }
+
+    function show_business_name(val)
+    {
+      if($("#type option:selected").prop("value") == "business") {
+        $("#business_name").removeClass("hidden");
+      }
+      else {
+        $("#business_name").addClass("hidden");
+      }
+    }
+    </script>

@@ -1,0 +1,22 @@
+  <% if deal_equipments.present? %>
+  <h5 class="margin_bot20">Equipments & Installation</h5>
+  <% deal_equipments.each do |deal_equipment| %>
+  <table class="table table-bordered">
+    <thead>
+      <tr class="active">
+        <th colspan="3"><%= deal_equipment.try(:name) %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td width="20%">Installation</td>
+        <td width="80%" colspan="2"><%= deal_equipment.try(:installation) %></td>
+      </tr>
+      <tr>
+        <td width="20%">Price</td>
+        <td width="80%" colspan="2">$<%= deal_equipment.try(:price) %></td>
+      </tr>
+    </tbody>
+  </table>
+  <% end %>
+  <% end %>

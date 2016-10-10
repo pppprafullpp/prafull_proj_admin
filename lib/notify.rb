@@ -6,10 +6,12 @@ module Notify
   SMS_OWL_API_KEY = APP_CONFIG[:smsowl][:apikey]
   SENDER_ID = ''## configure your sender id provided by thirdparty
 
-  def notify(object,class_name,notification_name,sms = false,options = {:email => true})
+  def notify(object,class_name,notification_name,sms = false,options)
     if options[:email]
-      if options[:password].present?
+      if options[:password].present? and notification_name!="reset_sales_executive_password"
         Email.send_welcome_email(object,class_name,notification_name,options[:password])
+      # elsif class_name.to_s == "SalesExecutive" and notification_name == "reset_sales_executive_password"
+      #   Email.send_sales_executive_reset_password_email(object,class_name,notification_name,options[:password])
       else
         Email.send_email(object,class_name,notification_name)
       end
@@ -20,12 +22,17 @@ module Notify
   class Email
     ## generic function to route all emails ##
     def self.send_welcome_email(object,class_name,notification_name,password)
-      eval(class_name + '::' +class_name + 'Mailer').send(notification_name + '_email',object,password).deliver
+        # byebug
+      eval(class_name.name + '::' +class_name.name + 'Mailer').send(notification_name + '_email',object,password).deliver
     end
 
     def self.send_email(object,class_name,notification_name)
       eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
     end
+
+    # def self.send_sales_executive_reset_password_email(object,class_name,notification_name,password)
+    #   eval(class_name + '::' +class_name + 'Mailer').delay.send(notification_name + '_email',object)
+    # end
   end
 
   class Sms
@@ -70,7 +77,7 @@ module Notify
       otp = user.otp
       return "Hi #{user.first_name}, your OTP is #{otp}, have a nice day from Service Deals." if otp.present?
     end
-    
+
   end
 
   class AdminSms

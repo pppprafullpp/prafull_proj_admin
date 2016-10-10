@@ -1,0 +1,179 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Add Client Meeting</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+
+
+<div class="animated fadeInUp row">
+  <div class="col-lg-12">
+    <div class="ibox float-e-margins">
+      <div class="ibox-title">
+        <h5>Client Deals/Client Spoc Details</h5>
+        <div class="ibox-tools">
+          <a class="collapse-link">
+            <i class="fa fa-chevron-up"></i>
+          </a>
+          <a class="close-link">
+            <i class="fa fa-times"></i>
+          </a>
+        </div>
+      </div>
+      <div class="ibox-content">
+        <%=form_for @lead, :url => admin_lead_path,:class=>"form",:id=>"lead_creation_form", method: "patch" do |f| %>
+        <%=f.hidden_field :user_id%>
+        <%=f.hidden_field :id%>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group row">  <h4>Add Client Details</h4></div>
+
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_field :lead_name,:placeholder => 'Lead name', :class => "form-control" %></div>
+              </div>
+
+              <div class="form-group row">
+              <%if @lead.lead_type == "residence"%>
+                  <div class="col-md-12">  <%= f.select :lead_type,options_for_select([["Residence","residence"],["Business","business"]]) %></div>
+                <%else%>
+                <div class="col-md-12">  <%= f.select :lead_type,options_for_select([["Business","business"],["Residence","residence"]]) %></div>
+              <%end%>
+              </div>
+
+              <div class="form-group row">
+                <%if @lead.lead_type == "residence"%>
+                 <div class="col-md-12">  <%= f.text_field :business_name,:placeholder => 'Business Name', :class => "form-control hidden"%></div>
+                 <%else%>
+                  <div class="col-md-12">  <%= f.text_field :business_name,:placeholder => 'Business Name', :class => "form-control" %></div>
+               <%end%>
+              </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">  <%= f.number_field :lead_contact_number,:placeholder => 'lead contact number', :class => "form-control",:maxlength => "10" %></div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">  <%= f.email_field :lead_email,:placeholder => 'Lead Email' , :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">  <%= f.select :lead_location,options_for_select(Statelist.pluck(:state)) , :class => "form-control", :prompt => "-Select state-"  %></div>
+            </div>
+
+            <div class="form-group row">
+            <div class="col-md-12">  <%= f.text_field :lead_address,:placeholder => 'lead address', :class => "form-control" %></div>
+            </div>
+
+            <div class="form-group row">
+            <div class="col-md-12">  <%= f.text_area :lead_response,:placeholder => 'lead response', :class => "form-control" %></div>
+            </div>
+
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-group row"><h4>Add Client Spoc Details</h4></div>
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_field :lead_spoc_name,:placeholder => 'lead spoc name', :class => "form-control" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.email_field :lead_spoc_email,:placeholder => 'lead spoc email',:class => "form-control" %></div>
+              </div>
+
+              <div class="form-group row">
+                  <div class="col-md-12">  <%= f.number_field :lead_spoc_number,:placeholder => 'lead spoc number', :class => "form-control", :maxlength => "10" %></div>
+              </div>
+
+              <div class="form-group row">
+                  <div class="col-md-12">  <%= f.text_field :lead_spoc_designation,:placeholder => 'lead spoc designation', :class => "form-control" %></div>
+              </div>
+
+
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.select :status,options_for_select(Lead::MEETING_STATUSES.each_with_index.map {|name, index| [name,((index+1)*10)]},@lead.status),:prompt =>"-Select Status-", :class => "form-control" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_field :demo_time,:placeholder => 'demo_time',:class => "form-control" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">   <%= f.select :service_category_id,options_for_select([["Internet",1],["Telephone",2],["Cable",3],["Cellphone",4],["Bundle",5]]), :class => "form-control", :prompt => "-Select Category-" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">   <%= f.select :deal_id,options_for_select(Deal.pluck(:title,:id)),:class => "form-control chosen-select", :prompt => "-Select Deal-" %></div>
+              </div>
+
+              <div class="form-group row">
+                <div class="col-md-12">  <%= f.text_area :lead_description,:placeholder => 'Description', :class => "form-control" %></div>
+              </div>
+
+          </div>
+        </div>
+
+
+        <%= f.submit 'Submit', :class => "btn btn-block btn-outline btn-primary" %>
+        <p class="alert alert-danger hidden" id="error-msg"></p>
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+    <script>
+    function show_create_lead_form(){
+      $("#deal_id").chosen();
+      $("#createleadModal").modal("show");
+      $("#deal_id_chosen").css("width","100%");
+      $("#lead_location").chosen();
+    }
+    function edit_lead_popup(id){
+      $("#deal_id_chosen").css("width","100%");
+      response = $("#"+id+"_spoc_response").text();
+      status = $("#"+id+"_spoc_status").text();
+      $("#edit_lead_id").val(id);
+      switch(status) {
+        case "INFO GATHERED": value =10 ;break;
+        case "APPROCHED": value = 20 ;break;
+        case "MEETING FIXED": value =30 ;break;
+        case "DEMO COMPLETED": value =40 ;break;
+        case "IN PIPELINE": value = 50 ;break;
+        case "SIGNUP DONE": value = 60 ;break;
+        case "DATA RECIEVED": value = 70 ;break;
+        case "NOT INTERESTED": value = 80;break;
+        case "USING ANOTHER SYSTEM": value = 90 ;break;
+        case "SUCCESSFULLY COMPLETED": value = 100;break;
+      }
+
+      $("#edit_response").val(response);
+      $("#edit_status option[value="+value+"]").prop("selected","selected");
+      console.log(response);
+      $("#updateleadModal").modal("show");
+    }
+
+    $(document).ready(function(){
+      $("#lead_lead_type").change(function(){
+        if ($("#lead_lead_type option:selected").val() == "business") {
+          $("#lead_business_name").removeClass("hidden");
+        }
+        else {
+          $("#lead_business_name").addClass("hidden");
+        }
+      });
+      <%if @lead.lead_type == "business"%>
+                $("#lead_business_name").removeClass("hidden");
+      <%end%>
+      $("#lead_lead_type").addClass("form-control");
+      $("#lead_lead_location").addClass("form-control");
+      $("#lead_status").addClass("form-control");
+      $("#lead_service_category_id").addClass("form-control");
+      $("#lead_deal_id").addClass("form-control");
+
+    });
+    </script>

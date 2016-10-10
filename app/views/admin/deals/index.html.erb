@@ -1,0 +1,110 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>Deals</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+
+  </div>
+</div>
+<div class="animated fadeInUp">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Search Deals</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link"> <i class="fa fa-chevron-up"></i> </a>
+          </div>
+        </div>
+
+        <div class="ibox-content m-b-sm border-bottom">
+          <div class="row">
+            <%= form_for @search, :as => 'search', :url => admin_deals_path, :html => {:method => :get} do |f| %>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_deals_path, :filter => [:title,:service_category_id, :deal_type, :service_provider_id]}%>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="ibox ibox-title float-e-margins">
+    <div class="ibox-tools">
+      <%=button_to "Create Deal","/admin/deals/new", :method=>"get", :class=>"btn btn-w-m btn-primary"%>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="ibox float-e-margins">
+        <div class="ibox-title">
+          <h5>Deal Details(<%=@deals.count%>)</h5>
+          <div class="ibox-tools">
+            <a class="collapse-link">
+              <i class="fa fa-chevron-up"></i>
+            </a>
+            <a class="close-link">
+              <i class="fa fa-times"></i>
+            </a>
+          </div>
+        </div>
+        <div class="ibox-content">
+          <%= will_paginate @deals, :container => true, renderer: BootstrapPagination::Rails, :class=>"pagination pull-right" %>
+
+          <table class="table table-hover no-margins">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>Category</th>
+              <th>Provider</th>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Zipcodes</th>
+              <th>Is Nationwide</th>
+              <th>Type</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Is Sponsered</th>
+              <th>Action</th>
+            </tr>
+            <%@deals.each do |deal|%>
+            <tr>
+              <td><%=deal.id%></td>
+              <td><%=deal.service_category.name%></td>
+              <td><%=deal.service_provider.name%></td>
+              <td><%=deal.title%></td>
+              <td><%=deal.price%></td>
+              <td>"NA"</td>
+              <td><%=deal.is_nationwide%></td>
+              <td><%=deal.deal_type%></td>
+              <td><%=deal.start_date%></td>
+              <td><%=deal.end_date%></td>
+              <td><%=deal.is_sponsored%></td>
+              <td>
+                <table>
+                  <tr>
+                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Edit" href="<%= edit_admin_deal_path(id:deal.id)%>"><i class="fa fa-edit"></i></a></td>
+                    <td><a class="btn btn-outline btn-success" data-toggle="tooltip" title="Add Equipments" href="<%= show_deal_equipments_admin_deals_path(deal_id:deal.id,category:deal.service_category.name)%>"><i class="fa fa-mobile"></i></a></td>
+                    <td>
+                      <%=link_to deal_attributes_admin_deals_path(:deal_id=>deal.id,:category=>deal.service_category.name),:class => "btn btn-outline btn-success",:method => "get" do%>
+                      <i class="fa fa-tag"></i>
+                      <%end%>
+                    <td><%=button_to "X", admin_deal_path(deal), :class => "btn btn-outline btn-danger", method: :delete %></td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <%end%>
+            </thead>
+          </table>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+</div>

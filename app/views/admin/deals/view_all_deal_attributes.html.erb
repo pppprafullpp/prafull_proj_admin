@@ -1,0 +1,43 @@
+<div class="row wrapper border-bottom white-bg page-heading">
+  <div class="col-lg-10">
+    <h2>View Deal Attributes</h2>
+    <%= render :partial => "shared/breadcrumb", :locals => {:breadcrumb => @breadcrumb}%>
+  </div>
+  <div class="col-lg-2">
+  </div>
+</div>
+
+<div class="ibox float-e-margins">
+  <div class="ibox-content">
+    <h5> Saved Attributes </h5>
+  </div>
+  <div class="ibox-content">
+  <table class="table">
+    <tr>
+      <th>Id</th>
+      <th>Action</th>
+    </tr>
+    <%@all_deal_attributes.each do |f|%>
+    <tr>
+      <td><%=f.id%></td>
+      <td><%=button_to "Edit", edit_deal_attribute_admin_deals_path(attribute_id:f.id,category:@category_name,deal_id:@deal.id), :method => "get", :class=>"btn btn-primary"%><td>
+    </tr>
+    <%end%>
+  </table>
+ </div>
+</div>
+
+<script>
+function check_validations(){
+  event.preventDefault();
+  description = $("#description").val();
+  download = $("#download").val();
+  upload = $("#upload").val();
+  if(description == "" || download == "" || upload == "") {
+    $('#error-msg').removeClass("hidden").addClass('custom-input-error').addClass("flash").html("<b>Please Enter Description, Download speed and Upload Speed</b>");
+  }
+  else {
+    $("#internet_attribute_form").submit();
+  }
+}
+</script>

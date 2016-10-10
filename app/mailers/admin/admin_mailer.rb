@@ -22,4 +22,6 @@ class Admin::AdminMailer < ApplicationMailer
 
     mail(to: APP_CONFIG[:contact_email],cc: ADMIN_EMAIL.join(','), subject: "Service Deals:New Message Received")
   end
+
+
 end

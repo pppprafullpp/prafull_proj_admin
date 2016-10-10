@@ -1,0 +1,46 @@
+
+ <div class="col-sm-6 b-r tab-pane hidden" id="d" >
+<div class="form-group" id="business_name_div">
+      <label for="Name" class="control-label"> Business Name </label>
+      <%= text_field_tag :business_name, '',:name => "business[business_name]",:class => 'form-control',:placeholder => 'Please enter your Business Name' %>
+    </div>
+
+    <div class="form-group"  id="business_type_div">
+      <label for="Name" class="control-label">Business Type</label>
+      <%= select_tag(:business_type,options_for_select(Business::BUSINESS_TYPES,''),:class => 'form-control',:prompt => 'Select your Business Type',:name => "business[business_type]") %>
+    </div>
+
+    <div class="form-group" id="ssn_div">
+   <label for="Name" class="control-label">Ssn<span id="mandat">*</span></label>
+    	<%= text_field_tag :ssn,"",:name => "business[ssn]",:class => 'form-control',:maxlength => 18,:placeholder => 'Please enter your SSN'%>
+    </div>
+    <div class="form-group" id="federal_number_div">
+
+      <label for="Name" class="control-label">Federal Number<span id="mandat">*</span></label>
+
+      <%= text_field_tag :federal_number,"",:name => "business[federal_number]",:class => 'form-control',:maxlength => 18,:placeholder => 'Please enter your Federal Number'%>
+    </div>
+
+    <div class="form-group">
+      <label for="Name" class="control-label">Manager Name<span id="mandat">*</span></label>
+      <%= text_field_tag('business[manager_name]','',:class=>'form-control input-md',:placeholder=>'Manager Name',:maxlength=>'30') %>
+    </div>
+
+    <div class="form-group">
+      <label for="Name" class="control-label">Main Telephone Number<span id="mandat">*</span></label>
+      <%= phone_field_tag('business[manager_contact]','',:class => 'form-control input-md',:placeholder => 'Telephone', :maxlength => 11) %>
+    </div>
+    <%=button_tag("Next ", :id => "personal_details_btn",:class=>"btn btn-block btn-outline btn-primary", :onclick => "move_ahead_from_business_details()")%>
+    <p class="alert alert-danger hidden" id="error-msg-1"></p>
+  </div>
+  <script>
+  function move_ahead_from_business_details(){
+  event.preventDefault();
+  if ($("#business_name").val()=="" || $("#business_type option:selected").prop("value")=="" && ($("#ssn").val()=="" || $("#federal_number").val()=="" )) {
+      $("#error-msg-1").removeClass("hidden").text("Enter business name and business_type, federal nbr and ssn");
+  }
+  else {
+      $("#address_information").tab("show");
+    }
+  }
+  </script>
