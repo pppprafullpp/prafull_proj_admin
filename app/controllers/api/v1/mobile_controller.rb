@@ -20,6 +20,42 @@ class Api::V1::MobileController < ApplicationController
 
   end
 
+  def deals
+
+  end
+
+  def leads
+    leads = Lead.all
+    render :json => {
+      :total => leads.count,
+      :leads => leads.as_json(:except => [:created_at, :updated_at])
+    }
+  end
+
+  def sales_excecutives
+    se = SalesExecutive.all
+    render :json => {
+      :total => se.count,
+      :sales_excecutives => se.as_json(:except => [:created_at, :updated_at])
+    }
+  end
+
+  def orders
+    orders = Order.all
+    render :json => {
+      :total => orders.count,
+      :orders => orders.as_json(:except => [:created_at, :updated_at])
+    }
+  end
+
+  def dynamic_labels
+    dl = DynamicLabel.all
+    render :json => {
+      total:dl.count,
+      labels:dl.as_json(:except => [:created_at, :updated_at])
+    }
+  end
+
 
   private
   # Using a private method to encapsulate the permissible parameters is

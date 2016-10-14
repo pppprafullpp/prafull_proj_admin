@@ -15,7 +15,7 @@
     <div class="col-sm-4 w-220">
       <div class="form-group">
         <label class="control-label">User Type</label>
-        <%=f.select(:user_type, AppUser::USER_TYPES, { :include_blank => "-Select-"},{:class => 'form-control chosen-select'})%>
+        <%=f.select(:user_type, options_for_select(AppUser::USER_TYPES,params[:search][:user_type]), { :include_blank => "-Select-"},{:class => 'form-control chosen-select'})%>
       </div>
     </div>
 <%end%>
@@ -33,8 +33,8 @@
 <%if filter.include?(:sales_executive_status)%>
     <div class="col-sm-4 w-220">
       <div class="form-group">
-        <label class="control-label">Enabled</label>
-        <%=f.select(:status, options_for_select(SalesExecutive::PROFILE_STATUS), { :include_blank => "-Profile Status-"},{:class => 'form-control'})%>
+        <label class="control-label">Status</label>
+        <%=f.select(:status, options_for_select(SalesExecutive::PROFILE_STATUS,params[:search][:status]), { :include_blank => "-Profile Status-"},{:class => 'form-control'})%>
       </div>
     </div>
 <%end%>
@@ -125,7 +125,7 @@
     <div class="col-sm-4 w-220">
       <div class="form-group">
         <label class="control-label">Order Status</label>
-        <%=f.select(:status, Order.pluck(:status).uniq.to_a, { :include_blank => "-Select-", :selected => 0},{:class => 'form-control select'})%>
+        <%=f.select(:status, options_for_select(Order.pluck(:status).uniq.to_a,params[:search][:status]), { :include_blank => "-Select-", :selected => 0},{:class => 'form-control select'})%>
       </div>
     </div>
 <%end%>
@@ -174,7 +174,7 @@
     <div class="col-sm-4 w-220">
       <div class="form-group">
         <label class="control-label">Deal Category</label>
-        <%=f.select(:service_category_id, ServiceCategory.pluck(:name,:id).first(5),{:include_blank => "-Select Category-"},{:class => 'form-control select-chosen'})%>
+        <%=f.select(:service_category_id, options_for_select(ServiceCategory.pluck(:name,:id).first(5),params[:search][:service_category_id]),{:include_blank => "-Select Category-"},{:class => 'form-control select-chosen'})%>
       </div>
     </div>
 <%end%>
@@ -184,7 +184,7 @@
     <div class="col-sm-4 w-220">
       <div class="form-group">
         <label class="control-label">Service Provider</label>
-        <%=f.select(:service_provider_id, ServiceProvider.pluck(:name,:id).uniq,{:include_blank => "-Select Provider-"},{:class => 'form-control select-chosen'})%>
+        <%=f.select(:service_provider_id, options_for_select(ServiceProvider.pluck(:name,:id).uniq,params[:search][:service_provider_id]),{:include_blank => "-Select Provider-"},{:class => 'form-control select-chosen'})%>
       </div>
     </div>
 <%end%>
@@ -194,7 +194,7 @@
     <div class="col-sm-4 w-220">
       <div class="form-group">
         <label class="control-label">Deal Type</label>
-        <%=f.select(:deal_type, [["Business","business"],["Residence","residence"]],{:include_blank => "-Select Deal Type-"},{:class => 'form-control select'})%>
+        <%=f.select(:deal_type, options_for_select([["Business","business"],["Residence","residence"]],params[:search][:deal_type]),{:include_blank => "-Select Deal Type-"},{:class => 'form-control select'})%>
       </div>
     </div>
 <%end%>

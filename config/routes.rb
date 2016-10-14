@@ -185,6 +185,11 @@ Myapp::Application.routes.draw do
           post :login
           post :initialize_app
           get :forgot_password
+          post :deals
+          post :leads
+          post :sales_excecutives
+          post :orders
+          post :dynamic_labels
         end
       end
     end
