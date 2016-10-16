@@ -10,8 +10,6 @@
 # you'll amass, the slower it'll run and the greater likelihood for issues).
 #
 # It's strongly recommended that you check this file into your version control system.
-
-
 ActiveRecord::Schema.define(version: 20161009062540) do
 
   create_table "account_referral_amounts", force: :cascade do |t|
@@ -124,8 +122,8 @@ ActiveRecord::Schema.define(version: 20161009062540) do
     t.string   "mobile",                   limit: 255
     t.integer  "is_service_address_same",  limit: 4
     t.integer  "is_shipping_address_same", limit: 4
-    t.string   "primary_id",               limit: 255
-    t.string   "secondary_id",             limit: 255
+    t.string   "primary_id",               limit: 45
+    t.string   "secondary_id",             limit: 45
     t.string   "primary_id_number",        limit: 255
     t.string   "secondary_id_number",      limit: 255
     t.string   "email_verification_token", limit: 255
@@ -320,7 +318,7 @@ ActiveRecord::Schema.define(version: 20161009062540) do
     t.boolean  "rollover_data",                                                     default: false
     t.datetime "created_at",                                                                        null: false
     t.datetime "updated_at",                                                                        null: false
-    t.decimal  "effective_price",                          precision: 10,           default: 0
+    t.decimal  "effective_price",                          precision: 10
     t.text     "description",                limit: 65535
     t.string   "title",                      limit: 255
   end
@@ -374,11 +372,11 @@ ActiveRecord::Schema.define(version: 20161009062540) do
     t.string   "package_code",        limit: 255
     t.integer  "channel_count",       limit: 4
     t.text     "channel_ids",         limit: 65535
-    t.text     "description",         limit: 65535
     t.string   "image",               limit: 255
-    t.boolean  "status",                                                    default: true
-    t.datetime "created_at",                                                               null: false
-    t.datetime "updated_at",                                                               null: false
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.boolean  "status"
+    t.text     "description",         limit: 65535
     t.decimal  "price",                             precision: 5, scale: 2
     t.integer  "service_provider_id", limit: 4
   end
@@ -391,9 +389,9 @@ ActiveRecord::Schema.define(version: 20161009062540) do
     t.text     "description",         limit: 65535
     t.boolean  "is_hd",                             default: false
     t.string   "image",               limit: 255
-    t.boolean  "status",                            default: true
     t.datetime "created_at",                                           null: false
     t.datetime "updated_at",                                           null: false
+    t.boolean  "status"
     t.integer  "service_provider_id", limit: 4
   end
 
