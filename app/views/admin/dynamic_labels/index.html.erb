@@ -7,7 +7,6 @@
 
   </div>
 </div>
-
 <div class="animated fadeInUp">
   <div class="row">
     <div class="col-lg-12">
@@ -22,7 +21,7 @@
         <div class="ibox-content m-b-sm border-bottom">
           <div class="row">
             <%= form_for @search, :as => 'search', :url => admin_dynamic_labels_path, :html => {:method => :get} do |f| %>
-                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_dynamic_labels_path, :filter => [:service_provider_id]}%>
+                <%= render :partial=>'shared/search', :locals => {:f => f, :add_url => admin_deals_path,:cancel_url => admin_dynamic_labels_path, :filter => [:service_provider_id,:label_value,:label_key]}%>
             <% end %>
           </div>
         </div>
@@ -70,20 +69,18 @@
           <%@dynamic_labels.each_with_index do |dynamic_label,index|%>
               <tr>
                 <td><span class="label label-warning"><%=  index + 1 %></span></td>
-                <td><%= service_providers.key(dynamic_label.service_provider_id) %></td>
-                <td><%= dynamic_label.label_key %></td>
-                <td><%= dynamic_label.label_value %></td>
-                <td><%= statuses.key(dynamic_label.status) %></td>
-
+                <td value="<%=dynamic_label.service_provider_id%>" id="<%=dynamic_label.id%>_sp"><%= service_providers.key(dynamic_label.service_provider_id) %></td>
+                <td id="<%=dynamic_label.id%>_label_key"><%= dynamic_label.label_key %></td>
+                <td id="<%=dynamic_label.id%>_label_value"><%= dynamic_label.label_value %></td>
+                <td value="<%=dynamic_label.status%>" id="<%=dynamic_label.id%>_status"> <%= statuses.key(dynamic_label.status) %></td>
                 <td>
                   <table>
                     <tr>
-                      <td>EDIT</td>
+                      <td><%=link_to "edit","javascript:void(0)", :onclick=>"edit_form(#{dynamic_label.id})"%></td>
                     </tr>
                   </table>
                 </td>
               </tr>
-
           <%end%>
           </thead>
         </table>
@@ -103,28 +100,29 @@
       </div>
 
       <div class="ibox-content">
-        <%=form_for @dynamic_label, :url => admin_dynamic_labels_path, method: "post", :class => "form", :id => 'create_dynamic_label' do |f| %>
+        <%=form_tag admin_dynamic_labels_path, method: "post", :class => "form", :id => 'create_dynamic_label' do |f| %>
+        <%=hidden_field_tag :id,"",:name=>"dynamic_label[id]", :id=>"dynamic_label_id"%>
             <div class="row">
               <table class="table table-hover no-margins">
                 <tr>
                   <td>
-                    <div class="col-md-12">  <%= f.select :service_provider_id,options_for_select(service_providers,@dynamic_label.service_provider_id),{},:class => "form-control"%></div>
+                    <div class="col-md-12">  <%= select_tag :service_provider_id,options_for_select(service_providers),:id=>"dynamic_label_label_service_provider_id",:name=>"dynamic_label[service_provider_id]",:class => "form-control"%></div>
                   </td>
                 </tr>
 
                 <tr>
                   <td>
-                    <div class="col-md-12">  <%= f.text_field :label_key,:placeholder => 'Label Key',:class => "form-control" %></div>
+                    <div class="col-md-12">  <%= text_field_tag :label_key,"",:placeholder => 'Label Key',:id =>"dynamic_label_label_key",:name => "dynamic_label[label_key]",:class => "form-control" %></div>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <div class="col-md-12">  <%= f.text_field :label_value,:placeholder => 'Label Value', :class => "form-control"%></div>
+                    <div class="col-md-12">  <%= text_field_tag :label_value,"",:placeholder => 'Label Value',:id =>"dynamic_label_label_value",:name => "dynamic_label[label_value]",:class => "form-control"%></div>
                   </td>
                 </tr>
                 <tr>
                   <td>
-                    <div class="col-md-12">  <%= f.select :status,options_for_select(statuses,@dynamic_label.status),{},:class => "form-control"%></div>
+                    <div class="col-md-12">  <%= select_tag :status,options_for_select(statuses),:id =>"dynamic_label_label_status",:name => "dynamic_label[status]",:class => "form-control"%></div>
                   </td>
                 </tr>
               </table>
@@ -143,9 +141,25 @@
 
 <script>
     function add_new_sales_dynamic_label_form() {
+        $("#dynamic_label_service_provider_id option:first").attr("selected","selected");
         $("#dynamic_label_label_key").val("");
         $("#dynamic_label_label_value").val("");
+        $("#dynamic_label_status option:first").attr("selected","selected");
         $("#myModal2").modal("show");
+    }
+
+    function edit_form(id) {
+      sp = $("#"+id+"_sp").attr("value");
+      key = $("#"+id+"_label_key").text();
+      value = $("#"+id+"_label_value").text();
+      status = $("#"+id+"_status").attr("value");
+      console.log(status);
+      $("#myModal2").modal("show");
+      $("#dynamic_label_label_key").val(key);
+      $("#dynamic_label_label_value").val(value);
+      $("#dynamic_label_id").val(id);
+      $("#dynamic_label_service_provider_id option[value="+sp+"]").attr("selected","selected");
+      $("#dynamic_label_status option[value="+status+"]").attr("selected","selected");
     }
 
     $("#create_dynamic_label_button").on('click', function (e) {

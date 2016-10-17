@@ -20,7 +20,7 @@
                               <h2>Lead Details With <%=@lead_data.lead_spoc_name.present? ? @lead_data.lead_spoc_name : "NA"%></h2>
                           </div>
                           <dl class="dl-horizontal">
-                              <dt>Status:</dt> <dd><span class="label label-primary"><%=@lead_data.status.present? ? get_lead_status(@lead_data.status.to_i) : "NA" %></span></dd>
+                              <dt>Status:</dt> <dd><span class="label label-primary"><%=@lead_data.status.present? ? Lead::MEETING_STATUSES.key(@lead_data.status.to_i): "NA" %></span></dd>
                           </dl>
                       </div>
                   </div>
