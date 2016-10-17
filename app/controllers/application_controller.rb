@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  helper_method :is_admin?, :is_sales_executive?,:current_user, :auth_display_name, :auth_display_pic,:current_controller, :sort_direction,:decode_api_data, :get_zipcodes, :get_lead_status
+  helper_method :is_admin?, :is_sales_executive?,:current_user, :auth_display_name, :auth_display_pic,:current_controller, :sort_direction,:decode_api_data, :get_zipcodes #, :get_lead_status
 
   ## modules ##
   include Notify
@@ -161,17 +161,17 @@ class ApplicationController < ActionController::Base
       return zipcodes
     end
 
-    def get_lead_status(id)
-    return "INFO GATHERED" if id == 10
-    return "APPROCHED" if id == 20
-    return "MEETING FIXED" if id == 30
-    return "DEMO COMPLETED" if id == 40
-    return "IN PIPELINE" if id == 50
-    return "SIGNUP DONE" if id == 60
-    return "DATA RECIEVED" if id == 70
-    return "NOT INTERESTED" if id == 80
-    return "USING ANOTHER SYSTEM" if id == 90
-    return "SUCCESSFULLY COMPLETED" if id == 100
-    end
+    # def get_lead_status(id)
+    # return "INFO GATHERED" if id == 10
+    # return "APPROCHED" if id == 20
+    # return "MEETING FIXED" if id == 30
+    # return "DEMO COMPLETED" if id == 40
+    # return "IN PIPELINE" if id == 50
+    # return "SIGNUP DONE" if id == 60
+    # return "DATA RECIEVED" if id == 70
+    # return "NOT INTERESTED" if id == 80
+    # return "USING ANOTHER SYSTEM" if id == 90
+    # return "SUCCESSFULLY COMPLETED" if id == 100
+    # end
 
 end

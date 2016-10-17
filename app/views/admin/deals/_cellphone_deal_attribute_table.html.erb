@@ -123,8 +123,9 @@ additional_data: float, additional_data_price: decimal, rollover_data: boolean -
               <div class="col-md-12">  <%= text_field_tag :data_plan_price,"",:placeholder => 'Data plan price',:name => 'deal_attributes[data_plan_price]', :class => "form-control" %></div>
             </div>
             <div class="form-group">
-              <div class="col-md-12">  <%= text_field_tag :no_of_lines,"",:placeholder => 'No of lines',:name => 'deal_attributes[no_of_lines]', :class => "form-control" %></div>
+              <div class="col-md-12">  <%= select_tag :no_of_lines,options_for_select(1..4),:prompt=>"-No of lines-",:name => 'deal_attributes[no_of_lines]', :class => "form-control" %></div>
             </div>
+
             <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary", :onclick=>"check_validations()" %>
             <p class="alert alert-danger hidden" id="error-msg"></p>
             <% end %>
@@ -136,9 +137,9 @@ additional_data: float, additional_data_price: decimal, rollover_data: boolean -
           event.preventDefault();
           domestic_call_minutes = $("#domestic_call_minutes").val();
           international_call_minutes = $("#international_call_minutes").val();
-
-          if(international_call_minutes == "" || domestic_call_minutes == "") {
-            $('#error-msg').removeClass("hidden").addClass('custom-input-error').addClass("flash").html("<b>Please Enter international_call_minutes, international_call_minutes</b>");
+          no_of_lines = $("#no_of_lines option:selected").val();
+          if(international_call_minutes == "" || domestic_call_minutes == "" || no_of_lines == "") {
+            $('#error-msg').removeClass("hidden").addClass('custom-input-error').addClass("flash").html("<b>Please Enter international_call_minutes, international_call_minutes, no of lines</b>");
           }
           else {
             $("#telephone_attribute_form").submit();
@@ -161,6 +162,7 @@ additional_data: float, additional_data_price: decimal, rollover_data: boolean -
       $("#international_text").val("");
       $("#data_plan").val("");
       $("#data_plan_price").val("");
+      $("#no_of_lines option:first").attr("selected","selected");
       $("#modal-title").text("Add New Attribute")
       $("#cellphoneModal").modal("show");
     }
@@ -182,7 +184,8 @@ additional_data: float, additional_data_price: decimal, rollover_data: boolean -
       $("#data_plan_price").val(data_plan_price);
       $("#no_of_lines").val(no_of_lines);
       $("#attribute_id").val(id);
-      $("#modal-title").text("Edit Attribute")
+      $("#modal-title").text("Edit Attribute");
+      $('#error-msg').addClass("hidden")
       $("#cellphoneModal").modal("show");
     }
     </script>

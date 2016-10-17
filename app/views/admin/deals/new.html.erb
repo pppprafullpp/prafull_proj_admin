@@ -11,6 +11,7 @@
 <div class="ibox-content">
   <%zipcodes = get_zipcodes%>
   <!-- <table cellpadding='0' cellspacing='0' class='tabbed' height='100%' width='100%' > -->
+  <p class="alert alert-danger hidden" id="error-msg"></p>
 
     <tr>
       <td class='main' id='main' valign='top'>
@@ -106,11 +107,11 @@
       <tr>
         <td>
           <div>Start Date:<span id="mandat">*</span></div>
-          <%= f.text_field :start_date, :class => "form-control" %>
+          <%= f.text_field :start_date, :class => "form-control"%>
         </td>
         <td>
           <div>End Date:<span id="mandat">*</span></div>
-          <%= f.text_field :end_date, :class => "form-control" %>
+          <%= f.text_field :end_date, :class => "form-control"%>
         </td>
       </tr>
       <tr>
@@ -133,7 +134,7 @@
         </td>
       </tr>
       <tr>
-        <td><%= f.submit "Create", :class=>"btn btn-success" %></td>
+        <td><%= f.submit "Create", :class=>"btn btn-success", :onclick=>"check_validation()" %></td>
       </tr>
       </table>
 
@@ -207,6 +208,30 @@
       }
       $(document).ready(function(){
           $("#deal_deal_type").addClass("form-control");
+          $("#deal_start_date").datepicker({
+            format:"yyyy-mm-dd"
+          });
+          $("#deal_end_date").datepicker({
+            format:"yyyy-mm-dd"
+          });
       })
+
+      function check_validation(){
+        console.log("Ddd");
+        var is_valid = true;
+        event.preventDefault();
+        if ($("#deal_url").val() == "" || $("#deal_start_date").val() == "" || $("#deal_end_date").val() == "") {
+          is_valid = false
+        }
+        if(is_valid) {
+          $("#new_deal").submit();
+        }
+        else {
+          $("#error-msg").text("Please enter all the field").removeClass("hidden");
+          return false;
+        }
+
+      }
+
   </script>
   </div>

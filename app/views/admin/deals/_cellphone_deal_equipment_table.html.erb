@@ -125,6 +125,11 @@
             <div class="form-group">
               <div class="col-md-12">  <%= text_field_tag :cellphone_detail_id,"",:placeholder => 'active',:name => 'deal_equipments[cellphone_detail_id]', :class => "form-control" %></div>
             </div>
+
+            <div><strong>Equipment Color:<span id="mandat">*</span> </strong><br />
+                <%= select_tag :available_colors,options_for_select(EquipmentColor.pluck(:color_name,:id)),:class => 'chosen-select',:multiple => true,:name =>'deal_equipments[available_colors][]' %>
+            </div>
+
             <%= submit_tag 'Submit', :class => "btn btn-w-m btn-primary", :onclick=>"check_validations()" %>
             <p class="alert alert-danger hidden" id="error-msg"></p>
             <% end %>
@@ -132,6 +137,10 @@
         </div>
 
         <script>
+        $(document).ready(function(){
+          $("#available_colors").show();
+          $(".chosen-choices").css("display","none !important");
+        });
         function check_validations(){
           event.preventDefault();
           make = $("#make").val();
@@ -161,7 +170,10 @@
       $("#installation").val("");
       $("#offer").val("");
       $("#attribute_id").val("");
-      $("#modal-title").text("Add New Equipment")
+      $("#modal-title").text("Add New Equipment");
+      $("#available_colors").show();
+      $("#available_colors").css("width","100%");
+      $(".chosen-choices").addClass("hidden");
       $("#interneteqModal").modal("show");
     }
     function show_edit_equipment_modal(id) {
@@ -176,11 +188,21 @@
       $("#make").val(make);
       $("#price").val(price);
       $("#installation").val(installation);
-      $("#activation").val(activation);
+      console.log(activation);
+      if (activation!=""){
+        $("#activation").val(activation);
+      }
+      else {
+        $("#activation").val("");
+      }
+      // $("#activation").val(activation!=["[object Object]"] ? activation : "");
       $("#cellphone_detail_id").val(cellphone_detail_id);
       $("#equipment_id").val(id);
       $("#equipment_id").val(id);
-      $("#modal-title").text("Edit Attribute")
+      $("#modal-title").text("Edit Attribute");
+      $("#available_colors").show();
+      $("#available_colors").css("width","100%");
+      $(".chosen-choices").addClass("hidden");
       $("#interneteqModal").modal("show");
     }
     </script>

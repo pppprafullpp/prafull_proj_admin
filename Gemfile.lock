@@ -49,6 +49,11 @@ GEM
     arel (6.0.3)
     autoprefixer-rails (6.5.0.2)
       execjs
+      json
+    binding_of_caller (0.7.2)
+      debug_inspector (>= 0.0.1)
+    bootstrap-datepicker-rails (1.6.4.1)
+      railties (>= 3.0)
     bootstrap-sass (3.3.5)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
@@ -64,6 +69,10 @@ GEM
       capistrano (>= 1.0.0)
     capistrano-unicorn (0.2.0)
       capistrano (< 3.0)
+    chosen-rails (1.5.2)
+      coffee-rails (>= 3.2)
+      railties (>= 3.0)
+      sass-rails (>= 3.2)
     climate_control (0.0.3)
       activesupport (>= 3.0)
     cocaine (0.5.8)
@@ -235,11 +244,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bootstrap-datepicker-rails
   bootstrap-sass (~> 3.3.5)
   byebug
   capistrano (~> 2.15.5)
   capistrano-ext
   capistrano-unicorn
+  chosen-rails
   coffee-rails (~> 4.0.0)
   commontator (~> 4.10.0)
   delayed_job

@@ -120,6 +120,11 @@
 
 
     <script>
+    $(document).ready(function(){
+      $("#demo_time").datepicker({
+        format:"yyyy-mm-dd"
+      })
+    })
     function show_create_lead_form(){
       $("#deal_id").chosen();
       $("#createleadModal").modal("show");
