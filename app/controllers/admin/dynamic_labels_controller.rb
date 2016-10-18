@@ -13,8 +13,12 @@ class Admin::DynamicLabelsController < Admin::AdminApplicationController
     if params[:dynamic_label][:id].present?
       DynamicLabel.find(params[:dynamic_label][:id]).update_attributes(:label_key => params[:dynamic_label][:label_key],:label_value => params[:dynamic_label][:label_value],:service_provider_id => params[:dynamic_label][:service_provider_id], :status => params[:dynamic_label][:status])
     else
-      @dynamic_label = DynamicLabel.new(dynamic_label_params)
-      @dynamic_label.save!
+       @dynamic_label = DynamicLabel.new(dynamic_label_params)
+       if @dynamic_label.valid?
+         @dynamic_label.save!
+     else
+       flash[:warning] = "Already Exists"
+      end
     end
     redirect_to admin_dynamic_labels_path
   end
